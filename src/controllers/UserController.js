@@ -2,7 +2,6 @@ const userSchema = require('../models/UserSchema');
 const { checkEmail, response } = require('../utils/util');
 
 class UserController {
-
   async insert(req, res, next) {
     try {
       const {
@@ -14,10 +13,11 @@ class UserController {
         description,
         facilities,
         specialized,
+        avatar,
         course,
       } = req.body;
       if (!checkEmail(email.trim())) {
-        res.json(response(202, 'Đăng kí thất bại'))
+        res.json(response(202, 'Đăng kí thất bại'));
         return;
       }
       const user = {
@@ -30,14 +30,14 @@ class UserController {
         facilities,
         specialized,
         course,
+        avatar,
       };
       userSchema.create(user, function (err, user) {
         if (err) return res.json(response(500, 'Đã có lỗi xảy ra', err));
-        res.json(response(200, 'Thành công', user))
+        res.json(response(200, 'Thành công', user));
       });
-
     } catch (error) {
-      res.json(response(500, 'Đã có lỗi xảy ra', error))
+      res.json(response(500, 'Đã có lỗi xảy ra', error));
     }
   }
 
@@ -46,6 +46,15 @@ class UserController {
       const { email } = req.body;
       const user = await userSchema.findOne({ email });
       res.json(response(200, 'Thành công', user));
+    } catch (error) {
+      res.json(response(500, 'Đã có lỗi xảy ra', error));
+    }
+  }
+
+  async listUser(req, res, next) {
+    try {
+      const users = await userSchema.find({});
+      res.json(response(200, 'Thành công', { total: users.length, users }));
     } catch (error) {
       res.json(response(500, 'Đã có lỗi xảy ra', error));
     }
