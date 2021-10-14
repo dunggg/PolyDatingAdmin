@@ -1,0 +1,264 @@
+<body id="page-top">
+    <div id="wrapper">
+        <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
+            <div class="container-fluid d-flex flex-column p-0">
+                <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+                    <div class="sidebar-brand-icon rotate-n-15">
+                        <img src="public/img/bee.png" alt="">
+                    </div>
+                    <div class="sidebar-brand-text mx-3"><span>POLY DATING</span></div>
+                </a>
+                <hr class="sidebar-divider my-0">
+                <ul class="navbar-nav text-light" id="accordionSidebar">
+                    <li class="nav-item"><a class="nav-link" href="statistical"><i
+                                class="fas fa-tachometer-alt"></i><span>Thống kê</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="users"><i class="fas fa-user"></i><span>Người
+                                dùng</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="reports"><i class="fas fa-flag"></i><span>Báo
+                                cáo</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="notifications"><i
+                                class="fas fa-bell"></i><span>Thông báo</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="index"><i class="fas fa-sign-out-alt"></i><span>Đăng
+                                xuất</span></a></li>
+                </ul>
+                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0"
+                        id="sidebarToggle" type="button"></button></div>
+            </div>
+        </nav>
+
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
+                    <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3"
+                            id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
+                        <div class="d-sm-inline-block me-auto md-3 my-2 my-md-0 mw-100 navbar-search">
+                            <h4 class="text-dark mb-0">Thông báo</h4>
+                        </div>
+                    </div>
+                </nav>
+
+                <div class="container-fluid">
+                    <div class="card shadow mb-3">
+                        <div class="card-header py-3">
+                            <div class="row">
+                                <p class="text-primary m-0 fw-bold col-md-6">Lịch sử thông báo</p>
+                                <a href="#" class="text-danger m-0 fw-bold col-md-6 text-end" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal" style="text-decoration: none;">Gửi thông báo</a>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Gửi thông báo</h5>
+                                            </div>
+                                            <div class="modal-body">
+                                                <!-- form -->
+                                                <div class="mb-3">
+                                                    <label class="form-label">Tiêu đề</label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label">Link</label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label">Nội dung</label>
+                                                    <textarea class="form-control" style="resize: none;"
+                                                        rows="4"></textarea>
+                                                </div>
+
+                                                <p class="text-danger text-center fw-bolder fs-5">Gửi đến</p>
+
+                                                <div class="row">
+                                                    <div class="col-md-auto">
+                                                        <label class="form-label">
+                                                            <select class="d-inline-block form-select form-select-sm">
+                                                                <option value="" selected="">Cơ sở</option>
+                                                                <option value="25">25</option>
+                                                                <option value="50">50</option>
+                                                                <option value="100">100</option>
+                                                            </select>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="col-md-auto">
+                                                        <label class="form-label">
+                                                            <select class="d-inline-block form-select form-select-sm">
+                                                                <option value="" selected="">Ngành</option>
+                                                                <option value="25">25</option>
+                                                                <option value="50">50</option>
+                                                                <option value="100">100</option>
+                                                            </select>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="col-md-auto">
+                                                        <label class="form-label">
+                                                            <select class="d-inline-block form-select form-select-sm">
+                                                                <option value="" selected="">Khóa</option>
+                                                                <option value="25">25</option>
+                                                                <option value="50">50</option>
+                                                                <option value="100">100</option>
+                                                            </select>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="col-md-auto">
+                                                        <label class="form-label">
+                                                            <select class="d-inline-block form-select form-select-sm">
+                                                                <option value="" selected="">Giới tính</option>
+                                                                <option value="25">25</option>
+                                                                <option value="50">50</option>
+                                                                <option value="100">100</option>
+                                                            </select>
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                                <!-- end form -->
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Hủy</button>
+                                                <button type="button" class="btn btn-primary">Lưu</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- -------------------- -->
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-auto text-nowrap">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <select class="d-inline-block form-select form-select-sm">
+                                                <option value="" selected="">Cơ sở</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-auto text-nowrap">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <select class="d-inline-block form-select form-select-sm">
+                                                <option value="" selected="">Chuyên nghành</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-auto text-nowrap">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <select class="d-inline-block form-select form-select-sm">
+                                                <option value="" selected="">Khóa</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-auto text-nowrap">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <select class="d-inline-block form-select form-select-sm">
+                                                <option value="" selected="">Giới tính</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-auto">
+                                    <div class="text-md-end dataTables_filter" id="dataTable_filter">
+                                        <label class="form-label">
+                                            <input type="search" class="form-control form-control-sm"
+                                                aria-controls="dataTable" placeholder="Tìm kiếm...">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ----------------------------------- -->
+                            <div class="table-responsive table mt-2" id="dataTable" role="grid"
+                                aria-describedby="dataTable_info">
+                                <table class="table table-hover my-0" id="dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Tiêu đề</th>
+                                            <th>Nội dung</th>
+                                            <th>Cơ sở</th>
+                                            <th>Ngành</th>
+                                            <th>Khóa</th>
+                                            <th>Giới tính</th>
+                                            <th>Ngày gửi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Xin chào</td>
+                                            <td>Thắng rách Thắng rách Thắng rách Thắng rách Thắng rách Thắng rách </td>
+                                            <td>Hà Nội</td>
+                                            <td>Mobile</td>
+                                            <td>15</td>
+                                            <td>Nam</td>
+                                            <td>20/09/2021</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 align-self-center">
+                                    <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Hiển
+                                        thị 1 đến 10 của 21</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <nav
+                                        class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                                        <ul class="pagination">
+                                            <li class="page-item disabled"><a class="page-link" href="#"
+                                                    aria-label="Previous"><span aria-hidden="true">«</span></a></li>
+                                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span
+                                                        aria-hidden="true">»</span></a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © Brand 2021</span></div>
+                </div>
+            </footer>
+        </div>
+        <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    </div>
+
+    <script src="/public/js/theme.js"></script>
+</body>

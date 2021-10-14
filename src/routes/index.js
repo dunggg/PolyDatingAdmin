@@ -1,12 +1,31 @@
-var express = require('express');
-var router = express.Router();
-var api = require('./api/Index');
+const express = require('express');
+const user = require("../controllers/users.controller");
+const router = express.Router();
 
-/* GET home page. */
-router.get('/', function (req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get('/', (req, res) => {
+    res.render('index');
 });
 
-router.use('/api', api);
+router.get('/index', (req, res) => {
+    res.render('index');
+});
+
+router.get('/statistical', (req, res) => {
+    res.render('statistical');
+});
+
+router.get('/users', user.list);
+
+router.get('/user-details', (req, res) => {
+    res.render('user-details');
+});
+
+router.get('/reports', (req, res) => {
+    res.render('reports');
+});
+
+router.get('/notifications', (req, res) => {
+    res.render('notifications');
+});
 
 module.exports = router;
