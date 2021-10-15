@@ -4,6 +4,8 @@ const connectDB = require("./config/connectDB");
 const indexRouter = require("./routes/index");
 const usersApiRouter = require("./routes/api/users.api.router");
 
+const eduPolyApiRouter = require("./routes/api/edu-poly.api.router");
+
 connectDB();
 
 const app = express();
@@ -21,6 +23,8 @@ app.use("/", indexRouter);
 
 // Api
 app.use("/api/users", usersApiRouter);
+
+app.use("/api", eduPolyApiRouter);
 
 app.use((req, res, next) => {
   res.sendStatus(404);

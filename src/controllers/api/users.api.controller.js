@@ -3,9 +3,8 @@ const { baseJson, validateUser } = require("../../utils/utils");
 
 exports.list = async (req, res) => {
     try {
-        await User.find()
-            .then(data => res.status(200).json(baseJson(200, "Get list user successfully", { total: data.length, users: data })))
-            .catch(err => res.status(400).json(baseJson(400, err.message)));
+        const data = await User.find();
+        res.status(200).json(baseJson(200, "Get list user successfully", { total: data.length, users: data }));
 
     } catch (error) {
         res.status(500).json(baseJson(500, error.message));
