@@ -1,14 +1,14 @@
 const multer = require("multer");
 const User = require("../../models/user.shema");
-const { baseJson, validateUser, uploadMulter } = require("../../utils/utils");
+const { response, validateUser, uploadMulter } = require("../../utils/utils");
 
 exports.list = async (req, res) => {
     try {
         const data = await User.find();
-        res.status(200).json(baseJson(200, "Get list user successfully", { total: data.length, users: data }));
+        res.status(200).json(response(200, "Get list user successfully", { total: data.length, users: data }));
 
     } catch (error) {
-        res.status(500).json(baseJson(500, error.message));
+        res.status(500).json(response(500, error.message));
     }
 };
 
@@ -16,7 +16,7 @@ exports.insert = async (req, res) => {
     try {
         const { error, value } = validateUser.validate(req.body);
 
-        if (error) return res.json(baseJson(400, error.message));
+        if (error) return res.json(response(400, error.message));
 
         uploadMulter(req, res, (err) => {
             if (err instanceof multer.MulterError) {
@@ -39,11 +39,11 @@ exports.insert = async (req, res) => {
                 };
 
                 User.create(info)
-                    .then(() => res.status(201).json(baseJson(201, "Create account successfully")))
-                    .catch(err => res.status(400).json(baseJson(400, err.message)));
+                    .then(() => res.status(201).json(response(201, "Create account successfully")))
+                    .catch(err => res.status(400).json(response(400, err.message)));
             }
         });
     } catch (error) {
-        res.status(500).json(baseJson(500, error.message));
+        res.status(500).json(response(500, error.message));
     }
 };

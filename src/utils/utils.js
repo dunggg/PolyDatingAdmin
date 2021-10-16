@@ -2,7 +2,7 @@ const joi = require("joi");
 const multer = require('multer');
 
 /** Base Response */
-const baseJson = (statusCode, message, data = undefined) => {
+const response = (statusCode, message, data = undefined) => {
   return { statusCode, message, data };
 };
 
@@ -37,4 +37,4 @@ const uploadMulter = multer({
   }
 }).array('avatars', 6);
 
-module.exports = { baseJson, validateUser, uploadMulter };
+module.exports = { response, validateUser, uploadMulter };
