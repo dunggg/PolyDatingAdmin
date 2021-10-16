@@ -8,10 +8,10 @@ const response = (statusCode, message, data = undefined) => {
 
 /** Validate Model */
 const validateUser = joi.object({
-  email: joi.string().required(),
+  email: joi.string().email().required(),
   name: joi.string().min(5).max(20).required(),
-  avatars: joi.string().required(),
-  hobbies: joi.string().required(),
+  avatars: joi.array().items(joi.string().min(2).max(6).required()).required(),
+  hobbies: joi.array().items(joi.string().min(1).max(5).required()).required(),
   birthDay: joi.string().required(),
   gender: joi.string().required(),
   facilities: joi.string().required(),
