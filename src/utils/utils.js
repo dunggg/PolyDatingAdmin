@@ -10,7 +10,8 @@ const baseJson = (statusCode, message, data = undefined) => {
 const validateUser = joi.object({
   email: joi.string().required(),
   name: joi.string().min(5).max(20).required(),
-  hobbies: joi.array().min(1).max(5).required(),
+  avatars: joi.string().required(),
+  hobbies: joi.string().required(),
   birthDay: joi.string().required(),
   gender: joi.string().required(),
   facilities: joi.string().required(),

@@ -10,7 +10,7 @@ const facilities = [
 ]
 
 const specialized = [
-    'Chọn nghành học', "Thiết kế website", "CNTT - Ứng dụng phần mềm", "Lập trình máy tính - Thiết bị di động", "QTDN - Marketing & Sales",
+    "Thiết kế website", "CNTT - Ứng dụng phần mềm", "Lập trình máy tính - Thiết bị di động", "QTDN - Marketing & Sales",
     "QHCC - PR & Tổ chức sự kiện", "TMĐT - Digital & Online Marketing", "Thiết kế đồ họa", "Thẩm mỹ làm đẹp",
     "CN kỹ thuật điều khiển và tự động hóa", "CN kỹ thuật điện, điện tử", "Điện công nghiệp", "CN kỹ thuật cơ khí",
     "Hướng dẫn viên du lịch", "Quản trị khách sạn", "Quản trị nhà hàng"
