@@ -12,6 +12,7 @@ const User = new mongoose.Schema(
     facilities: String,
     specialized: String,
     course: String,
+    isShow: { type: String, default: 'Mọi người' },
     isActive: { type: Boolean, default: true },
     status: { type: Boolean, default: true },
   },

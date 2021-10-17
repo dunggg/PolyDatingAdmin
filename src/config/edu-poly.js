@@ -1,4 +1,3 @@
-
 const hobbies = [
     "Nghe nhạc", "Xem phim", "Chơi game", "Đá bóng", "Nấu ăn", "Đọc sách", "Bóng đá", "Viết truyện", "Thắng Rách"
 ]

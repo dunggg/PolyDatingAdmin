@@ -4,22 +4,22 @@
             <div class="container-fluid d-flex flex-column p-0">
                 <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
                     <div class="sidebar-brand-icon rotate-n-15">
-                        <img src="public/img/bee.png" alt="">
+                        <img src="/public/img/bee.png" alt="">
                     </div>
                     <div class="sidebar-brand-text mx-3"><span>POLY DATING</span></div>
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item"><a class="nav-link" href="statistical"><i
+                    <li class="nav-item"><a class="nav-link" href="/statistical"><i
                                 class="fas fa-tachometer-alt"></i><span>Thống kê</span></a></li>
-                    <li class="nav-item"><a class="nav-link active" href="users"><i
-                                class="fas fa-user"></i><span>Người dùng</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="reports"><i class="fas fa-flag"></i><span>Báo
+                    <li class="nav-item"><a class="nav-link active" href="/users"><i class="fas fa-user"></i><span>Người
+                                dùng</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/reports"><i class="fas fa-flag"></i><span>Báo
                                 cáo</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="notifications"><i
+                    <li class="nav-item"><a class="nav-link" href="/notifications"><i
                                 class="fas fa-bell"></i><span>Thông báo</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="index"><i
-                                class="fas fa-sign-out-alt"></i><span>Đăng xuất</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/index"><i class="fas fa-sign-out-alt"></i><span>Đăng
+                                xuất</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0"
                         id="sidebarToggle" type="button"></button></div>
@@ -31,7 +31,7 @@
                     <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3"
                             id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
                         <div class="d-sm-inline-block me-auto md-3 my-2 my-md-0 mw-100 navbar-search">
-                            <h4 class="text-dark mb-0">Thông tin người dùng</h4>
+                            <h4 class="text-dark mb-0">Thông tin người dùng {{user.name}}</h4>
                         </div>
                     </div>
                 </nav>
@@ -47,22 +47,15 @@
                                 <div class="card-body text-center">
                                     <div class="col">
                                         <img class="rounded-circle mb-3 mt-2"
-                                            src="https://f43-zpg.zdn.vn/2575592389455815324/e11f1916619f97c1ce8e.jpg"
-                                            width="180" height="180">
-                                        <p class="fw-bold h4">Thắng Rách</p>
+                                            src="http://localhost:3000/{{user.avatars.[0]}}" width="180" height="180">
+                                        <p class="fw-bold h4">{{user.name}}</p>
                                     </div>
-
                                     <hr>
-                                    <img class="rounded m-2"
-                                        src="https://f43-zpg.zdn.vn/2575592389455815324/e11f1916619f97c1ce8e.jpg"
-                                        width="140" height="140">
-                                    <img class="rounded m-2"
-                                        src="https://f43-zpg.zdn.vn/2575592389455815324/e11f1916619f97c1ce8e.jpg"
-                                        width="140" height="140">
-                                    <img class="rounded m-2"
-                                        src="https://f43-zpg.zdn.vn/2575592389455815324/e11f1916619f97c1ce8e.jpg"
-                                        width="140" height="140">
 
+                                    {{#each user.avatars}}
+                                    <img class="rounded m-2" src="http://localhost:3000/{{this}}" width="140"
+                                        height="140">
+                                    {{/each}}
                                 </div>
                             </div>
                         </div>
@@ -76,17 +69,21 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="col">
-                                                <p>ID: </p>
-                                                <p>Số điện thoại:</p>
-                                                <p>Sinh nhật:</p>
-                                                <p>Email:</p>
-                                                <p>Cơ sở:</p>
-                                                <p>Chuyên nghành:</p>
-                                                <p>Khóa: </p>
-                                                <p>Ngày tạo: </p>
-                                                <p>Sở thích: </p>
-                                                <p>Báo cáo: </p>
-                                                <p>Trạng thái: </p>
+                                                <p>ID: {{user._id}}</p>
+                                                <p>Email: {{user.email}}</p>
+                                                <p>Họ tên: {{user.name}}</p>
+                                                <p>Sở thích: {{user.hobbies}}</p>
+                                                <p>Ngày sinh: {{user.birthDay}}</p>
+                                                <p>Giới tính: {{user.gender}}</p>
+                                                <p>Cơ sở: {{user.facilities}}</p>
+                                                <p>Chuyên ngành: {{user.specialized}}</p>
+                                                <p>Khóa học: {{user.course}}</p>
+                                                <p>Báo cáo: 0</p>
+                                                <p>Hiển thị với: {{user.isShow}}</p>
+                                                <p>Trạng thái (Online): {{user.status}} </p>
+                                                <p>Hoạt động (Active): {{user.isActive}}</p>
+                                                <p>Ngày tạo: {{user.createdAt}}</p>
+                                                <p>Ngày cập nhật: {{user.updatedAt}}</p>
                                             </div>
                                         </div>
                                     </div>

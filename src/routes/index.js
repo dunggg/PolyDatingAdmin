@@ -14,12 +14,6 @@ router.get('/statistical', (req, res) => {
     res.render('statistical');
 });
 
-router.get('/users', user.list);
-
-router.get('/user-details', (req, res) => {
-    res.render('user-details');
-});
-
 router.get('/reports', (req, res) => {
     res.render('reports');
 });

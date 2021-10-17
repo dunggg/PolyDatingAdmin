@@ -47,10 +47,9 @@
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
                                             <select class="d-inline-block form-select form-select-sm">
-                                                <option value="" selected="">Cơ sở</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
+                                                {{#each facilities}}
+                                                <option value="{{this}}">{{this}}</option>
+                                                {{/each}}
                                             </select>
                                         </label>
                                     </div>
@@ -60,10 +59,9 @@
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
                                             <select class="d-inline-block form-select form-select-sm">
-                                                <option value="" selected="">Chuyên nghành</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
+                                                {{#each specialized}}
+                                                <option value="{{this}}">{{this}}</option>
+                                                {{/each}}
                                             </select>
                                         </label>
                                     </div>
@@ -73,10 +71,9 @@
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
                                             <select class="d-inline-block form-select form-select-sm">
-                                                <option value="" selected="">Khóa</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
+                                                {{#each course}}
+                                                <option value="{{this}}">{{this}}</option>
+                                                {{/each}}
                                             </select>
                                         </label>
                                     </div>
@@ -87,9 +84,8 @@
                                         <label class="form-label">
                                             <select class="d-inline-block form-select form-select-sm">
                                                 <option value="" selected="">Giới tính</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
+                                                <option value="Nam">Nam</option>
+                                                <option value="Nữ">Nữ</option>
                                             </select>
                                         </label>
                                     </div>
@@ -112,10 +108,9 @@
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
                                             <select class="d-inline-block form-select form-select-sm">
-                                                <option value="" selected="">Chặn</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
+                                                <option value="" selected="">Hoạt động</option>
+                                                <option value="true">Kích hoạt</option>
+                                                <option value="false">Chặn</option>
                                             </select>
                                         </label>
                                     </div>
@@ -136,34 +131,35 @@
                                 <table class="table table-hover my-0" id="dataTable">
                                     <thead>
                                         <tr>
-                                            <th>Id</th>
+                                            <th>Email</th>
                                             <th>Họ tên</th>
-                                            <th>Cơ sở</th>
-                                            <th>Ngành</th>
-                                            <th>Khóa</th>
-                                            <th>Giới tính</th>
-                                            <th>Báo cáo</th>
-                                            <th>Sinh nhật</th>
                                             <th>Sở thích</th>
-                                            <th>Trạng thái</th>
+                                            <th>Ngày sinh</th>
+                                            <th>Giới tính</th>
+                                            <th>Cơ sở</th>
+                                            <th>Chuyên ngành</th>
+                                            <th>Khóa học</th>
+                                            <th>Báo cáo</th>
+                                            <th>Hoạt động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {{#each users}}
                                         <tr>
-                                            <td><a href="user-details">{{this._id}}</a></td>
-                                            <td><img class="rounded-circle me-2" width="30" height="30"
-                                                    src="https://f43-zpg.zdn.vn/2575592389455815324/e11f1916619f97c1ce8e.jpg">
+                                            <td><a href="/users/{{this.email}}">{{this.email}}</a></td>
+                                            <td>
+                                                <img class="rounded-circle me-2" width="30" height="30"
+                                                    src="http://localhost:3000/{{this.avatars.[0]}}">
                                                 {{this.name}}
                                             </td>
+                                            <td>{{this.hobbies}}</td>
+                                            <td>{{this.birthDay}}</td>
+                                            <td>{{this.gender}}</td>
                                             <td>{{this.facilities}}</td>
                                             <td>{{this.specialized}}</td>
                                             <td>{{this.course}}</td>
-                                            <td>{{this.gender}}</td>
                                             <td>0</td>
-                                            <td>{{this.birthDay}}</td>
-                                            <td>{{this.hobbies}}</td>
-                                            <td class="text-danger">{{this.isActive}}</td>
+                                            <td class="text-success">{{this.isActive}}</td>
                                         </tr>
                                         {{/each }}
                                     </tbody>
@@ -173,7 +169,7 @@
                             <div class="row">
                                 <div class="col-md-6 align-self-center">
                                     <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Hiển
-                                        thị 1 đến 10 của 21</p>
+                                        thị 1 đến 10 của {{users.length}}</p>
                                 </div>
                                 <div class="col-md-6">
                                     <nav
