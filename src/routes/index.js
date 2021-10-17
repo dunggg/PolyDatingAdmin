@@ -14,7 +14,7 @@ router.get('/statistical', (req, res) => {
     res.render('statistical');
 });
 
-router.get('/users', user.list);
+router.get('/users/page/:page', user.list);
 
 router.get('/user-details', (req, res) => {
     res.render('user-details');
