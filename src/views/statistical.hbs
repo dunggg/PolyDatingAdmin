@@ -10,20 +10,28 @@
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item"><a class="nav-link active" href="statistical"><i class="fas fa-tachometer-alt"></i><span>Thống kê</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="users"><i class="fas fa-user"></i></i><span>Người dùng</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="reports"><i class="fas fa-flag"></i><span>Báo cáo</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="notifications"><i class="fas fa-bell"></i><span>Thông báo</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="index"><i class="fas fa-sign-out-alt"></i><span>Đăng xuất</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/statistical"><i
+                                class="fas fa-tachometer-alt"></i><span>Thống kê</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/users/page/1"><i
+                                class="fas fa-user"></i></i><span>Người dùng</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/reports"><i class="fas fa-flag"></i><span>Báo
+                                cáo</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/notifications"><i
+                                class="fas fa-bell"></i><span>Thông
+                                báo</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/index"><i class="fas fa-sign-out-alt"></i><span>Đăng
+                                xuất</span></a></li>
                 </ul>
-                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0"
+                        id="sidebarToggle" type="button"></button></div>
             </div>
         </nav>
 
         <div class="d-flex flex-column" id="content-wrapper">
             <div id="content">
                 <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
-                    <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
+                    <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3"
+                            id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
                         <div class="d-sm-inline-block me-auto md-3 my-2 my-md-0 mw-100 navbar-search">
                             <h4 class="text-dark mb-0">Thống kê</h4>
                         </div>
@@ -120,15 +128,22 @@
                                     <div class="card">
                                         <div class="card-header"></div>
                                         <div class="card-body">
-                                            <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
-                                                <div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-                                                    <div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0">
+                                            <div class="chartjs-size-monitor"
+                                                style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
+                                                <div class="chartjs-size-monitor-expand"
+                                                    style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
+                                                    <div
+                                                        style="position:absolute;width:1000000px;height:1000000px;left:0;top:0">
                                                     </div>
                                                 </div>
-                                                <div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-                                                    <div style="position:absolute;width:200%;height:200%;left:0; top:0"></div>
+                                                <div class="chartjs-size-monitor-shrink"
+                                                    style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
+                                                    <div style="position:absolute;width:200%;height:200%;left:0; top:0">
+                                                    </div>
                                                 </div>
-                                            </div> <canvas id="chart-line" width="299" height="200" class="chartjs-render-monitor" style="display: block; width: 299px; height: 200px;"></canvas>
+                                            </div> <canvas id="chart-line" width="299" height="200"
+                                                class="chartjs-render-monitor"
+                                                style="display: block; width: 299px; height: 200px;"></canvas>
                                         </div>
                                     </div>
                                 </div>
@@ -146,10 +161,10 @@
         </div>
         <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
-   
+
     <script src="/public/js/theme.js"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             var ctx = $("#chart-line");
             var myLineChart = new Chart(ctx, {
                 type: 'bar',
