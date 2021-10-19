@@ -60,7 +60,7 @@
                                 <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
-                                            <select class="d-inline-block form-select form-select-sm">
+                                            <select class="d-inline-block form-select form-select-sm" id="specialized">
                                                 {{#each specialized}}
                                                 <option value="{{this}}">{{this}}</option>
                                                 {{/each}}
@@ -72,7 +72,7 @@
                                 <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
-                                            <select class="d-inline-block form-select form-select-sm">
+                                            <select id="course" class="d-inline-block form-select form-select-sm">
                                                 {{#each course}}
                                                 <option value="{{this}}">{{this}}</option>
                                                 {{/each}}
@@ -84,7 +84,7 @@
                                 <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
-                                            <select class="d-inline-block form-select form-select-sm">
+                                            <select id="gender" class="d-inline-block form-select form-select-sm">
                                                 <option value="" selected="">Giới tính</option>
                                                 <option value="Nam">Nam</option>
                                                 <option value="Nữ">Nữ</option>
@@ -96,7 +96,7 @@
                                 <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
-                                            <select class="d-inline-block form-select form-select-sm">
+                                            <select id="report" class="d-inline-block form-select form-select-sm">
                                                 <option value="" selected="">Báo cáo</option>
                                                 <option value="25">25</option>
                                                 <option value="50">50</option>
@@ -109,7 +109,7 @@
                                 <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
-                                            <select class="d-inline-block form-select form-select-sm">
+                                            <select id="status" class="d-inline-block form-select form-select-sm">
                                                 <option value="" selected="">Hoạt động</option>
                                                 <option value="true">Kích hoạt</option>
                                                 <option value="false">Chặn</option>
@@ -124,9 +124,17 @@
                                             <input type="search" class="form-control form-control-sm"
                                                 aria-controls="dataTable" placeholder="Tìm kiếm...">
                                         </label>
+                                        <button id="btn-search" type="button" class="btn btn-primary">Tìm
+                                            kiếm</button>
                                     </div>
                                 </div>
                             </div>
+                            <form id="form">
+                                <input type="hidden" name="a" value="1" />
+                                <input type="hidden" name="b" value="2" />
+                                <input type="hidden" name="c" value="3" />
+                                <input type="submit" />
+                            </form>
 
                             <div class="table-responsive table mt-2" id="dataTable" role="grid"
                                 aria-describedby="dataTable_info">

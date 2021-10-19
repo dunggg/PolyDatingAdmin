@@ -1,21 +1,23 @@
-(function() {
-  "use strict"; // Start of use strict
+(function () {
+  'use strict'; // Start of use strict
 
   var sidebar = document.querySelector('.sidebar');
-  var sidebarToggles = document.querySelectorAll('#sidebarToggle, #sidebarToggleTop');
-  
+  var sidebarToggles = document.querySelectorAll(
+    '#sidebarToggle, #sidebarToggleTop',
+  );
+
   if (sidebar) {
-    
     var collapseEl = sidebar.querySelector('.collapse');
-    var collapseElementList = [].slice.call(document.querySelectorAll('.sidebar .collapse'))
+    var collapseElementList = [].slice.call(
+      document.querySelectorAll('.sidebar .collapse'),
+    );
     var sidebarCollapseList = collapseElementList.map(function (collapseEl) {
       return new bootstrap.Collapse(collapseEl, { toggle: false });
     });
 
     for (var toggle of sidebarToggles) {
-
       // Toggle the side navigation
-      toggle.addEventListener('click', function(e) {
+      toggle.addEventListener('click', function (e) {
         document.body.classList.toggle('sidebar-toggled');
         sidebar.classList.toggle('toggled');
 
@@ -23,29 +25,35 @@
           for (var bsCollapse of sidebarCollapseList) {
             bsCollapse.hide();
           }
-        };
+        }
       });
     }
 
     // Close any open menu accordions when window is resized below 768px
-    window.addEventListener('resize', function() {
-      var vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    window.addEventListener('resize', function () {
+      var vw = Math.max(
+        document.documentElement.clientWidth || 0,
+        window.innerWidth || 0,
+      );
 
       if (vw < 768) {
         for (var bsCollapse of sidebarCollapseList) {
           bsCollapse.hide();
         }
-      };
+      }
     });
   }
 
   // Prevent the content wrapper from scrolling when the fixed side navigation hovered over
-  
+
   var fixedNaigation = document.querySelector('body.fixed-nav .sidebar');
-  
+
   if (fixedNaigation) {
-    fixedNaigation.on('mousewheel DOMMouseScroll wheel', function(e) {
-      var vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    fixedNaigation.on('mousewheel DOMMouseScroll wheel', function (e) {
+      var vw = Math.max(
+        document.documentElement.clientWidth || 0,
+        window.innerWidth || 0,
+      );
 
       if (vw > 768) {
         var e0 = e.originalEvent,
@@ -57,11 +65,10 @@
   }
 
   var scrollToTop = document.querySelector('.scroll-to-top');
-  
+
   if (scrollToTop) {
-    
     // Scroll to top button appear
-    window.addEventListener('scroll', function() {
+    window.addEventListener('scroll', function () {
       var scrollDistance = window.pageYOffset;
 
       //check if user is scrolling up
@@ -73,4 +80,30 @@
     });
   }
 
+  const specialized = document.getElementById('specialized');
+  const course = document.getElementById('course');
+  const gender = document.getElementById('gender');
+  const report = document.getElementById('report');
+  const status = document.getElementById('status');
+  const form = document.getElementById('form');
+  const btnSearch = document.getElementById('btn-search');
+
+  btnSearch.addEventListener('click', () => {
+    // form.action = `/users/page/1/search?specialized=${specialized.value.replaceAll(
+    //   ' ',
+    //   '',
+    // )}&course=${course.value.replaceAll(
+    //   ' ',
+    //   '',
+    // )}&gender=${gender.value.replaceAll(
+    //   ' ',
+    //   '',
+    // )}&report=${report.value.replaceAll(
+    //   ' ',
+    //   '',
+    // )}&status=${status.value.replaceAll(' ', '')}`;
+    // form.action = `/users/page/1?specialized=${specialized.value}&course=${course.value}&gender=${gender.value}&report=${report.value}&status=${status.value}`;
+    form.action = `/users/page/1/search?specialized=abs`;
+    form.submit();
+  });
 })(); // End of use strict
