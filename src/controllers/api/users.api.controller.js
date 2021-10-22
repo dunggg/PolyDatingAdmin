@@ -11,14 +11,26 @@ exports.list = async (req, res) => {
 
         const data = await User.find({ isShow: value.isShow }).limit(parseInt(value.pageSize));
 
-        if (data.length == 0) return res.status(400).json(response(400, "Fail"));
-
-        res.status(200).json(response(200, "Get list user successfully", { total: data.length, users: data }));
+        res.status(200).json(response(200, "Lay danh sach nguoi dung thanh cong!", { total: data.length, users: data }));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
     }
 };
+
+exports.search = async (req, res) => {
+    try {
+        const { email } = req.query;
+
+        const data = await User.findOne({ email });
+
+        if (!data) return res.status(200).json(response(200, "Nguoi dung khong ton tai!"));
+
+        res.status(200).json(response(200, "Tim kiem nguoi dung thanh cong!", { user: data }));
+    } catch (error) {
+        res.status(500).json(response(500, error.message));
+    }
+}
 
 exports.insert = (req, res) => {
     try {
