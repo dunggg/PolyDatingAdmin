@@ -10,7 +10,7 @@ exports.list = async (req, res) => {
     } catch (error) {
         res.status(500).json(response(500, error.message));
     }
-};
+};//
 
 exports.insert = (req, res) => {
     try {
