@@ -1,22 +1,9 @@
-const joi = require("joi");
 const multer = require('multer');
 
 /** Base Response */
 const response = (statusCode, message, data = undefined) => {
   return { statusCode, message, data };
 };
-
-/** Validate Model */
-const validateUser = joi.object({
-  email: joi.string().email().required(),
-  name: joi.string().min(5).max(20).required(),
-  hobbies: joi.any().required(),
-  birthDay: joi.string().required(),
-  gender: joi.string().required(),
-  facilities: joi.string().required(),
-  specialized: joi.string().required(),
-  course: joi.string().required()
-});
 
 /**  Multer upload image */
 const storage = multer.diskStorage({
@@ -36,4 +23,4 @@ const uploadMulter = multer({
   }
 }).array('avatars', 6);
 
-module.exports = { response, validateUser, uploadMulter };
+module.exports = { response, uploadMulter };

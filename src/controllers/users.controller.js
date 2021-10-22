@@ -1,5 +1,5 @@
 const User = require('../models/user.shema');
-const { response, validateUser } = require('../utils/utils');
+const { response } = require('../utils/utils');
 const {
   course,
   hobbies,

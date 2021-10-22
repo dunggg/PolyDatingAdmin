@@ -1,16 +1,24 @@
 const multer = require("multer");
 const User = require("../../models/user.shema");
-const { response, validateUser, uploadMulter } = require("../../utils/utils");
+const { response, uploadMulter } = require("../../utils/utils");
+const validate = require('../../utils/validate');
 
 exports.list = async (req, res) => {
     try {
-        const data = await User.find();
+        const { error, value } = validate.listUser.validate(req.query);
+
+        if (error) return res.status(400).json(response(400, error.message));
+
+        const data = await User.find({ isShow: value.isShow }).limit(parseInt(value.pageSize));
+
+        if (data.length == 0) return res.status(400).json(response(400, "Fail"));
+
         res.status(200).json(response(200, "Get list user successfully", { total: data.length, users: data }));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
     }
-};//
+};
 
 exports.insert = (req, res) => {
     try {
@@ -26,7 +34,7 @@ exports.insert = (req, res) => {
                 arr.push('public/data-image/' + req.files[index].filename);
             }
 
-            const { error, value } = validateUser.validate(req.body);
+            const { error, value } = validate.insertUser.validate(req.body);
 
             if (error) return res.status(400).json(response(400, error.message));
 
