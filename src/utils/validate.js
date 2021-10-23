@@ -8,7 +8,8 @@ exports.insertUser = joi.object({
     gender: joi.string().required(),
     facilities: joi.string().required(),
     specialized: joi.string().required(),
-    course: joi.string().required()
+    course: joi.string().required(),
+    isShow: joi.string().required(),
 });
 
 exports.listUser = joi.object({
