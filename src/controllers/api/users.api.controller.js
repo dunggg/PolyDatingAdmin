@@ -60,6 +60,7 @@ exports.insert = (req, res) => {
                 facilities: value.facilities,
                 specialized: value.specialized,
                 course: value.course,
+                isShow: value.isShow
             };
 
             User.create(info)
