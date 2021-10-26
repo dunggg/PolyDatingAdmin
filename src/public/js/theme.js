@@ -85,10 +85,20 @@
   const gender = document.getElementById('gender');
   const report = document.getElementById('report');
   const status = document.getElementById('status');
+  const specializedInput = document.querySelector('input[name=specialized]');
+  const courseInput = document.querySelector('input[name=course]');
+  const genderInput = document.querySelector('input[name=gender]');
+  const reportInput = document.querySelector('input[name=report]');
+  const statusInput = document.querySelector('input[name=status]');
   const form = document.getElementById('form');
   const btnSearch = document.getElementById('btn-search');
 
   btnSearch.addEventListener('click', () => {
+    specializedInput.value = specialized.value;
+    courseInput.value = course.value;
+    genderInput.value = gender.value;
+    reportInput.value = report.value;
+    statusInput.value = status.value;
     // form.action = `/users/page/1/search?specialized=${specialized.value.replaceAll(
     //   ' ',
     //   '',
@@ -103,7 +113,6 @@
     //   '',
     // )}&status=${status.value.replaceAll(' ', '')}`;
     // form.action = `/users/page/1?specialized=${specialized.value}&course=${course.value}&gender=${gender.value}&report=${report.value}&status=${status.value}`;
-    form.action = `/users/page/1/search?specialized=abs`;
     form.submit();
   });
 })(); // End of use strict

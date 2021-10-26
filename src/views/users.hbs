@@ -85,7 +85,7 @@
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
                                             <select id="gender" class="d-inline-block form-select form-select-sm">
-                                                <option value="" selected="">Giới tính</option>
+                                                <option value="Giới tính" selected="">Giới tính</option>
                                                 <option value="Nam">Nam</option>
                                                 <option value="Nữ">Nữ</option>
                                             </select>
@@ -97,7 +97,7 @@
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
                                             <select id="report" class="d-inline-block form-select form-select-sm">
-                                                <option value="" selected="">Báo cáo</option>
+                                                <option value="Báo cáo" selected="">Báo cáo</option>
                                                 <option value="25">25</option>
                                                 <option value="50">50</option>
                                                 <option value="100">100</option>
@@ -110,7 +110,7 @@
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
                                             <select id="status" class="d-inline-block form-select form-select-sm">
-                                                <option value="" selected="">Hoạt động</option>
+                                                <option value="Hoạt động" selected="">Hoạt động</option>
                                                 <option value="true">Kích hoạt</option>
                                                 <option value="false">Chặn</option>
                                             </select>
@@ -130,10 +130,11 @@
                                 </div>
                             </div>
                             <form id="form">
-                                <input type="hidden" name="a" value="1" />
-                                <input type="hidden" name="b" value="2" />
-                                <input type="hidden" name="c" value="3" />
-                                <input type="submit" />
+                                <input type="hidden" name="specialized" value="" />
+                                <input type="hidden" name="course" value="" />
+                                <input type="hidden" name="gender" value="" />
+                                <input type="hidden" name="report" value="" />
+                                <input type="hidden" name="status" value="" />
                             </form>
 
                             <div class="table-responsive table mt-2" id="dataTable" role="grid"
@@ -190,8 +191,14 @@
                                             {{#each arrPage}}
                                             {{#compare}} {{/compare}}
                                             {{/each}}
+                                            {{#if isSearch}}
+                                            <li class="page-item"><a class="page-link"
+                                                    href="/users/page/{{next}}?abc=abc" aria-label="Next"><span
+                                                        aria-hidden="true">»</span></a></li>
+                                            {{else}}
                                             <li class="page-item"><a class="page-link" href="/users/page/{{next}}"
                                                     aria-label="Next"><span aria-hidden="true">»</span></a></li>
+                                            {{/if}}
                                         </ul>
                                     </nav>
                                 </div>

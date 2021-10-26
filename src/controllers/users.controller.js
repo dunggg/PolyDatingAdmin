@@ -8,6 +8,11 @@ const {
 } = require('../config/edu-poly');
 
 exports.list = async (req, res) => {
+  let isSearch = false;
+  if (req.query !== {}) {
+    const { specialized, course, gender, report, status } = req.query;
+    isSearch = true;
+  }
   try {
     let perPage = 5;
     let page = req.params.page || 1;
@@ -32,6 +37,7 @@ exports.list = async (req, res) => {
       course,
       specialized,
       facilities,
+      isSearch,
     };
     res.render('users', payload);
   } catch (error) {
