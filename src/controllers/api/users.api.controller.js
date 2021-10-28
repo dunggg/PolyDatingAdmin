@@ -30,7 +30,7 @@ exports.search = async (req, res) => {
 
     const data = await User.findOne({ email });
 
-    if (!data)//
+    if (!data)
       return res.status(200).json(response(200, "Nguoi dung khong ton tai!"));
 
     res
