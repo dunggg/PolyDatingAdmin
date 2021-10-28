@@ -17,7 +17,7 @@ app.set('view engine', 'hbs');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use('/public', express.static(__dirname + '/public')); // use bootstap
+app.use('/public', express.static(__dirname + '/public')); // use bootstrap
 
 hbs.registerHelper('compare', function (object) {
   const s1 = Number(object.data.root.page);
