@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const User = new mongoose.Schema(
   {
     email: { type: String, unique: true },
-    password: String,
+    password: { type: String, default: null },
     name: String,
     avatars: Array,
     hobbies: Array,
@@ -13,7 +13,7 @@ const User = new mongoose.Schema(
     facilities: String,
     specialized: String,
     course: String,
-    isShow: { type: String, default: "Mọi người" },
+    isShow: Array,
     isActive: { type: Boolean, default: true },
     status: { type: Boolean, default: true },
   },

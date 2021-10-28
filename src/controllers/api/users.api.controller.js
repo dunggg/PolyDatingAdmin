@@ -1,6 +1,5 @@
-const multer = require("multer");
 const User = require("../../models/user.schema");
-const { response, uploadMulter } = require("../../utils/utils");
+const { response } = require("../../utils/utils");
 const validate = require("../../utils/validate");
 
 exports.list = async (req, res) => {
@@ -9,15 +8,12 @@ exports.list = async (req, res) => {
 
     if (error) return res.status(400).json(response(400, error.message));
 
-    const data = await User.find({ isShow: value.isShow }).limit(
-      parseInt(value.pageSize)
-    );
+    const data = await User.find({ isShow: value.isShow }).limit(parseInt(value.pageSize));
 
-    res.status(200).json(
-      response(200, "Lay danh sach nguoi dung thanh cong!", {
-        total: data.length,
-        users: data,
-      })
+    res.status(200).json(response(200, "Lay danh sach nguoi dung thanh cong!", {
+      total: data.length,
+      users: data,
+    })
     );
   } catch (error) {
     res.status(500).json(response(500, error.message));
@@ -30,56 +26,41 @@ exports.search = async (req, res) => {
 
     const data = await User.findOne({ email });
 
-    if (!data)
-      return res.status(200).json(response(200, "Nguoi dung khong ton tai!"));
+    if (!data) return res.status(200).json(response(200, "Người dùng không tồn tại"));
 
-    res
-      .status(200)
-      .json(response(200, "Tim kiem nguoi dung thanh cong!", { user: data }));
+    res.status(200).json(response(200, "Tìm người dùng thành công", { user: data }));
   } catch (error) {
     res.status(500).json(response(500, error.message));
   }
 };
 
-exports.insert = (req, res) => {
+exports.insert = async (req, res) => {
   try {
-    uploadMulter(req, res, (err) => {
-      if (err instanceof multer.MulterError) {
-        if (err.code == "LIMIT_FILE_SIZE")
-          return res.status(400).json(response(400, err.message));
-      }
+    const { error, value } = validate.insertUser.validate(req.body);
+    if (error) return res.status(400).json(response(400, error.message));
+    if (req.files.length < 2) return res.status(400).json(response(400, "Cần ít nhất 2 ảnh"));
 
-      const arr = [];
+    const avatars = [];
+    for (let index = 0; index < req.files.length; index++) {
+      avatars.push("public/data-image/" + req.files[index].filename)
+    }
 
-      if (req.files) {
-        for (let index = 0; index < req.files.length; index++) {
-          arr.push("public/data-image/" + req.files[index].filename);
-        }
-      }
+    const dataUser = {
+      email: value.email,
+      name: value.name,
+      avatars: avatars,
+      hobbies: value.hobbies,
+      birthDay: value.birthDay,
+      gender: value.gender,
+      facilities: value.facilities,
+      specialized: value.specialized,
+      course: value.course,
+      isShow: value.isShow,
+    }
 
-      const { error, value } = validate.insertUser.validate(req.body);
+    await User.create(dataUser);
+    res.status(201).json(response(201, "Tạo tài khoản thành công"))
 
-      if (error) return res.status(400).json(response(400, error.message));
-
-      const info = {
-        email: value.email,
-        name: value.name,
-        avatars: arr,
-        hobbies: value.hobbies,
-        birthDay: value.birthDay,
-        gender: value.gender,
-        facilities: value.facilities,
-        specialized: value.specialized,
-        course: value.course,
-        isShow: value.isShow,
-      };
-
-      User.create(info)
-        .then(() =>
-          res.status(201).json(response(201, "Create account successfully"))
-        )
-        .catch((err) => res.status(400).json(response(400, err.message)));
-    });
   } catch (error) {
     res.status(500).json(response(500, error.message));
   }
