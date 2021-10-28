@@ -31,34 +31,26 @@ const facilities = [
 ];
 
 const specialized = [
-  "Chọn ngành học",
-  "--- Công nghệ thông tin ---",
+  "Lựa chọn ngành học",
   "Thiết kế đồ họa",
   "Thiết kế website",
   "CNTT - Ứng dụng phần mềm",
   "Lập trình máy tính - Thiết bị di động",
-
-  "--- Kinh tế ---",
   "TMĐT - Digital & Online Marketing",
   "QHCC - PR & Tổ chức sự kiện",
   "QTDN - Marketing & Sales",
   "Kế toán doanh nghiệp",
-
-  "--- Du lịch - Nhà hàng - Khách sạn ---",
   "Hướng dẫn viên du lịch",
   "Quản trị khách sạn",
-
-  "--- Cơ khí, (điện) tự động hóa ---",
   "CN kỹ thuật điều khiển và tự động hóa",
   "CN kỹ thuật điện, điện tử",
   "Điện công nghiệp",
   "CN kỹ thuật cơ khí",
-
   "Thẩm mỹ - Làm đẹp",
 ];
 
 const course = [
-  "Chọn khóa học",
+  "Lựa chọn khóa học",
   "Khóa 14",
   "Khóa 15",
   "Khóa 16",
