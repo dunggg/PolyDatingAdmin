@@ -10,7 +10,7 @@ exports.list = async (req, res) => {
 
     const data = await User.find({ isShow: value.isShow }).limit(parseInt(value.pageSize));
 
-    res.status(200).json(response(200, "Lay danh sach nguoi dung thanh cong!", {
+    res.status(200).json(response(200, "Lấy danh sách người dùng thành công", {
       total: data.length,
       users: data
     }));

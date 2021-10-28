@@ -9,7 +9,7 @@ exports.insertUser = joi.object({
     // facilities: joi.string().required(),
     // specialized: joi.string().required(),
     // course: joi.string().required(),
-    isShow: joi.any().required()
+    isShow: joi.array()
 });
 
 exports.listUser = joi.object({
