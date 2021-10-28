@@ -1,5 +1,5 @@
 const multer = require("multer");
-const User = require("../../models/user.shema");
+const User = require("../../models/user.schema");
 const { response, uploadMulter } = require("../../utils/utils");
 const validate = require("../../utils/validate");
 

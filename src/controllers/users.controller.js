@@ -1,4 +1,4 @@
-const User = require('../models/user.shema');
+const User = require('../models/user.schema');
 const { response } = require('../utils/utils');
 const {
   course,
