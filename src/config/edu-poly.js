@@ -12,7 +12,7 @@ const hobbies = [
 ];
 
 const facilities = [
-  "Chọn cơ sở",
+  "Lựa chọn cơ sở",
   "FPT Polytechnic Hà Nội",
   "FPT Polytechnic Đà Nẵng",
   "FPT Polytechnic Hồ Chí Minh",
