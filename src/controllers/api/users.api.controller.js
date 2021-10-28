@@ -47,15 +47,15 @@ exports.insert = async (req, res) => {
 
     const dataUser = {
       email: value.email,
-      name: value.name,
+      // name: value.name,
       avatars: avatars,
-      hobbies: value.hobbies,
-      birthDay: value.birthDay,
-      gender: value.gender,
-      facilities: value.facilities,
-      specialized: value.specialized,
-      course: value.course,
-      isShow: value.isShow,
+      // hobbies: value.hobbies,
+      // birthDay: value.birthDay,
+      // gender: value.gender,
+      // facilities: value.facilities,
+      // specialized: value.specialized,
+      // course: value.course,
+      // isShow: value.isShow,
     }
 
     await User.create(dataUser);
