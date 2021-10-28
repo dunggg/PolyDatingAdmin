@@ -54,7 +54,7 @@ exports.insert = async (req, res) => {
       // facilities: value.facilities,
       // specialized: value.specialized,
       // course: value.course,
-      // isShow: value.isShow,
+      isShow: value.isShow,
     }
 
     await User.create(dataUser);
