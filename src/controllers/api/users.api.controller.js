@@ -42,7 +42,7 @@ exports.insert = async (req, res) => {
 
     const avatars = [];
     for (let index = 0; index < req.files.length; index++) {
-      avatars.push("public/data-image/" + req.files[index].filename)
+      avatars.push("src/public/data-image/" + req.files[index].filename)
     }
 
     const dataUser = {
