@@ -1,5 +1,6 @@
 const User = require('../models/user.schema');
 const { response } = require('../utils/utils');
+const _ = require('lodash');
 const {
   course,
   hobbies,
@@ -9,12 +10,18 @@ const {
 
 exports.list = async (req, res) => {
   let isSearch = false;
-  if (req.query !== {}) {
-    const { specialized, course, gender, report, status } = req.query;
+  if (!_.isEmpty(req.query)) {
+    var {
+      specialized: specializedParams,
+      course: courseParams,
+      gender: genderParams,
+      report: reportParmas,
+      status: statusParams,
+    } = req.query;
     isSearch = true;
   }
   try {
-    let perPage = 5;
+    let perPage = 1;
     let page = req.params.page || 1;
     const data = await User.find();
     const listUser = await User.find()
@@ -26,7 +33,7 @@ exports.list = async (req, res) => {
     for (let i = 1; i <= countPage; i++) {
       arrPage.push(i);
     }
-    const payload = {
+    let payload = {
       users: listUser,
       arrPage,
       countTo: perPage * page,
@@ -39,6 +46,16 @@ exports.list = async (req, res) => {
       facilities,
       isSearch,
     };
+    if (!_.isEmpty(req.query)) {
+      payload = {
+        ...payload,
+        specializedParams,
+        courseParams,
+        genderParams,
+        reportParmas,
+        statusParams,
+      };
+    }
     res.render('users', payload);
   } catch (error) {
     res.status(500).json(response(500, error.message));

@@ -186,15 +186,21 @@
                                     <nav
                                         class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
                                         <ul class="pagination">
+                                            {{#if isSearch}}
+                                            <li class="page-item"><a class="page-link"
+                                                    href="/users/page/{{pre}}?specialized={{specializedParams}}&course={{courseParams}}&gender={{genderParams}}&report={{reportParams}}&status={{statusParams}}"
+                                                    aria-label="Next"><span aria-hidden="true">«</span></a></li>
+                                            {{else}}
                                             <li class="page-item"><a class="page-link" href="/users/page/{{pre}}"
                                                     aria-label="Next"><span aria-hidden="true">«</span></a></li>
+                                            {{/if}}
                                             {{#each arrPage}}
                                             {{#compare}} {{/compare}}
                                             {{/each}}
                                             {{#if isSearch}}
                                             <li class="page-item"><a class="page-link"
-                                                    href="/users/page/{{next}}?abc=abc" aria-label="Next"><span
-                                                        aria-hidden="true">»</span></a></li>
+                                                    href="/users/page/{{next}}?specialized={{specializedParams}}&course={{courseParams}}&gender={{genderParams}}&report={{reportParams}}&status={{statusParams}}"
+                                                    aria-label="Next"><span aria-hidden="true">»</span></a></li>
                                             {{else}}
                                             <li class="page-item"><a class="page-link" href="/users/page/{{next}}"
                                                     aria-label="Next"><span aria-hidden="true">»</span></a></li>
