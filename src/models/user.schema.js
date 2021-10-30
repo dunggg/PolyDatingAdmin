@@ -16,6 +16,7 @@ const User = new mongoose.Schema(
     isShow: Array,
     isActive: { type: Boolean, default: true },
     status: { type: Boolean, default: true },
+    role: { type: String, default: 'User' }
   },
   { timestamps: true }
 );
