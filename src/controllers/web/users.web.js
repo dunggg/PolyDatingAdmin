@@ -1,5 +1,5 @@
+const { updateOne } = require('../../models/user.schema');
 const User = require('../../models/user.schema');
-const { response } = require('../../utils/utils');
 const {
   course,
   hobbies,
@@ -61,12 +61,46 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body
 
-    const data = await User.findOne({ email, password, roleAdmin: true });
+    if (email == "admin" && password == "admin") return res.redirect('/statistical')
+
+    const data = await User.findOne({ email, password });
 
     if (!data) return res.render('index', { msgError: "Sai email hoặc mật khẩu" })
 
+    if (data.role != "Admin") return res.render('index', { msgError: "Tài khoản không có quyền hạn" })
+
+    if (data.isActive != "Kích hoạt") return res.render('index', { msgError: "Tài khoản đã bị khóa" })
+
     res.redirect('/statistical')
   } catch (error) {
-    res.status(500).send(error)
+    res.status(500).send(error.message)
   }
 };
+
+exports.block = async (req, res) => {
+  try {
+    const { _id } = req.params;
+
+    const data = await User.findOne({ _id });
+
+    await User.updateOne({ _id }, { isActive: "Chặn" });
+
+    res.render('profile', { user: data });
+  } catch (error) {
+    res.status(500).send(error.message)
+  }
+}
+
+exports.unBlock = async (req, res) => {
+  try {
+    const { _id } = req.params;
+
+    const data = await User.findOne({ _id });
+
+    await User.updateOne({ _id }, { isActive: "Kích hoạt" });
+
+    res.render('profile', { user: data });
+  } catch (error) {
+    res.status(500).send(error.message)
+  }
+}

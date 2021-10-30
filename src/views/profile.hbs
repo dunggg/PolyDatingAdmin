@@ -93,7 +93,7 @@
                                                 </p>
                                                 <p><span class="text-black">Hoạt động (Active): </span>{{user.isActive}}
                                                 </p>
-                                                <p><span class="text-black">Vai trò: </span>{{user.roleAmin}}</p>
+                                                <p><span class="text-black">Vai trò: </span>{{user.role}}</p>
                                                 <p><span class="text-black">Ngày tạo: </span>{{user.createdAt}}</p>
                                                 <p><span class="text-black">Ngày cập nhật: </span>{{user.updatedAt}}</p>
                                             </div>
@@ -108,8 +108,14 @@
                                 <div class="card-header py-3">
                                     <div class="row">
                                         <p class="text-primary m-0 fw-bold col-md-6">Báo cáo</p>
-                                        <a href="#" class="text-danger m-0 fw-bold col-md-6 text-end"
-                                            style="text-decoration: none;">Chặn</a>
+
+                                        <form action="/users/block/{{user._id}}" method="post" id="form-block"
+                                            class="text-end col-md-6 ">
+
+                                            <a href="#" class="text-danger m-0 fw-bold" style="text-decoration: none;"
+                                                onclick="document.getElementById('form-block').submit()">Chặn</a>
+                                        </form>
+
                                     </div>
                                 </div>
                                 <div class="card-body">
