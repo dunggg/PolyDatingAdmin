@@ -9,14 +9,14 @@ const User = new mongoose.Schema(
     hobbies: Array,
     birthDay: String,
     gender: String,
-    description: { type: String, default: null },
+    description: String,
     facilities: String,
     specialized: String,
     course: String,
     isShow: Array,
-    isActive: { type: Boolean, default: true },
-    status: { type: Boolean, default: true },
-    role: { type: String, default: 'User' }
+    isActive: String,
+    status: String,
+    role: String
   },
   { timestamps: true }
 );

@@ -16,7 +16,6 @@ exports.list = async (req, res) => {
   try {
     let perPage = 5;
     let page = req.params.page || 1;
-    const data = await User.find();
     const listUser = await User.find()
       .skip(perPage * page - perPage)
       .limit(perPage);
@@ -39,9 +38,10 @@ exports.list = async (req, res) => {
       facilities,
       isSearch,
     };
+
     res.render('users', payload);
   } catch (error) {
-    res.status(500).json(response(500, error.message));
+    res.status(500).send(error.message)
   }
 };
 
@@ -53,7 +53,7 @@ exports.find = async (req, res, next) => {
 
     res.render('profile', { user: data });
   } catch (error) {
-    next();
+    res.status(500).send(error.message)
   }
 };
 
@@ -61,7 +61,7 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body
 
-    const data = await User.findOne({ email, password, role: 'Admin' });
+    const data = await User.findOne({ email, password, roleAdmin: true });
 
     if (!data) return res.render('index', { msgError: "Sai email hoặc mật khẩu" })
 

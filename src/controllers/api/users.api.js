@@ -51,10 +51,14 @@ exports.insert = async (req, res) => {
       hobbies: value.hobbies,
       birthDay: value.birthDay,
       gender: value.gender,
+      description: "Không có gì để hiển thị",
       facilities: value.facilities,
       specialized: value.specialized,
       course: value.course,
       isShow: value.isShow,
+      isActive: "Kích hoạt",
+      status: "Online",
+      role: "User"
     }
 
     await User.create(dataUser);

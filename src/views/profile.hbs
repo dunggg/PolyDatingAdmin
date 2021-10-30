@@ -46,21 +46,24 @@
                                     <p class="text-primary m-0 fw-bold">Hồ sơ</p>
                                 </div>
 
-                                <div class="card-body text-center">
-                                    <div class="col">
+                                <div class="card-body">
+                                    <div class="col text-center">
                                         <img class="rounded-circle mb-3 mt-2"
                                             src="https://poly-dating.herokuapp.com/{{user.avatars.[0]}}" width="180"
                                             height="180">
                                         <p class="text-black fw-bold h4">{{user.name}}</p>
                                     </div>
+
+                                    <p><span class="text-black">Giới thiệu: </span>{{user.description}}</p>
                                     <hr>
 
-                                    <p>{{user.description}}</p>
+                                    <div class="text-center">
+                                        {{#each user.avatars}}
+                                        <img class="rounded m-2" src="https://poly-dating.herokuapp.com/{{this}}"
+                                            width="140" height="140">
+                                        {{/each}}
+                                    </div>
 
-                                    {{#each user.avatars}}
-                                    <img class="rounded m-2" src="https://poly-dating.herokuapp.com/{{this}}"
-                                        width="140" height="140">
-                                    {{/each}}
                                 </div>
                             </div>
                         </div>
@@ -86,10 +89,11 @@
                                                 <p><span class="text-black">Khóa học: </span>{{user.course}}</p>
                                                 <p><span class="text-black">Báo cáo: </span>0 lượt</p>
                                                 <p><span class="text-black">Hiển thị với: </span>{{user.isShow}}</p>
-                                                <p><span class="text-black">Trạng thái (Online): </span>{{user.status}}
+                                                <p><span class="text-black">Trạng thái (Online): </span> {{user.status}}
                                                 </p>
                                                 <p><span class="text-black">Hoạt động (Active): </span>{{user.isActive}}
                                                 </p>
+                                                <p><span class="text-black">Vai trò: </span>{{user.roleAmin}}</p>
                                                 <p><span class="text-black">Ngày tạo: </span>{{user.createdAt}}</p>
                                                 <p><span class="text-black">Ngày cập nhật: </span>{{user.updatedAt}}</p>
                                             </div>
@@ -176,7 +180,8 @@
                                     <div class="row">
                                         <div class="col-md-6 align-self-center">
                                             <p id="dataTable_info" class="dataTables_info" role="status"
-                                                aria-live="polite">Hiển thị 1 đến 10 của 21</p>
+                                                aria-live="polite">
+                                                Hiển thị 1 đến 10 của 21</p>
                                         </div>
                                         <div class="col-md-6">
                                             <nav
