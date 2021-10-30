@@ -17,13 +17,14 @@ exports.list = async (req, res) => {
       gender: genderParams,
       report: reportParmas,
       status: statusParams,
+      facilities: facilitiesParams,
+      email: searchParams,
     } = req.query;
     isSearch = true;
   }
   try {
     let perPage = 1;
     let page = req.params.page || 1;
-    const data = await User.find();
     const listUser = await User.find()
       .skip(perPage * page - perPage)
       .limit(perPage);
@@ -54,6 +55,8 @@ exports.list = async (req, res) => {
         genderParams,
         reportParmas,
         statusParams,
+        facilitiesParams,
+        searchParams,
       };
     }
     res.render('users', payload);

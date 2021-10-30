@@ -23,6 +23,7 @@ hbs.registerHelper('compare', function (object) {
   const s1 = Number(object.data.root.page);
   const s2 = object.data.index + 1;
   const isSearch = object.data.root.isSearch;
+  const facilitiesParams = object.data.root.facilitiesParams;
   const specializedParams = object.data.root.specializedParams;
   const courseParams = object.data.root.courseParams;
   const genderParams = object.data.root.genderParams;
@@ -30,10 +31,18 @@ hbs.registerHelper('compare', function (object) {
   const reportParmas = object.data.root.reportParmas;
   return s1 === s2
     ? isSearch
-      ? `<li class="page-item active"><a class="page-link" href="/users/page/${s1}?specialized=${specializedParams}&course=${courseParams}&gender=${genderParams}&report=${reportParmas}&status=${statusParams}">${s1}</a></li>`
+      ? `<li class="page-item active"><a class="page-link" href="/users/page/${s1}${
+          facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
+        }${specializedParams ? `&specialized=${specializedParams}` : ''}${
+          courseParams ? `&course=${courseParams}` : ''
+        }${genderParams ? `&gender=${genderParams}` : ''}${
+          reportParmas ? `&report=${reportParmas}` : ''
+        }${statusParams ? `&status=${statusParams}` : ''}">${s1}</a></li>`
       : `<li class="page-item active"><a class="page-link" href="/users/page/${s1}">${s1}</a></li>`
     : isSearch
-    ? `<li class="page-item"><a class="page-link" href="/users/page/${s2}?specialized=${specializedParams}&course=${courseParams}&gender=${genderParams}&report=${reportParmas}&status=${statusParams}">${s2}</a></li>`
+    ? `<li class="page-item"><a class="page-link" href="/users/page/${s2}?facilities=${{
+        facilitiesParams,
+      }}&specialized=${specializedParams}&course=${courseParams}&gender=${genderParams}&report=${reportParmas}&status=${statusParams}">${s2}</a></li>`
     : `<li class="page-item"><a class="page-link" href="/users/page/${s2}">${s2}</a></li>`;
 });
 

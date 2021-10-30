@@ -48,7 +48,7 @@
                                 <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
-                                            <select class="d-inline-block form-select form-select-sm">
+                                            <select id="facilities" class="d-inline-block form-select form-select-sm">
                                                 {{#each facilities}}
                                                 <option value="{{this}}">{{this}}</option>
                                                 {{/each}}
@@ -85,7 +85,7 @@
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
                                             <select id="gender" class="d-inline-block form-select form-select-sm">
-                                                <option value="Giới tính" selected="">Giới tính</option>
+                                                <option value="" selected="">Giới tính</option>
                                                 <option value="Nam">Nam</option>
                                                 <option value="Nữ">Nữ</option>
                                             </select>
@@ -97,7 +97,7 @@
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
                                             <select id="report" class="d-inline-block form-select form-select-sm">
-                                                <option value="Báo cáo" selected="">Báo cáo</option>
+                                                <option value="" selected="">Báo cáo</option>
                                                 <option value="25">25</option>
                                                 <option value="50">50</option>
                                                 <option value="100">100</option>
@@ -110,7 +110,7 @@
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
                                             <select id="status" class="d-inline-block form-select form-select-sm">
-                                                <option value="Hoạt động" selected="">Hoạt động</option>
+                                                <option value="" selected="">Hoạt động</option>
                                                 <option value="true">Kích hoạt</option>
                                                 <option value="false">Chặn</option>
                                             </select>
@@ -121,7 +121,7 @@
                                 <div class="col-md-auto">
                                     <div class="text-md-end dataTables_filter" id="dataTable_filter">
                                         <label class="form-label">
-                                            <input type="search" class="form-control form-control-sm"
+                                            <input id="search" type="search" class="form-control form-control-sm"
                                                 aria-controls="dataTable" placeholder="Tìm kiếm...">
                                         </label>
                                         <button id="btn-search" type="button" class="btn btn-primary">Tìm
@@ -130,11 +130,13 @@
                                 </div>
                             </div>
                             <form id="form">
+                                <input type="hidden" name="facilities" />
                                 <input type="hidden" name="specialized" value="" />
                                 <input type="hidden" name="course" value="" />
                                 <input type="hidden" name="gender" value="" />
                                 <input type="hidden" name="report" value="" />
                                 <input type="hidden" name="status" value="" />
+                                <input type="hidden" name="email">
                             </form>
 
                             <div class="table-responsive table mt-2" id="dataTable" role="grid"
@@ -188,7 +190,7 @@
                                         <ul class="pagination">
                                             {{#if isSearch}}
                                             <li class="page-item"><a class="page-link"
-                                                    href="/users/page/{{pre}}?specialized={{specializedParams}}&course={{courseParams}}&gender={{genderParams}}&report={{reportParams}}&status={{statusParams}}"
+                                                    href="/users/page/{{pre}}{{#if facilitiesParams}}?facilities={{facilitiesParams}}{{else}}?{{/if}}{{#if specializedParams}}&specialized={{specializedParams}}{{/if}}{{#if courseParams}}&course={{courseParams}}{{/if}}{{#if genderParams}}&gender={{genderParams}}{{/if}}{{#if reportParams}}&report={{reportParams}}{{/if}}{{#if statusParams}}&status={{statusParams}}{{/if}}{{#if searchParams}}&email={{searchParams}}{{/if}}"
                                                     aria-label="Next"><span aria-hidden="true">«</span></a></li>
                                             {{else}}
                                             <li class="page-item"><a class="page-link" href="/users/page/{{pre}}"
@@ -199,7 +201,7 @@
                                             {{/each}}
                                             {{#if isSearch}}
                                             <li class="page-item"><a class="page-link"
-                                                    href="/users/page/{{next}}?specialized={{specializedParams}}&course={{courseParams}}&gender={{genderParams}}&report={{reportParams}}&status={{statusParams}}"
+                                                    href="/users/page/{{next}}?facilities={{facilitiesParams}}&specialized={{specializedParams}}&course={{courseParams}}&gender={{genderParams}}&report={{reportParams}}&status={{statusParams}}"
                                                     aria-label="Next"><span aria-hidden="true">»</span></a></li>
                                             {{else}}
                                             <li class="page-item"><a class="page-link" href="/users/page/{{next}}"
