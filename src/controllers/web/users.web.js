@@ -83,9 +83,7 @@ exports.block = async (req, res) => {
   try {
     const { _id } = req.params;
 
-    const data = await User.findOne({ _id });
-
-    await User.updateOne({ _id: data._id }, { isActive: "Chặn" });
+    const data = await User.findByIdAndUpdate({ _id }, { isActive: "Chặn" })
 
     res.redirect(`/users/${data.email}`);
   } catch (error) {
@@ -97,9 +95,7 @@ exports.unblock = async (req, res) => {
   try {
     const { _id } = req.params;
 
-    const data = await User.findOne({ _id });
-
-    await User.updateOne({ _id: data._id }, { isActive: "Kích hoạt" });
+    const data = await User.findByIdAndUpdate({ _id }, { isActive: "Kích hoạt" })
 
     res.redirect(`/users/${data.email}`);
   } catch (error) {

@@ -79,7 +79,8 @@ exports.delete = async (req, res) => {
 
     if (!data) return res.status(200).json(response(200, "Người dùng không tồn tại"));
 
-    await User.deleteOne({ _id: data._id });
+    await User.findByIdAndDelete({ _id: data._id });
+    res.status(200).json(response(200, "Xóa người dùng thành công"));
 
   } catch (error) {
     res.status(500).json(response(500, error.message));

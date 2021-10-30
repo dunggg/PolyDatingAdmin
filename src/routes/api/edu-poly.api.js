@@ -5,28 +5,48 @@ const { course, hobbies, specialized, facilities, reports } = require('../../con
 
 //Api
 router.get('/hobbies', (req, res) => {
-    res.status(200).json(response(200, "Get list hobbies successfully",
-        { total: hobbies.length, hobbies }))
+    try {
+        res.status(200).json(response(200, "Get list hobbies successfully",
+            { total: hobbies.length, hobbies }));
+    } catch (error) {
+        res.status(500).json(response(500, error.message));
+    }
 });
 
 router.get('/course', (req, res) => {
-    res.status(200).json(response(200, "Get list course successfully",
-        { total: course.length, course }))
+    try {
+        res.status(200).json(response(200, "Get list course successfully",
+            { total: course.length, course }));
+    } catch (error) {
+        res.status(500).json(response(500, error.message));
+    }
 });
 
 router.get('/specialized', (req, res) => {
-    res.status(200).json(response(200, "Get list specialized successfully",
-        { total: specialized.length, specialized }))
+    try {
+        res.status(200).json(response(200, "Get list specialized successfully",
+            { total: specialized.length, specialized }));
+    } catch (error) {
+        res.status(500).json(response(500, error.message));
+    }
 });
 
 router.get('/facilities', (req, res) => {
-    res.status(200).json(response(200, "Get list facilities successfully",
-        { total: facilities.length, facilities }))
+    try {
+        res.status(200).json(response(200, "Get list facilities successfully",
+            { total: facilities.length, facilities }));
+    } catch (error) {
+        res.status(500).json(response(500, error.message));
+    }
 });
 
 router.get('/reports', (req, res) => {
-    res.status(200).json(response(200, "Get list reports successfully",
-        { total: reports.length, reports }))
+    try {
+        res.status(200).json(response(200, "Get list reports successfully",
+            { total: reports.length, reports }));
+    } catch (error) {
+        res.status(500).json(response(500, error.message));
+    }
 });
 
 module.exports = router;
