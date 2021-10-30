@@ -51,6 +51,7 @@ const specialized = [
 
 const course = [
   "Lựa chọn khóa học",
+  "Khóa 13",
   "Khóa 14",
   "Khóa 15",
   "Khóa 16",

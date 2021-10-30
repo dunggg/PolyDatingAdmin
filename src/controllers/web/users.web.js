@@ -1,11 +1,11 @@
-const User = require('../models/user.schema');
-const { response } = require('../utils/utils');
+const User = require('../../models/user.schema');
+const { response } = require('../../utils/utils');
 const {
   course,
   hobbies,
   specialized,
   facilities,
-} = require('../config/edu-poly');
+} = require('../api/edu-poly.api');
 
 exports.list = async (req, res) => {
   let isSearch = false;
@@ -49,7 +49,7 @@ exports.find = async (req, res, next) => {
   try {
     const data = await User.findOne({ email: req.params.email });
 
-    if (data == null) return next();
+    if (!data) return next();
 
     res.render('profile', { user: data });
   } catch (error) {

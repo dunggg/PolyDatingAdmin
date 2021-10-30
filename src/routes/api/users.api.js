@@ -1,6 +1,6 @@
 const express = require("express");
-const user = require("../../controllers/api/users.api.controller");
 const router = express.Router();
+const user = require("../../controllers/api/users.api");
 const uploadFile = require("../../middlewares/uploadFile");
 
 //Api
