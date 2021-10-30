@@ -22,7 +22,7 @@ exports.list = async (req, res) => {
 
 exports.search = async (req, res) => {
   try {
-    const { email } = req.query;
+    const { email } = req.params;
 
     const data = await User.findOne({ email });
 
