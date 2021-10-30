@@ -12,15 +12,22 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="p-5">
-                                    <div style="height: 125px;"></div>
+                                    <div style="height: 100px;"></div>
 
                                     <div class="text-center">
                                         <h4 class="text-dark mb-4 h3 fw-bolder">POLY DATING</h4>
                                     </div>
-                                    <form class="user" action="statistical">
+
+                                    <form class="user" action="/users/login" method="post">
+                                        {{#if msgError}}
+                                        <div class="form-control form-control-user border border-danger mb-3">
+                                            <p class="text-center text-danger m-0 h6">{{msgError}}</p>
+                                        </div>
+                                        {{/if}}
+
                                         <div class="mb-3">
                                             <input class="form-control form-control-user" type="text"
-                                                placeholder="Tài khoản" name="email">
+                                                placeholder="Email" name="email">
                                         </div>
                                         <div class="mb-3">
                                             <input class="form-control form-control-user" type="password"
@@ -30,7 +37,7 @@
                                             nhập</button>
                                     </form>
 
-                                    <div style="height: 125px;"></div>
+                                    <div style="height: 100px;"></div>
                                 </div>
                             </div>
                         </div>

@@ -6,10 +6,6 @@ router.get('/', (req, res) => {
     res.render('index');
 });
 
-router.get('/index', (req, res) => {
-    res.render('index');
-});
-
 router.get('/statistical', (req, res) => {
     res.render('statistical');
 });

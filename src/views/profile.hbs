@@ -2,7 +2,8 @@
     <div id="wrapper">
         <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
             <div class="container-fluid d-flex flex-column p-0">
-                <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+                <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0"
+                    href="/statistical">
                     <div class="sidebar-brand-icon rotate-n-15">
                         <img src="/public/img/bee.png" alt="">
                     </div>
@@ -19,7 +20,7 @@
                                 cáo</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/notifications"><i
                                 class="fas fa-bell"></i><span>Thông báo</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/index"><i class="fas fa-sign-out-alt"></i><span>Đăng
+                    <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-sign-out-alt"></i><span>Đăng
                                 xuất</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0"
@@ -48,14 +49,17 @@
                                 <div class="card-body text-center">
                                     <div class="col">
                                         <img class="rounded-circle mb-3 mt-2"
-                                            src="https://poly-dating.herokuapp.com/{{user.avatars.[0]}}" width="180" height="180">
-                                        <p class="fw-bold h4">{{user.name}}</p>
+                                            src="https://poly-dating.herokuapp.com/{{user.avatars.[0]}}" width="180"
+                                            height="180">
+                                        <p class="text-black fw-bold h4">{{user.name}}</p>
                                     </div>
                                     <hr>
 
+                                    <p>{{user.description}}</p>
+
                                     {{#each user.avatars}}
-                                    <img class="rounded m-2" src="https://poly-dating.herokuapp.com/{{this}}" width="140"
-                                        height="140">
+                                    <img class="rounded m-2" src="https://poly-dating.herokuapp.com/{{this}}"
+                                        width="140" height="140">
                                     {{/each}}
                                 </div>
                             </div>
@@ -70,21 +74,24 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="col">
-                                                <p>ID: {{user._id}}</p>
-                                                <p>Email: {{user.email}}</p>
-                                                <p>Họ tên: {{user.name}}</p>
-                                                <p>Sở thích: {{user.hobbies}}</p>
-                                                <p>Ngày sinh: {{user.birthDay}}</p>
-                                                <p>Giới tính: {{user.gender}}</p>
-                                                <p>Cơ sở: {{user.facilities}}</p>
-                                                <p>Chuyên ngành: {{user.specialized}}</p>
-                                                <p>Khóa học: {{user.course}}</p>
-                                                <p>Báo cáo: 0</p>
-                                                <p>Hiển thị với: {{user.isShow}}</p>
-                                                <p>Trạng thái (Online): {{user.status}} </p>
-                                                <p>Hoạt động (Active): {{user.isActive}}</p>
-                                                <p>Ngày tạo: {{user.createdAt}}</p>
-                                                <p>Ngày cập nhật: {{user.updatedAt}}</p>
+                                                <p><span class="text-black">Id: </span>{{user._id}}</p>
+                                                <p><span class="text-black">Email: </span>{{user.email}}</p>
+                                                <p><span class="text-black">Họ tên: </span>{{user.name}}</p>
+                                                <p><span class="text-black">Giới tính: </span>{{user.gender}}</p>
+                                                <p><span class="text-black">Ngày sinh: </span>{{user.birthDay}}</p>
+                                                <p><span class="text-black">Sở thích: </span>{{user.hobbies}}</p>
+                                                <p><span class="text-black">Cơ sở: </span>{{user.facilities}}</p>
+                                                <p><span class="text-black">Chuyên ngành: </span>{{user.specialized}}
+                                                </p>
+                                                <p><span class="text-black">Khóa học: </span>{{user.course}}</p>
+                                                <p><span class="text-black">Báo cáo: </span>0 lượt</p>
+                                                <p><span class="text-black">Hiển thị với: </span>{{user.isShow}}</p>
+                                                <p><span class="text-black">Trạng thái (Online): </span>{{user.status}}
+                                                </p>
+                                                <p><span class="text-black">Hoạt động (Active): </span>{{user.isActive}}
+                                                </p>
+                                                <p><span class="text-black">Ngày tạo: </span>{{user.createdAt}}</p>
+                                                <p><span class="text-black">Ngày cập nhật: </span>{{user.updatedAt}}</p>
                                             </div>
                                         </div>
                                     </div>

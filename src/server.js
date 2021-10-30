@@ -3,7 +3,7 @@ const path = require('path');
 const hbs = require('hbs');
 const connectDB = require('./config/connectDB');
 const indexRouter = require('./routes/web/index');
-const usersRouter = require('./routes/web/user.web');
+const usersRouter = require('./routes/web/users.web');
 const usersApiRouter = require('./routes/api/users.api');
 const eduPolyApiRouter = require('./routes/api/edu-poly.api');
 

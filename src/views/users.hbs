@@ -2,7 +2,8 @@
     <div id="wrapper">
         <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
             <div class="container-fluid d-flex flex-column p-0">
-                <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+                <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0"
+                    href="/statistical">
                     <div class="sidebar-brand-icon rotate-n-15">
                         <img src="/public/img/bee.png" alt="">
                     </div>
@@ -20,7 +21,7 @@
                     <li class="nav-item"><a class="nav-link" href="/notifications"><i
                                 class="fas fa-bell"></i><span>Thông
                                 báo</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/index"><i class="fas fa-sign-out-alt"></i><span>Đăng
+                    <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-sign-out-alt"></i><span>Đăng
                                 xuất</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0"
@@ -124,11 +125,21 @@
                                             <input type="search" class="form-control form-control-sm"
                                                 aria-controls="dataTable" placeholder="Tìm kiếm...">
                                         </label>
-                                        <button id="btn-search" type="button" class="btn btn-primary">Tìm
-                                            kiếm</button>
                                     </div>
                                 </div>
+
+                                <div class="col-md-auto">
+                                    <div class="text-md-end dataTables_filter" id="dataTable_filter">
+                                        <label class="form-label">
+                                            <input type="submit" id="btn-search"
+                                                class="form-control form-control-sm btn-primary"
+                                                aria-controls="dataTable" value="Tìm kiếm">
+                                        </label>
+                                    </div>
+                                </div>
+
                             </div>
+
                             <form id="form">
                                 <input type="hidden" name="specialized" value="" />
                                 <input type="hidden" name="course" value="" />
@@ -144,9 +155,9 @@
                                         <tr>
                                             <th>Email</th>
                                             <th>Họ tên</th>
-                                            <th>Sở thích</th>
-                                            <th>Ngày sinh</th>
                                             <th>Giới tính</th>
+                                            <th>Ngày sinh</th>
+                                            <th>Sở thích</th>
                                             <th>Cơ sở</th>
                                             <th>Chuyên ngành</th>
                                             <th>Khóa học</th>

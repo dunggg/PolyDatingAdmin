@@ -56,3 +56,17 @@ exports.find = async (req, res, next) => {
     next();
   }
 };
+
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body
+
+    const data = await User.findOne({ email, password, role: 'Admin' });
+
+    if (!data) return res.render('index', { msgError: "Sai email hoặc mật khẩu" })
+
+    res.redirect('/statistical')
+  } catch (error) {
+    res.status(500).send(error)
+  }
+};
