@@ -46,6 +46,7 @@ exports.insert = async (req, res) => {
 
     const dataUser = {
       email: value.email,
+      password: null,
       name: value.name,
       avatars: avatars,
       hobbies: value.hobbies,
