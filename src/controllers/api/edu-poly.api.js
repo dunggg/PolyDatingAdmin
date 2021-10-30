@@ -51,6 +51,7 @@ const specialized = [
 
 const course = [
   "Lựa chọn khóa học",
+  "Khóa 13",
   "Khóa 14",
   "Khóa 15",
   "Khóa 16",
@@ -58,4 +59,12 @@ const course = [
   "Khóa 18",
 ];
 
-module.exports = { hobbies, facilities, specialized, course };
+const reports = [
+  "Tên không phù hợp",
+  "Nội dung không phù hợp",
+  "Hình ảnh không phù hợp",
+  "Phát ngôn lăng mạ",
+  "Vấn đề khác"
+];
+
+module.exports = { hobbies, facilities, specialized, course, reports };

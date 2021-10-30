@@ -1,13 +1,14 @@
 const express = require('express');
 const path = require('path');
+const hbs = require('../src/config/hbsHelper');
 const connectDB = require('./config/connectDB');
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/user.router');
-const usersApiRouter = require('./routes/api/users.api.router');
-const eduPolyApiRouter = require('./routes/api/edu-poly.api.router');
-const hbs = require('hbs');
+const indexRouter = require('./routes/web/index');
+const usersRouter = require('./routes/web/users.web');
+const usersApiRouter = require('./routes/api/users.api');
+const eduPolyApiRouter = require('./routes/api/edu-poly.api');
 
 connectDB();
+hbs;
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/public', express.static(__dirname + '/public')); // use bootstrap
 
+<<<<<<< HEAD
 hbs.registerHelper('compare', function (object) {
   const s1 = Number(object.data.root.page);
   const s2 = object.data.index + 1;
@@ -46,6 +48,8 @@ hbs.registerHelper('compare', function (object) {
     : `<li class="page-item"><a class="page-link" href="/users/page/${s2}">${s2}</a></li>`;
 });
 
+=======
+>>>>>>> 08be5dd6f5c7e883436d9acf62cdd027b57c647d
 // Website
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

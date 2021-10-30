@@ -10,11 +10,11 @@ exports.list = async (req, res) => {
 
     const data = await User.find({ isShow: value.isShow }).limit(parseInt(value.pageSize));
 
-    res.status(200).json(response(200, "Lay danh sach nguoi dung thanh cong!", {
+    res.status(200).json(response(200, "Lấy danh sách người dùng thành công", {
       total: data.length,
-      users: data,
-    })
-    );
+      users: data
+    }));
+
   } catch (error) {
     res.status(500).json(response(500, error.message));
   }
@@ -22,7 +22,7 @@ exports.list = async (req, res) => {
 
 exports.search = async (req, res) => {
   try {
-    const { email } = req.query;
+    const { email } = req.params;
 
     const data = await User.findOne({ email });
 
@@ -45,21 +45,44 @@ exports.insert = async (req, res) => {
       avatars.push("public/data-image/" + req.files[index].filename)
     }
 
+    console.log(value.hobbies);
+
     const dataUser = {
       email: value.email,
-      // name: value.name,
+      password: null,
+      name: value.name,
       avatars: avatars,
-      // hobbies: value.hobbies,
-      // birthDay: value.birthDay,
-      // gender: value.gender,
-      // facilities: value.facilities,
-      // specialized: value.specialized,
-      // course: value.course,
-      // isShow: value.isShow,
+      hobbies: value.hobbies,
+      birthDay: value.birthDay,
+      gender: value.gender,
+      description: "Không có gì để hiển thị",
+      facilities: value.facilities,
+      specialized: value.specialized,
+      course: value.course,
+      isShow: value.isShow,
+      isActive: "Kích hoạt",
+      status: "Online",
+      role: "User"
     }
 
     await User.create(dataUser);
     res.status(201).json(response(201, "Tạo tài khoản thành công"))
+
+  } catch (error) {
+    res.status(500).json(response(500, error.message));
+  }
+};
+
+exports.delete = async (req, res) => {
+  try {
+    const { _id } = req.params;
+
+    const data = await User.findOne({ _id });
+
+    if (!data) return res.status(200).json(response(200, "Người dùng không tồn tại"));
+
+    await User.findByIdAndDelete({ _id: data._id });
+    res.status(200).json(response(200, "Xóa người dùng thành công"));
 
   } catch (error) {
     res.status(500).json(response(500, error.message));

@@ -1,12 +1,8 @@
 const express = require('express');
-const user = require("../controllers/users.controller");
 const router = express.Router();
 
+//Web
 router.get('/', (req, res) => {
-    res.render('index');
-});
-
-router.get('/index', (req, res) => {
     res.render('index');
 });
 
