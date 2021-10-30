@@ -45,6 +45,8 @@ exports.insert = async (req, res) => {
       avatars.push("public/data-image/" + req.files[index].filename)
     }
 
+    console.log(value.hobbies);
+
     const dataUser = {
       email: value.email,
       password: null,
