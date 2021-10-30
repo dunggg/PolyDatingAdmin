@@ -47,7 +47,9 @@ exports.list = async (req, res) => {
 
 exports.find = async (req, res, next) => {
   try {
-    const data = await User.findOne({ email: req.params.email });
+    const { email } = req.params;
+
+    const data = await User.findOne({ email });
 
     if (!data) return next();
 
@@ -83,23 +85,23 @@ exports.block = async (req, res) => {
 
     const data = await User.findOne({ _id });
 
-    await User.updateOne({ _id }, { isActive: "Chặn" });
+    await User.updateOne({ _id: data._id }, { isActive: "Chặn" });
 
-    res.render('profile', { user: data });
+    res.redirect(`/users/${data.email}`);
   } catch (error) {
     res.status(500).send(error.message)
   }
 }
 
-exports.unBlock = async (req, res) => {
+exports.unblock = async (req, res) => {
   try {
     const { _id } = req.params;
 
     const data = await User.findOne({ _id });
 
-    await User.updateOne({ _id }, { isActive: "Kích hoạt" });
+    await User.updateOne({ _id: data._id }, { isActive: "Kích hoạt" });
 
-    res.render('profile', { user: data });
+    res.redirect(`/users/${data.email}`);
   } catch (error) {
     res.status(500).send(error.message)
   }

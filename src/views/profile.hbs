@@ -109,12 +109,22 @@
                                     <div class="row">
                                         <p class="text-primary m-0 fw-bold col-md-6">Báo cáo</p>
 
+                                        {{#if (eq user.isActive "Kích hoạt")}}
                                         <form action="/users/block/{{user._id}}" method="post" id="form-block"
                                             class="text-end col-md-6 ">
 
                                             <a href="#" class="text-danger m-0 fw-bold" style="text-decoration: none;"
                                                 onclick="document.getElementById('form-block').submit()">Chặn</a>
                                         </form>
+
+                                        {{else}}
+                                        <form action="/users/unblock/{{user._id}}" method="post" id="form-block"
+                                            class="text-end col-md-6 ">
+
+                                            <a href="#" class="text-success m-0 fw-bold" style="text-decoration: none;"
+                                                onclick="document.getElementById('form-block').submit()">Kích hoạt</a>
+                                        </form>
+                                        {{/if}}
 
                                     </div>
                                 </div>

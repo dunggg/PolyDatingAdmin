@@ -7,5 +7,6 @@ const uploadFile = require("../../middlewares/uploadFile");
 router.get("/list", user.list);
 router.get("/search", user.search);
 router.post("/insert", uploadFile.uploadFile, user.insert);
+router.post("/delete/:_id", user.delete);
 
 module.exports = router;

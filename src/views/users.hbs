@@ -181,7 +181,13 @@
                                             <td>{{this.specialized}}</td>
                                             <td>{{this.course}}</td>
                                             <td>0</td>
+
+                                            {{#if (eq this.isActive "Kích hoạt")}}
                                             <td class="text-success">{{this.isActive}}</td>
+                                            {{else}}
+                                            <td class="text-danger">{{this.isActive}}</td>
+                                            {{/if}}
+
                                         </tr>
                                         {{/each }}
                                     </tbody>

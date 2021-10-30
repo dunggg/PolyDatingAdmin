@@ -14,6 +14,7 @@ exports.list = async (req, res) => {
       total: data.length,
       users: data
     }));
+
   } catch (error) {
     res.status(500).json(response(500, error.message));
   }
@@ -64,6 +65,21 @@ exports.insert = async (req, res) => {
 
     await User.create(dataUser);
     res.status(201).json(response(201, "Tạo tài khoản thành công"))
+
+  } catch (error) {
+    res.status(500).json(response(500, error.message));
+  }
+};
+
+exports.delete = async (req, res) => {
+  try {
+    const { _id } = req.params;
+
+    const data = await User.findOne({ _id });
+
+    if (!data) return res.status(200).json(response(200, "Người dùng không tồn tại"));
+
+    await User.deleteOne({ _id: data._id });
 
   } catch (error) {
     res.status(500).json(response(500, error.message));
