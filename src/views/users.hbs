@@ -218,7 +218,7 @@
                                             {{/each}}
                                             {{#if isSearch}}
                                             <li class="page-item"><a class="page-link"
-                                                    href="/users/page/{{next}}?facilities={{facilitiesParams}}&specialized={{specializedParams}}&course={{courseParams}}&gender={{genderParams}}&report={{reportParams}}&status={{statusParams}}"
+                                                    href="/users/page/{{next}}{{#if facilitiesParams}}?facilities={{facilitiesParams}}{{else}}?{{/if}}{{#if specializedParams}}&specialized={{specializedParams}}{{/if}}{{#if courseParams}}&course={{courseParams}}{{/if}}{{#if genderParams}}&gender={{genderParams}}{{/if}}{{#if reportParams}}&report={{reportParams}}{{/if}}{{#if statusParams}}&status={{statusParams}}{{/if}}{{#if searchParams}}&email={{searchParams}}{{/if}}"
                                                     aria-label="Next"><span aria-hidden="true">»</span></a></li>
                                             {{else}}
                                             <li class="page-item"><a class="page-link" href="/users/page/{{next}}"

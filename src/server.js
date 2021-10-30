@@ -30,6 +30,7 @@ hbs.registerHelper('compare', function (object) {
   const genderParams = object.data.root.genderParams;
   const statusParams = object.data.root.statusParams;
   const reportParmas = object.data.root.reportParmas;
+  const searchParams = object.data.root.searchParams;
   return s1 === s2
     ? isSearch
       ? `<li class="page-item active"><a class="page-link" href="/users/page/${s1}${
@@ -38,12 +39,20 @@ hbs.registerHelper('compare', function (object) {
           courseParams ? `&course=${courseParams}` : ''
         }${genderParams ? `&gender=${genderParams}` : ''}${
           reportParmas ? `&report=${reportParmas}` : ''
-        }${statusParams ? `&status=${statusParams}` : ''}">${s1}</a></li>`
+        }${statusParams ? `&status=${statusParams}` : ''}${
+          searchParams ? `&email=${searchParams}` : ''
+        }">${s1}</a></li>`
       : `<li class="page-item active"><a class="page-link" href="/users/page/${s1}">${s1}</a></li>`
     : isSearch
-    ? `<li class="page-item"><a class="page-link" href="/users/page/${s2}?facilities=${{
-        facilitiesParams,
-      }}&specialized=${specializedParams}&course=${courseParams}&gender=${genderParams}&report=${reportParmas}&status=${statusParams}">${s2}</a></li>`
+    ? `<li class="page-item"><a class="page-link" href="/users/page/${s2}${
+        facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
+      }${specializedParams ? `&specialized=${specializedParams}` : ''}${
+        courseParams ? `&course=${courseParams}` : ''
+      }${genderParams ? `&gender=${genderParams}` : ''}${
+        reportParmas ? `&report=${reportParmas}` : ''
+      }${statusParams ? `&status=${statusParams}` : ''}${
+        searchParams ? `&email=${searchParams}` : ''
+      }">${s2}</a></li>`
     : `<li class="page-item"><a class="page-link" href="/users/page/${s2}">${s2}</a></li>`;
 });
 
