@@ -26,7 +26,7 @@ exports.search = async (req, res) => {
 
     const data = await User.findOne({ email });
 
-    if (!data) return res.status(200).json(response(200, "Người dùng không tồn tại", data));
+    if (!data) return res.status(200).json(response(200, "Người dùng không tồn tại", "null"));
 
     res.status(200).json(response(200, "Tìm người dùng thành công", { user: data }));
   } catch (error) {
