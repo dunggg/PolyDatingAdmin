@@ -6,6 +6,7 @@ const indexRouter = require('./routes/web/index');
 const usersRouter = require('./routes/web/users.web');
 const eduPolyApiRouter = require('./routes/api/edu-poly.api');
 const usersApiRouter = require('./routes/api/users.api');
+const favoritesApiRouter = require('./routes/api/favorites.api');
 const reportsApiRouter = require('./routes/api/reports.api');
 
 connectDB();
@@ -56,6 +57,7 @@ app.use('/users', usersRouter);
 // Api
 app.use('/api', eduPolyApiRouter);
 app.use('/api/users', usersApiRouter);
+app.use('/api/favorites', favoritesApiRouter);
 app.use('/api/reports', reportsApiRouter);
 
 app.use((req, res, next) => {

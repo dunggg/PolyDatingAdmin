@@ -28,7 +28,7 @@ exports.insert = async (req, res) => {
             createdAt: new Date(),
         }
 
-        await Report.create(payload);
+        await Report.create(payload)
         res.status(201).json(response(201, "Gửi báo cáo thành công"))
 
     } catch (error) {
