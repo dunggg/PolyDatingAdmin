@@ -16,3 +16,10 @@ exports.listUser = joi.object({
     isShow: joi.array().required(),
     pageSize: joi.string().required(),
 });
+
+exports.insertReport = joi.object({
+    emailReport: joi.string().email().required(),
+    emailReported: joi.string().email().required(),
+    title: joi.string().required(),
+    content: joi.string().min(20).max(200).required()
+})
