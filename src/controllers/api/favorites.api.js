@@ -59,7 +59,7 @@ exports.delete = async (req, res) => {
         if (error) return res.status(400).json(response(400, error.message));
 
         const data = Favorite.findOne({ emailPersonal: value.emailPersonal, emailLike: value.emailLike });
-        if (!data) return res.status(200).json(response(200, "Người dùng không tồn tại", data));
+        if (!data) return res.status(200).json(response(200, "Lời mời kết bạn không tồn tại", data));
 
         await Favorite.deleteOne({ _id: data._id });
         res.status(200).json(response(200, `Đã xóa ${data.emailLike} khỏi danh sách lời mời kết bạn`));
