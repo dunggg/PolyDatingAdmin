@@ -40,9 +40,9 @@ exports.insert = async (req, res) => {
     if (error) return res.status(400).json(response(400, error.message));
     if (req.files.length < 2) return res.status(400).json(response(400, "Cần ít nhất 2 ảnh"));
 
-    const avatars = [];
+    const images = [];
     for (let index = 0; index < req.files.length; index++) {
-      avatars.push("public/data-image/" + req.files[index].filename)
+      images.push("public/data-image/" + req.files[index].filename)
     }
 
     console.log(value.hobbies);
@@ -51,7 +51,7 @@ exports.insert = async (req, res) => {
       email: value.email,
       password: null,
       name: value.name,
-      avatars: avatars,
+      images,
       hobbies: value.hobbies,
       birthDay: value.birthDay,
       gender: value.gender,

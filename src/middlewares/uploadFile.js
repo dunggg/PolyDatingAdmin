@@ -24,7 +24,7 @@ const uploadMulter = multer({
         }
         cb(null, true);
     },
-}).array("avatars", 6);
+}).array("images", 6);
 
 exports.uploadFile = (req, res, next) => {
     try {
