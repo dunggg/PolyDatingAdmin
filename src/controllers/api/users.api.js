@@ -38,7 +38,7 @@ exports.insert = async (req, res) => {
   try {
     const { error, value } = validate.insertUser.validate(req.body);
     if (error) return res.status(400).json(response(400, error.message));
-    if (req.files.length < 2) return res.status(400).json(response(400, "Cần ít nhất 2 ảnh"));
+    // if (req.files.length < 2) return res.status(400).json(response(400, "Cần ít nhất 2 ảnh"));
 
     const images = [];
     for (let index = 0; index < req.files.length; index++) {
@@ -48,8 +48,10 @@ exports.insert = async (req, res) => {
     let hobbies = [];
     hobbies = value.hobbies.slice(1, -1).split(',');
 
+    // console.log(images);
+
     let isShow = [];
-    isShow = value.isShow.slice(1, -1).split(',');
+    // isShow = value.isShow.slice(1, -1).split(',');
 
     const dataUser = {
       email: value.email,
