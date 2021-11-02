@@ -10,6 +10,7 @@ const {
 
 exports.list = async (req, res) => {
   let isSearch = false;
+  var search = {};
   if (!_.isEmpty(req.query)) {
     var {
       specialized: specializedParams,
@@ -20,15 +21,20 @@ exports.list = async (req, res) => {
       facilities: facilitiesParams,
       email: searchParams,
     } = req.query;
+    for (const key in req.query) {
+      if (key != null) {
+        search[`${key}`] = req.query[`${key}`];
+      }
+    }
     isSearch = true;
   }
   try {
     let perPage = 5;
     let page = req.params.page || 1;
-    const listUser = await User.find()
+    const listUser = await User.find(search)
       .skip(perPage * page - perPage)
       .limit(perPage);
-    const countDoc = await User.countDocuments();
+    const countDoc = await User.countDocuments(search);
     const countPage = Math.ceil(countDoc / perPage);
     const arrPage = [];
     for (let i = 1; i <= countPage; i++) {
@@ -61,7 +67,8 @@ exports.list = async (req, res) => {
     }
     res.render('users', payload);
   } catch (error) {
-    res.status(500).json(response(500, error.message));
+    // res.status(500).json(500, error.message);
+    console.log(error.message);
   }
 };
 
