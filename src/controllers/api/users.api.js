@@ -51,7 +51,7 @@ exports.insert = async (req, res) => {
     // console.log(images);
 
     let isShow = [];
-    // isShow = value.isShow.slice(1, -1).split(',');
+    isShow = value.isShow.slice(1, -1).split(',');
 
     const dataUser = {
       email: value.email,
