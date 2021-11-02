@@ -4,8 +4,10 @@ const hbs = require('../src/config/hbsHelper');
 const connectDB = require('./config/connectDB');
 const indexRouter = require('./routes/web/index');
 const usersRouter = require('./routes/web/users.web');
-const usersApiRouter = require('./routes/api/users.api');
 const eduPolyApiRouter = require('./routes/api/edu-poly.api');
+const usersApiRouter = require('./routes/api/users.api');
+const favoritesApiRouter = require('./routes/api/favorites.api');
+const reportsApiRouter = require('./routes/api/reports.api');
 
 connectDB();
 hbs;
@@ -33,27 +35,19 @@ hbs.registerHelper('compare', function (object) {
   const searchParams = object.data.root.searchParams;
   return s1 === s2
     ? isSearch
-      ? `<li class="page-item active"><a class="page-link" href="/users/page/${s1}${
-          facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
-        }${specializedParams ? `&specialized=${specializedParams}` : ''}${
-          courseParams ? `&course=${courseParams}` : ''
-        }${genderParams ? `&gender=${genderParams}` : ''}${
-          reportParmas ? `&report=${reportParmas}` : ''
-        }${statusParams ? `&status=${statusParams}` : ''}${
-          searchParams ? `&email=${searchParams}` : ''
-        }">${s1}</a></li>`
+      ? `<li class="page-item active"><a class="page-link" href="/users/page/${s1}${facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
+      }${specializedParams ? `&specialized=${specializedParams}` : ''}${courseParams ? `&course=${courseParams}` : ''
+      }${genderParams ? `&gender=${genderParams}` : ''}${reportParmas ? `&report=${reportParmas}` : ''
+      }${statusParams ? `&status=${statusParams}` : ''}${searchParams ? `&email=${searchParams}` : ''
+      }">${s1}</a></li>`
       : `<li class="page-item active"><a class="page-link" href="/users/page/${s1}">${s1}</a></li>`
     : isSearch
-    ? `<li class="page-item"><a class="page-link" href="/users/page/${s2}${
-        facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
-      }${specializedParams ? `&specialized=${specializedParams}` : ''}${
-        courseParams ? `&course=${courseParams}` : ''
-      }${genderParams ? `&gender=${genderParams}` : ''}${
-        reportParmas ? `&report=${reportParmas}` : ''
-      }${statusParams ? `&status=${statusParams}` : ''}${
-        searchParams ? `&email=${searchParams}` : ''
+      ? `<li class="page-item"><a class="page-link" href="/users/page/${s2}${facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
+      }${specializedParams ? `&specialized=${specializedParams}` : ''}${courseParams ? `&course=${courseParams}` : ''
+      }${genderParams ? `&gender=${genderParams}` : ''}${reportParmas ? `&report=${reportParmas}` : ''
+      }${statusParams ? `&status=${statusParams}` : ''}${searchParams ? `&email=${searchParams}` : ''
       }">${s2}</a></li>`
-    : `<li class="page-item"><a class="page-link" href="/users/page/${s2}">${s2}</a></li>`;
+      : `<li class="page-item"><a class="page-link" href="/users/page/${s2}">${s2}</a></li>`;
 });
 
 hbs.registerHelper('option', function (object, value, a) {
@@ -65,8 +59,10 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // Api
-app.use('/api/users', usersApiRouter);
 app.use('/api', eduPolyApiRouter);
+app.use('/api/users', usersApiRouter);
+app.use('/api/favorites', favoritesApiRouter);
+app.use('/api/reports', reportsApiRouter);
 
 app.use((req, res, next) => {
   res.sendStatus(404);

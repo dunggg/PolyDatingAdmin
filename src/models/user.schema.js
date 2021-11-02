@@ -5,7 +5,7 @@ const User = new mongoose.Schema(
     email: { type: String, unique: true },
     password: String,
     name: String,
-    avatars: Array,
+    images: Array,
     hobbies: Array,
     birthDay: String,
     gender: String,
@@ -14,9 +14,9 @@ const User = new mongoose.Schema(
     specialized: String,
     course: String,
     isShow: Array,
-    isActive: String,
-    status: String,
-    role: String
+    isActive: Boolean,
+    status: Boolean,
+    roleAdmin: Boolean
   },
   { timestamps: true }
 );

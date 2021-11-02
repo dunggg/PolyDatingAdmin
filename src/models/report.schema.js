@@ -2,19 +2,13 @@ const mongoose = require("mongoose");
 
 const Report = new mongoose.Schema(
   {
-    emailUser: String,
     emailReport: String,
+    emailReported: String,
     title: String,
     content: String,
-    images: Array,
-    status: {
-      type: Boolean,
-      default: false,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now(),
-    },
+    images: String,
+    status: Boolean,
+    createdAt: Date
   },
   { timestamps: false }
 );

@@ -2,12 +2,10 @@ const mongoose = require("mongoose");
 
 const Favorite = new mongoose.Schema(
   {
-    emailUser: String,
+    emailPersonal: String,
     emailLike: String,
-    createdAt: {
-      type: Date,
-      default: Date.now(),
-    },
+    status: Boolean,
+    createdAt: Date
   },
   {
     timestamps: false,
