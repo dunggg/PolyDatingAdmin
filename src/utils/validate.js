@@ -1,7 +1,7 @@
 const joi = require("joi");
 
 exports.listUser = joi.object({
-    isShow: joi.array().required(),
+    isShow: joi.string().required(),
     pageSize: joi.string().required(),
 });
 
