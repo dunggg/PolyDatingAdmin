@@ -56,6 +56,10 @@ hbs.registerHelper('compare', function (object) {
     : `<li class="page-item"><a class="page-link" href="/users/page/${s2}">${s2}</a></li>`;
 });
 
+hbs.registerHelper('option', function (object, value, a) {
+  console.log(object, value, a);
+});
+
 // Website
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
