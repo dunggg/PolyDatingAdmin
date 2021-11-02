@@ -1,20 +1,20 @@
 const joi = require("joi");
 
+exports.listUser = joi.object({
+    isShow: joi.array().required(),
+    pageSize: joi.string().required(),
+});
+
 exports.insertUser = joi.object({
-    email: joi.string().email().min(1).required(),
+    email: joi.string().min(1).required(),
     name: joi.string().min(5).max(20).required(),
-    hobbies: joi.any(),
+    hobbies: joi.string().required(),
     birthDay: joi.string().required(),
     gender: joi.string().required(),
     facilities: joi.string().required(),
     specialized: joi.string().required(),
     course: joi.string().required(),
-    isShow: joi.any()
-});
-
-exports.listUser = joi.object({
-    isShow: joi.array().required(),
-    pageSize: joi.string().required(),
+    isShow: joi.string().required()
 });
 
 exports.insertReport = joi.object({

@@ -14,9 +14,9 @@ const User = new mongoose.Schema(
     specialized: String,
     course: String,
     isShow: Array,
-    isActive: String,
-    status: String,
-    role: String
+    isActive: Boolean,
+    status: Boolean,
+    roleAdmin: Boolean
   },
   { timestamps: true }
 );

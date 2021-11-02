@@ -45,24 +45,28 @@ exports.insert = async (req, res) => {
       images.push("public/data-image/" + req.files[index].filename)
     }
 
-    console.log(value.hobbies);
+    let hobbies = [];
+    hobbies = value.hobbies.slice(1, -1).split(',');
+
+    let isShow = [];
+    isShow = value.isShow.slice(1, -1).split(',');
 
     const dataUser = {
       email: value.email,
       password: null,
       name: value.name,
       images,
-      hobbies: value.hobbies,
+      hobbies,
       birthDay: value.birthDay,
       gender: value.gender,
       description: "Không có gì để hiển thị",
       facilities: value.facilities,
       specialized: value.specialized,
       course: value.course,
-      isShow: value.isShow,
-      isActive: "Kích hoạt",
-      status: "Online",
-      role: "User"
+      isShow,
+      isActive: true,
+      status: true,
+      roleAdmin: false
     }
 
     await User.create(dataUser);
