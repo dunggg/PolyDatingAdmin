@@ -48,7 +48,7 @@ exports.insert = async (req, res) => {
     let hobbies = [];
     hobbies = value.hobbies.slice(1, -1).split(',');
 
-    // console.log(images);
+    console.log(images);
 
     let isShow = [];
     isShow = value.isShow.slice(1, -1).split(',');
