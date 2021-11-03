@@ -6,8 +6,8 @@ exports.listUser = joi.object({
 });
 
 exports.insertUser = joi.object({
-    email: joi.string().min(1).required(),
-    name: joi.string().min(1).max(20).required(),
+    email: joi.string().email().min(15).required(),
+    name: joi.string().min(5).max(25).required(),
     hobbies: joi.string().required(),
     birthDay: joi.string().required(),
     gender: joi.string().required(),

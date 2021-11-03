@@ -10,25 +10,28 @@ exports.list = async (req, res) => {
 
     const data = await User.find({ isShow: value.isShow }).limit(parseInt(value.pageSize));
 
-    res.status(200).json(response(200, "Lấy danh sách người dùng thành công", {
+    const payload = {
       total: data.length,
       users: data
-    }));
+    };
+
+    res.status(200).json(response(200, "Lấy danh sách người dùng thành công", payload));
 
   } catch (error) {
     res.status(500).json(response(500, error.message));
   }
 };
 
-exports.search = async (req, res) => {
+exports.find = async (req, res) => {
   try {
     const { email } = req.params;
 
     const data = await User.findOne({ email });
 
-    if (!data) return res.status(200).json(response(200, "Người dùng không tồn tại", "null"));
+    if (!data) return res.status(200).json(response(200, `Người dùng không tồn tại`, null));
 
-    res.status(200).json(response(200, "Tìm người dùng thành công", { user: data }));
+    res.status(200).json(response(200, "Tìm kiếm người dùng thành công", { user: data }));
+
   } catch (error) {
     res.status(500).json(response(500, error.message));
   }
@@ -37,8 +40,10 @@ exports.search = async (req, res) => {
 exports.insert = async (req, res) => {
   try {
     const { error, value } = validate.insertUser.validate(req.body);
+
     if (error) return res.status(400).json(response(400, error.message));
-    // if (req.files.length < 2) return res.status(400).json(response(400, "Cần ít nhất 2 ảnh"));
+
+    if (req.files.length < 2) return res.status(400).json(response(400, "Cần chọn ít nhất 2 ảnh"));
 
     const images = [];
     for (let index = 0; index < req.files.length; index++) {
@@ -48,12 +53,10 @@ exports.insert = async (req, res) => {
     let hobbies = [];
     hobbies = value.hobbies.slice(1, -1).split(',');
 
-    console.log(images);
-
     let isShow = [];
     isShow = value.isShow.slice(1, -1).split(',');
 
-    const dataUser = {
+    const payload = {
       email: value.email,
       password: null,
       name: value.name,
@@ -71,7 +74,7 @@ exports.insert = async (req, res) => {
       roleAdmin: false
     }
 
-    await User.create(dataUser);
+    await User.create(payload);
     res.status(201).json(response(201, "Tạo tài khoản thành công"))
 
   } catch (error) {
@@ -79,18 +82,18 @@ exports.insert = async (req, res) => {
   }
 };
 
-exports.delete = async (req, res) => {
-  try {
-    const { _id } = req.params;
+// exports.delete = async (req, res) => {
+//   try {
+//     const { _id } = req.params;
 
-    const data = await User.findOne({ _id });
+//     const data = await User.findOne({ _id });
 
-    if (!data) return res.status(200).json(response(200, "Người dùng không tồn tại"));
+//     if (!data) return res.status(200).json(response(200, "Người dùng không tồn tại"));
 
-    await User.findByIdAndDelete({ _id: data._id });
-    res.status(200).json(response(200, "Xóa người dùng thành công"));
+//     await User.findByIdAndDelete({ _id: data._id });
+//     res.status(200).json(response(200, "Xóa người dùng thành công"));
 
-  } catch (error) {
-    res.status(500).json(response(500, error.message));
-  }
-};
+//   } catch (error) {
+//     res.status(500).json(response(500, error.message));
+//   }
+// };

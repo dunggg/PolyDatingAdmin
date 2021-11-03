@@ -5,8 +5,8 @@ const uploadFile = require("../../middlewares/uploadFile");
 
 //Api
 router.get("/list", user.list);
-router.get("/search/:email", user.search);
+router.get("/find/:email", user.find);
 router.post("/insert", uploadFile.uploadFile, user.insert);
-router.post("/delete/:_id", user.delete);
+// router.post("/delete/:_id", user.delete);
 
 module.exports = router;
