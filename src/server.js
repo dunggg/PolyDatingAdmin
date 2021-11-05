@@ -22,48 +22,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/public', express.static(__dirname + '/public')); // use bootstrap
 
-hbs.registerHelper('compare', function (object) {
-  const s1 = Number(object.data.root.page);
-  const s2 = object.data.index + 1;
-  const isSearch = object.data.root.isSearch;
-  const facilitiesParams = object.data.root.facilitiesParams;
-  const specializedParams = object.data.root.specializedParams;
-  const courseParams = object.data.root.courseParams;
-  const genderParams = object.data.root.genderParams;
-  const statusParams = object.data.root.statusParams;
-  const reportParmas = object.data.root.reportParmas;
-  const searchParams = object.data.root.searchParams;
-  return s1 === s2
-    ? isSearch
-      ? `<li class="page-item active"><a class="page-link" href="/users/page/${s1}${
-          facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
-        }${specializedParams ? `&specialized=${specializedParams}` : ''}${
-          courseParams ? `&course=${courseParams}` : ''
-        }${genderParams ? `&gender=${genderParams}` : ''}${
-          reportParmas ? `&report=${reportParmas}` : ''
-        }${statusParams ? `&status=${statusParams}` : ''}${
-          searchParams ? `&email=${searchParams}` : ''
-        }">${s1}</a></li>`
-      : `<li class="page-item active"><a class="page-link" href="/users/page/${s1}">${s1}</a></li>`
-    : isSearch
-    ? `<li class="page-item"><a class="page-link" href="/users/page/${s2}${
-        facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
-      }${specializedParams ? `&specialized=${specializedParams}` : ''}${
-        courseParams ? `&course=${courseParams}` : ''
-      }${genderParams ? `&gender=${genderParams}` : ''}${
-        reportParmas ? `&report=${reportParmas}` : ''
-      }${statusParams ? `&status=${statusParams}` : ''}${
-        searchParams ? `&email=${searchParams}` : ''
-      }">${s2}</a></li>`
-    : `<li class="page-item"><a class="page-link" href="/users/page/${s2}">${s2}</a></li>`;
-});
-
-hbs.registerHelper('option', function (object, value, a) {
-  console.log(object, value, a);
-  // lkjaslfdjlasf
-  //lkasdfjlasjfdaslfdjkl
-});
-
 // Website
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

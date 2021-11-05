@@ -8,6 +8,16 @@ const {
   facilities,
 } = require('../api/edu-poly.api');
 
+// const convertStatus = (string) => {
+//   let check = false;
+//   if (string === 'Kích hoạt') {
+//     check = true;
+//   } else if (string === 'Chặn') {
+//     check = false;
+//   }
+//   return check;
+// };
+
 exports.list = async (req, res) => {
   let isSearch = false;
   var search = {};
@@ -68,7 +78,7 @@ exports.list = async (req, res) => {
     res.render('users', payload);
   } catch (error) {
     // res.status(500).json(500, error.message);
-    console.log(error.message);
+    console.log(error);
   }
 };
 
