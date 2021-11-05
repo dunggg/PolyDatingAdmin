@@ -67,6 +67,27 @@ hbs.registerHelper('optionGender', function (any, value, object) {
     : `<option value=${valOption}>${value}</option>`;
 });
 
+hbs.registerHelper('optionSpecialized', function (any, value, object) {
+  const specializedParams = object.data.root.specializedParams;
+  return specializedParams === value
+    ? "<option selected value='" + value + "'>" + value + '</option>'
+    : "<option value='" + value + "'>" + value + '</option>';
+});
+
+hbs.registerHelper('optionCourse', function (any, value, object) {
+  const courseParams = object.data.root.courseParams;
+  return courseParams === value
+    ? "<option selected value='" + value + "'>" + value + '</option>'
+    : "<option value='" + value + "'>" + value + '</option>';
+});
+
+hbs.registerHelper('optionFacilities', function (any, value, object) {
+  const facilitiesParams = object.data.root.facilitiesParams;
+  return facilitiesParams === value
+    ? "<option selected value='" + value + "'>" + value + '</option>'
+    : "<option value='" + value + "'>" + value + '</option>';
+});
+
 hbs.registerHelper('optionStatus', function (any, value, object) {
   const statusParams = object?.data?.root.statusParams;
   return statusParams === value

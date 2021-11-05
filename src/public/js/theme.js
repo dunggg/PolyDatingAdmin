@@ -97,16 +97,6 @@
   const form = document.getElementById('form');
   const btnSearch = document.getElementById('btn-search');
 
-  const arrEmpty = [
-    'Lựa chọn cơ sở',
-    'Lựa chọn ngành học',
-    'Lựa chọn khóa học',
-    '',
-    '',
-    '',
-    '',
-  ];
-
   btnSearch.addEventListener('click', () => {
     facilitiesInput.value = facilities.value;
     specializedInput.value = specialized.value;
