@@ -90,9 +90,17 @@ hbs.registerHelper('optionFacilities', function (any, value, object) {
 
 hbs.registerHelper('optionStatus', function (any, value, object) {
   const statusParams = object?.data?.root.statusParams;
-  return statusParams === value
-    ? `<option selected value=${value}>${value}</option>`
-    : `<option value=${value}>${value}</option>`;
+  var val = '';
+  if (value === 'Kích hoạt') {
+    val = 'true';
+  } else if (value === 'Chặn') {
+    val = 'false';
+  } else {
+    val = '';
+  }
+  return statusParams === val
+    ? `<option selected value=${val}>${value}</option>`
+    : `<option value=${val}>${value}</option>`;
 });
 
 module.exports = hbs;

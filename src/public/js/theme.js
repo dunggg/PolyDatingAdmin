@@ -97,6 +97,8 @@
   const form = document.getElementById('form');
   const btnSearch = document.getElementById('btn-search');
 
+  console.log(status);
+
   btnSearch.addEventListener('click', () => {
     facilitiesInput.value = facilities.value;
     specializedInput.value = specialized.value;

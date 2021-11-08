@@ -111,9 +111,12 @@
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
                                             <select id="status" class="d-inline-block form-select form-select-sm">
-                                                <option value="">Hoạt động</option>
+                                                {{!-- <option value="">Hoạt động</option>
                                                 <option value="true">Kích hoạt</option>
-                                                <option value="false">Chặn</option>
+                                                <option value="false">Chặn</option> --}}
+                                                {{#optionStatus '' 'Hoạt động'}}{{/optionStatus}}
+                                                {{#optionStatus '' 'Kích hoạt'}}{{/optionStatus}}
+                                                {{#optionStatus '' 'Chặn'}}{{/optionStatus}}
                                             </select>
                                         </label>
                                     </div>
