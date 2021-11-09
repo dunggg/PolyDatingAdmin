@@ -26,25 +26,25 @@ exports.insert = async (req, res) => {
         const { error, value } = validate.insertFavorite.validate(req.body);
         if (error) return res.status(400).json(response(400, error.message));
 
-        const dataPersonal = await User.findOne({ email: value.emailPersonal });
-        const dataLike = await User.findOne({ email: value.emailLike });
+        const dataPersonal = await User.findOne({ email: value.emailPersonal }); // huy
+        const dataLike = await User.findOne({ email: value.emailLike }); // thang
 
-        const emailLike = {
-            email: dataLike.email,
-            name: dataLike.name,
-            images: dataLike.images,
-            hobbies: dataLike.hobbies,
-            birthDay: dataLike.birthDay,
-            gender: dataLike.gender,
-            description: dataLike.description,
-            facilities: dataLike.facilities,
-            specialized: dataLike.specialized,
-            course: dataLike.course,
+        const emailPersonal = {
+            email: dataPersonal.email,
+            name: dataPersonal.name,
+            images: dataPersonal.images,
+            hobbies: dataPersonal.hobbies,
+            birthDay: dataPersonal.birthDay,
+            gender: dataPersonal.gender,
+            description: dataPersonal.description,
+            facilities: dataPersonal.facilities,
+            specialized: dataPersonal.specialized,
+            course: dataPersonal.course,
         }
 
         const payload = {
-            emailPersonal: dataPersonal.email,
-            emailLike,
+            emailPersonal,
+            emailLike: dataLike.emailLike,
             status: false,
             createdAt: new Date()
         }
@@ -64,7 +64,7 @@ exports.delete = async (req, res) => {
         const data = Favorite.findOne({ emailPersonal, emailLike });
 
         await Favorite.deleteOne({ _id: data._id });
-        res.status(200).json(response(200, `Đã xóa ${data.emailLike} khỏi danh sách lời mời kết bạn`));
+        res.status(200).json(response(200, `Đã xóa ${emailLike} khỏi danh sách lời mời kết bạn`));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
