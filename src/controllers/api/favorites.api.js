@@ -26,8 +26,8 @@ exports.insert = async (req, res) => {
         const { error, value } = validate.insertFavorite.validate(req.body);
         if (error) return res.status(400).json(response(400, error.message));
 
-        const dataPersonal = await User.findOne({ email: value.emailPersonal }); // huy
-        const dataLike = await User.findOne({ email: value.emailLike }); // thang
+        const dataPersonal = await User.findOne({ email: value.emailPersonal });
+        const dataLike = await User.findOne({ email: value.emailLike });
 
         const emailPersonal = {
             email: dataPersonal.email,
@@ -44,7 +44,7 @@ exports.insert = async (req, res) => {
 
         const payload = {
             emailPersonal,
-            emailLike: dataLike.emailLike,
+            emailLike: dataLike.email,
             status: false,
             createdAt: new Date()
         }
