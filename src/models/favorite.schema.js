@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Favorite = new mongoose.Schema(
   {
     emailPersonal: String,
-    emailLike: String,
+    emailLike: Array,
     status: Boolean,
     createdAt: Date
   },

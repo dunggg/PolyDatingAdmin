@@ -24,10 +24,6 @@ exports.insertReport = joi.object({
     content: joi.string().min(20).max(200).required()
 });
 
-exports.listFavorite = joi.object({
-    emailPersonal: joi.string().email().required()
-});
-
 exports.insertFavorite = joi.object({
     emailPersonal: joi.string().email().required(),
     emailLike: joi.string().email().required()
