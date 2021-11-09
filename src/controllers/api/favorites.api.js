@@ -5,16 +5,16 @@ const validate = require("../../utils/validate");
 
 exports.list = async (req, res) => {
     try {
-        const { emailPersonal } = req.params;
+        const { emailLike } = req.params;
 
-        const dataFavorite = await Favorite.find({ emailPersonal });
+        const dataFavorite = await Favorite.find({ emailLike });
 
         const payload = {
             total: dataFavorite.length,
             favorites: dataFavorite
         }
 
-        res.status(200).json(response(200, `Lấy danh sách lượt thích của ${emailPersonal} thành công`, payload));
+        res.status(200).json(response(200, `Lấy danh sách lượt thích của ${emailLike} thành công`, payload));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
