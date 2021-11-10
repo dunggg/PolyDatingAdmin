@@ -1,7 +1,6 @@
 const Favorite = require('../../models/favorite.schema');
 const User = require('../../models/user.schema');
 const { response } = require("../../utils/utils");
-const validate = require("../../utils/validate");
 
 exports.list = async (req, res) => {
     try {
@@ -70,7 +69,7 @@ exports.delete = async (req, res) => {
         const data = await Favorite.findOne(obj);
 
         await Favorite.deleteOne({ _id: data._id });
-        res.status(200).json(response(200, `Đã xóa ${emailLiked} khỏi danh sách lời mời kết bạn`));
+        res.status(200).json(response(200, `Đã xóa ${data.userLiked.name} khỏi danh sách lời mời kết bạn`));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
