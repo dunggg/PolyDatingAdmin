@@ -2,18 +2,36 @@ const Favorite = require('../../models/favorite.schema');
 const User = require('../../models/user.schema');
 const { response } = require("../../utils/utils");
 
-exports.list = async (req, res) => {
+exports.listBeLiked = async (req, res) => {
     try {
         const { emailBeLiked } = req.params;
 
-        const dataFavorite = await Favorite.find({ emailBeLiked });
+        const dataFavorite = await Favorite.find({ 'userBeLiked.email': emailBeLiked });
 
         const payload = {
             total: dataFavorite.length,
             favorites: dataFavorite
         }
 
-        res.status(200).json(response(200, `Lấy danh sách lượt thích của ${emailBeLiked} thành công`, payload));
+        res.status(200).json(response(200, `Lấy danh sách lời mời kết bạn của ${emailBeLiked}`, payload));
+
+    } catch (error) {
+        res.status(500).json(response(500, error.message));
+    }
+};
+
+exports.listLiked = async (req, res) => {
+    try {
+        const { emailLiked } = req.params;
+
+        const dataFavorite = await Favorite.find({ 'userLiked.email': emailLiked });
+
+        const payload = {
+            total: dataFavorite.length,
+            favorites: dataFavorite
+        }
+
+        res.status(200).json(response(200, `Lấy danh sách yêu cầu kết bạn của ${emailLiked}`, payload));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
@@ -27,22 +45,9 @@ exports.insert = async (req, res) => {
         const dataBeLiked = await User.findOne({ email: emailBeLiked });
         const dataLiked = await User.findOne({ email: emailLiked });
 
-        const userLiked = {
-            email: dataLiked.email,
-            name: dataLiked.name,
-            images: dataLiked.images,
-            hobbies: dataLiked.hobbies,
-            birthDay: dataLiked.birthDay,
-            gender: dataLiked.gender,
-            description: dataLiked.description,
-            facilities: dataLiked.facilities,
-            specialized: dataLiked.specialized,
-            course: dataLiked.course,
-        }
-
         const payload = {
-            emailBeLiked: dataBeLiked.email,
-            userLiked,
+            userBeLiked: dataBeLiked,
+            userLiked: dataLiked,
             status: false,
             createdAt: new Date()
         }
@@ -58,9 +63,9 @@ exports.insert = async (req, res) => {
 exports.update = async (req, res) => {
     try {
         const { emailBeLiked, emailLiked } = req.body;
-        
+
         const payload = {
-            emailBeLiked,
+            "emailBeLiked.email": emailBeLiked,
             'userLiked.email': emailLiked
         }
 
@@ -79,7 +84,7 @@ exports.delete = async (req, res) => {
         const { emailBeLiked, emailLiked } = req.body;
 
         const payload = {
-            emailBeLiked,
+            "emailBeLiked.email": emailBeLiked,
             'userLiked.email': emailLiked
         }
 
