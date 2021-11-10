@@ -8,8 +8,6 @@ exports.list = async (req, res) => {
 
         const dataFavorite = await Favorite.find({ emailBeLiked });
 
-        console.log(dataFavorite);
-
         const payload = {
             total: dataFavorite.length,
             favorites: dataFavorite
@@ -61,12 +59,12 @@ exports.delete = async (req, res) => {
     try {
         const { emailBeLiked, emailLiked } = req.body;
 
-        const obj = {
+        const payload = {
             emailBeLiked,
             'userLiked.email': emailLiked
         }
 
-        const data = await Favorite.findOne(obj);
+        const data = await Favorite.findOne(payload);
 
         await Favorite.deleteOne({ _id: data._id });
         res.status(200).json(response(200, `Đã xóa ${data.userLiked.name} khỏi danh sách lời mời kết bạn`));
