@@ -55,6 +55,25 @@ exports.insert = async (req, res) => {
     }
 };
 
+exports.update = async (req, res) => {
+    try {
+        const { emailBeLiked, emailLiked } = req.body;
+
+        const payload = {
+            emailBeLiked,
+            'userLiked.email': emailLiked
+        }
+
+        const data = await Favorite.findOne(payload);
+
+        await Favorite.updateOne({ _id: data._id }, { status: true })
+        res.status(200).json(response(200, `Chấp nhận lời mời kết bạn với ${data.userLiked.name}`));
+
+    } catch (error) {
+        res.status(500).json(response(500, error.message));
+    }
+};
+
 exports.delete = async (req, res) => {
     try {
         const { emailBeLiked, emailLiked } = req.body;
@@ -67,7 +86,7 @@ exports.delete = async (req, res) => {
         const data = await Favorite.findOne(payload);
 
         await Favorite.deleteOne({ _id: data._id });
-        res.status(200).json(response(200, `Đã xóa ${data.userLiked.name} khỏi danh sách lời mời kết bạn`));
+        res.status(200).json(response(200, `Đã xóa ${data.userLiked.name} khỏi danh sách lời mời kết bạn.`));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
