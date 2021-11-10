@@ -50,7 +50,7 @@ exports.insert = async (req, res) => {
         }
 
         await Favorite.create(payload);
-        res.status(201).json(response(200, `Yêu thích ${dataBeLiked.email} thành công`, payload));
+        res.status(201).json(response(200, `Yêu thích ${dataBeLiked.name}`, payload));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
