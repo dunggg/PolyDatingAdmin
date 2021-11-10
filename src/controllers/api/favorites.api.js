@@ -5,16 +5,18 @@ const validate = require("../../utils/validate");
 
 exports.list = async (req, res) => {
     try {
-        const { emailLike } = req.params;
+        const { emailBeLiked } = req.params;
 
-        const dataFavorite = await Favorite.find({ emailLike });
+        const dataFavorite = await Favorite.find({ emailBeLiked });
+
+        console.log(dataFavorite);
 
         const payload = {
             total: dataFavorite.length,
             favorites: dataFavorite
         }
 
-        res.status(200).json(response(200, `Lấy danh sách lượt thích của ${emailLike} thành công`, payload));
+        res.status(200).json(response(200, `Lấy danh sách lượt thích của ${emailBeLiked} thành công`, payload));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
@@ -23,34 +25,33 @@ exports.list = async (req, res) => {
 
 exports.insert = async (req, res) => {
     try {
-        const { error, value } = validate.insertFavorite.validate(req.body);
-        if (error) return res.status(400).json(response(400, error.message));
+        const { emailBeLiked, emailLiked } = req.body;
 
-        const dataPersonal = await User.findOne({ email: value.emailPersonal });
-        const dataLike = await User.findOne({ email: value.emailLike });
+        const dataBeLiked = await User.findOne({ email: emailBeLiked });
+        const dataLiked = await User.findOne({ email: emailLiked });
 
-        const emailPersonal = {
-            email: dataPersonal.email,
-            name: dataPersonal.name,
-            images: dataPersonal.images,
-            hobbies: dataPersonal.hobbies,
-            birthDay: dataPersonal.birthDay,
-            gender: dataPersonal.gender,
-            description: dataPersonal.description,
-            facilities: dataPersonal.facilities,
-            specialized: dataPersonal.specialized,
-            course: dataPersonal.course,
+        const userLiked = {
+            email: dataLiked.email,
+            name: dataLiked.name,
+            images: dataLiked.images,
+            hobbies: dataLiked.hobbies,
+            birthDay: dataLiked.birthDay,
+            gender: dataLiked.gender,
+            description: dataLiked.description,
+            facilities: dataLiked.facilities,
+            specialized: dataLiked.specialized,
+            course: dataLiked.course,
         }
 
         const payload = {
-            emailPersonal,
-            emailLike: dataLike.email,
+            emailBeLiked: dataBeLiked.email,
+            userLiked,
             status: false,
             createdAt: new Date()
         }
 
         await Favorite.create(payload);
-        res.status(201).json(response(200, `Yêu thích ${dataLike.email} thành công`, payload));
+        res.status(201).json(response(200, `Yêu thích ${dataBeLiked.email} thành công`, payload));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
@@ -59,12 +60,17 @@ exports.insert = async (req, res) => {
 
 exports.delete = async (req, res) => {
     try {
-        const { emailPersonal, emailLike } = req.body;
+        const { emailBeLiked, emailLiked } = req.body;
 
-        const data = Favorite.findOne({ emailPersonal, emailLike });
+        const obj = {
+            emailBeLiked,
+            'userLiked.email': emailLiked
+        }
+
+        const data = await Favorite.findOne(obj);
 
         await Favorite.deleteOne({ _id: data._id });
-        res.status(200).json(response(200, `Đã xóa ${emailLike} khỏi danh sách lời mời kết bạn`));
+        res.status(200).json(response(200, `Đã xóa ${emailLiked} khỏi danh sách lời mời kết bạn`));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));

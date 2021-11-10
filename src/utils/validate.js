@@ -23,8 +23,3 @@ exports.insertReport = joi.object({
     title: joi.string().required(),
     content: joi.string().min(20).max(200).required()
 });
-
-exports.insertFavorite = joi.object({
-    emailPersonal: joi.string().email().required(),
-    emailLike: joi.string().email().required()
-});
