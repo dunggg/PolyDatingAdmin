@@ -58,7 +58,7 @@ exports.insert = async (req, res) => {
 exports.update = async (req, res) => {
     try {
         const { emailBeLiked, emailLiked } = req.body;
-
+        
         const payload = {
             emailBeLiked,
             'userLiked.email': emailLiked
