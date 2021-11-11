@@ -53,6 +53,8 @@ exports.insert = async (req, res) => {
 
     let isShow = [];
     isShow = value.isShow.slice(1, -1).split(',');
+    
+    isShow.push(value.facilities, value.specialized, value.course);
 
     const payload = {
       email: value.email,
