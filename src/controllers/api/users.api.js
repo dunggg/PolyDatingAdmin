@@ -4,11 +4,9 @@ const validate = require("../../utils/validate");
 
 exports.list = async (req, res) => {
   try {
-    const { error, value } = validate.listUser.validate(req.query);
+    const { isShow } = req.query;
 
-    if (error) return res.status(400).json(response(400, error.message));
-
-    const data = await User.find({ isShow: value.isShow }).limit(parseInt(value.pageSize));
+    const data = await User.find({ isShow });
 
     const payload = {
       total: data.length,

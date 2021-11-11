@@ -1,10 +1,5 @@
 const joi = require("joi");
 
-exports.listUser = joi.object({
-    isShow: joi.array().required(),
-    pageSize: joi.string().required(),
-});
-
 exports.insertUser = joi.object({
     email: joi.string().email().min(15).required(),
     name: joi.string().min(1).max(25).required(),
