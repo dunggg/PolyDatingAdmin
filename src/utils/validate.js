@@ -9,7 +9,6 @@ exports.insertUser = joi.object({
     facilities: joi.string().required(),
     specialized: joi.string().required(),
     course: joi.string().required(),
-    isShow: joi.string().required()
 });
 
 exports.insertReport = joi.object({
