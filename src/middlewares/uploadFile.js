@@ -4,7 +4,7 @@ const { response } = require("../utils/utils");
 /**  Multer upload image */
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "src/public/data-image/");
+        cb(null, "src/public/data_images/");
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);

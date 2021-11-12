@@ -43,9 +43,9 @@ exports.insert = async (req, res) => {
 
     if (req.files.length < 2) return res.status(400).json(response(400, "Cần chọn ít nhất 2 ảnh"));
 
-    const images = [];
+    let images = [];
     for (let index = 0; index < req.files.length; index++) {
-      images.push("public/data-image/" + req.files[index].filename)
+      images.push(`public/data_images/${req.files[index].filename}`)
     }
 
     let hobbies = value.hobbies.slice(1, -1).split(',');
@@ -72,6 +72,31 @@ exports.insert = async (req, res) => {
 
     await User.create(payload);
     res.status(201).json(response(201, "Tạo tài khoản thành công"))
+
+  } catch (error) {
+    res.status(500).json(response(500, error.message));
+  }
+};
+
+exports.updateImages = async (req, res) => {
+  try {
+    const { _id } = req.body;
+
+    const data = await User.findOne({ _id });
+
+    let images = data.images;
+
+    console.log(req.files, "hinh anh moi");
+    console.log(images, "hinh anh cu");
+
+    for (let index = 0; index < req.files.length; index++) {
+      images.push(`public/data_images/${req.files[index].filename}`)
+    }
+
+    console.log(images, "hinh anh cap nhat");
+
+    await User.updateOne({ _id: data._id }, { images })
+    res.status(200).json(response(200, "Cập nhật ảnh thành công"));
 
   } catch (error) {
     res.status(500).json(response(500, error.message));

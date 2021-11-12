@@ -65,7 +65,7 @@ exports.update = async (req, res) => {
         const { emailBeLiked, emailLiked } = req.body;
 
         const payload = {
-            "emailBeLiked.email": emailBeLiked,
+            "userBeLiked.email": emailBeLiked,
             'userLiked.email': emailLiked
         }
 
@@ -79,12 +79,12 @@ exports.update = async (req, res) => {
     }
 };
 
-exports.delete = async (req, res) => {
+exports.deleteLiked = async (req, res) => {
     try {
         const { emailBeLiked, emailLiked } = req.body;
 
         const payload = {
-            "emailBeLiked.email": emailBeLiked,
+            "userBeLiked.email": emailBeLiked,
             'userLiked.email': emailLiked
         }
 
@@ -92,6 +92,25 @@ exports.delete = async (req, res) => {
 
         await Favorite.deleteOne({ _id: data._id });
         res.status(200).json(response(200, `Đã xóa ${data.userLiked.name} khỏi danh sách lời mời kết bạn.`));
+
+    } catch (error) {
+        res.status(500).json(response(500, error.message));
+    }
+};
+
+exports.deleteBeLiked = async (req, res) => {
+    try {
+        const { emailLiked, emailBeLiked } = req.body;
+
+        const payload = {
+            'userLiked.email': emailLiked,
+            "userBeLiked.email": emailBeLiked
+        }
+
+        const data = await Favorite.findOne(payload);
+
+        await Favorite.deleteOne({ _id: data._id });
+        res.status(200).json(response(200, `Đã hủy yêu cầu kết bạn với ${data.userBeLiked.name}`));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
