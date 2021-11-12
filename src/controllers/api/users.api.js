@@ -48,8 +48,7 @@ exports.insert = async (req, res) => {
       images.push("public/data-image/" + req.files[index].filename)
     }
 
-    let hobbies = [];
-    hobbies = value.hobbies.slice(1, -1).split(',');
+    let hobbies = value.hobbies.slice(1, -1).split(',');
 
     let isShow = ["Mọi người", "Tất cả cơ sở", "Tất cả chuyên ngành", "Tất cả khóa học"];
 
@@ -73,6 +72,26 @@ exports.insert = async (req, res) => {
 
     await User.create(payload);
     res.status(201).json(response(201, "Tạo tài khoản thành công"))
+
+  } catch (error) {
+    res.status(500).json(response(500, error.message));
+  }
+};
+
+exports.updateIsShow = async (req, res) => {
+  try {
+    const { _id, isShow } = req.body;
+
+    const data = await User.findOne({ _id });
+
+    let shows = isShow.slice(1, -1).split(',');
+
+    const payload = {
+      isShow: shows
+    }
+
+    await User.updateOne({ _id: data._id }, payload)
+    res.status(200).json(response(200, "Cập nhật hiển thị thành công"));
 
   } catch (error) {
     res.status(500).json(response(500, error.message));

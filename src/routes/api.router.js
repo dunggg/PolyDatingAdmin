@@ -15,6 +15,7 @@ router.get("/master/list", master.list);
 router.get("/users/list", user.list);
 router.get("/users/find/:email", user.find);
 router.post("/users/insert", uploadFile.uploadFile, user.insert);
+router.post("/users/update/is_show", user.updateIsShow);
 // router.post("/users/delete/:_id", user.delete);
 
 // 3. Favorites
