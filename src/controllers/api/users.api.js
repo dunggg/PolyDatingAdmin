@@ -51,10 +51,7 @@ exports.insert = async (req, res) => {
     let hobbies = [];
     hobbies = value.hobbies.slice(1, -1).split(',');
 
-    let isShow = [];
-    isShow = value.isShow.slice(1, -1).split(',');
-    
-    isShow.push(value.facilities, value.specialized, value.course);
+    let isShow = ["Mọi người"];
 
     const payload = {
       email: value.email,
