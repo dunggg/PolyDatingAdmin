@@ -51,7 +51,7 @@ exports.insert = async (req, res) => {
     let hobbies = [];
     hobbies = value.hobbies.slice(1, -1).split(',');
 
-    let isShow = ["Mọi người", "Tất cả", "Tất cả", "Tất cả"];
+    let isShow = ["Mọi người", "Tất cả cơ sở", "Tất cả chuyên ngành", "Tất cả khóa học"];
 
     const payload = {
       email: value.email,
