@@ -84,16 +84,10 @@ exports.updateImages = async (req, res) => {
 
     const data = await User.findOne({ _id });
 
-    let images = data.images;
-
-    console.log(req.files, "hinh anh moi");
-    console.log(images, "hinh anh cu");
-
+    let images = [];
     for (let index = 0; index < req.files.length; index++) {
       images.push(`public/data_images/${req.files[index].filename}`)
     }
-
-    console.log(images, "hinh anh cap nhat");
 
     await User.updateOne({ _id: data._id }, { images })
     res.status(200).json(response(200, "Cập nhật ảnh thành công"));
