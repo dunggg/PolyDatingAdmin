@@ -24,8 +24,7 @@ router.get("/favorites/list/be_liked/:emailBeLiked", favorite.listBeLiked);
 router.get("/favorites/list/liked/:emailLiked", favorite.listLiked);
 router.post("/favorites/insert", favorite.insert);
 router.post("/favorites/update", favorite.update);
-router.post("/favorites/delete/be_liked", favorite.deleteBeLiked);
-router.post("/favorites/delete/liked", favorite.deleteLiked);
+router.post("/favorites/delete", favorite.delete);
 
 // 4. Reports
 router.post("/reports/insert", uploadFile.uploadFile, report.insert);
