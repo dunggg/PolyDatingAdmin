@@ -1,21 +1,20 @@
 const express = require('express');
 const router = express.Router();
+const statistical = require('./statistical');
 
 //Web
 router.get('/', (req, res) => {
-    res.render('index');
+  res.render('index');
 });
 
-router.get('/statistical', (req, res) => {
-    res.render('statistical');
-});
+router.use('/statistical', statistical);
 
 router.get('/reports', (req, res) => {
-    res.render('reports');
+  res.render('reports');
 });
 
 router.get('/notifications', (req, res) => {
-    res.render('notifications');
+  res.render('notifications');
 });
 
 module.exports = router;

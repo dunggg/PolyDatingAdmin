@@ -29,7 +29,7 @@ exports.list = async (req, res) => {
     isSearch = true;
   }
   try {
-    let perPage = 5;
+    let perPage = 1;
     let page = req.params.page || 1;
     const listUser = await User.find(search)
       .skip(perPage * page - perPage)
@@ -37,8 +37,16 @@ exports.list = async (req, res) => {
     const countDoc = await User.countDocuments(search);
     const countPage = Math.ceil(countDoc / perPage);
     const arrPage = [];
-    for (let i = 1; i <= countPage; i++) {
-      arrPage.push(i);
+    if (countPage >= 5) {
+      if (page - 2 > 0) {
+        for (let i = page - 2; i <= page + 5; i++) {
+          arrPage.push(i);
+        }
+      }
+    } else {
+      for (let i = 1; i <= countPage; i++) {
+        arrPage.push(i);
+      }
     }
     let payload = {
       users: listUser,
@@ -67,8 +75,7 @@ exports.list = async (req, res) => {
     }
     res.render('users', payload);
   } catch (error) {
-    // res.status(500).json(500, error.message);
-    console.log(error);
+    res.status(500).send(500, error.message);
   }
 };
 
