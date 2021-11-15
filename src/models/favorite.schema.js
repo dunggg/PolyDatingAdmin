@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const Favorite = new mongoose.Schema(
   {
-    emailPersonal: String,
-    emailLike: String,
+    userBeLiked: Object,
+    userLiked: Object,
     status: Boolean,
     createdAt: Date
   },

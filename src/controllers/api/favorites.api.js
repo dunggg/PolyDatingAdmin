@@ -1,24 +1,37 @@
 const Favorite = require('../../models/favorite.schema');
 const User = require('../../models/user.schema');
 const { response } = require("../../utils/utils");
-const validate = require("../../utils/validate");
 
-exports.list = async (req, res) => {
+exports.listBeLiked = async (req, res) => {
     try {
-        const { error, value } = validate.listFavorite.validate(req.params);
-        if (error) return res.status(400).json(response(400, error.message));
+        const { emailBeLiked } = req.params;
 
-        const dataUser = await User.findOne({ email: value.emailPersonal });
-        if (!dataUser) return res.status(200).json(response(200, "Người dùng không tồn tại", dataUser));
-
-        const dataFavorite = await Favorite.find({ emailPersonal: dataUser.email });
+        const dataFavorite = await Favorite.find({ 'userBeLiked.email': emailBeLiked });
 
         const payload = {
             total: dataFavorite.length,
             favorites: dataFavorite
         }
 
-        res.status(200).json(response(200, `Lấy danh sách lượt thích của ${dataUser.email} thành công`, payload));
+        res.status(200).json(response(200, `Lấy danh sách lời mời kết bạn của ${emailBeLiked}`, payload));
+
+    } catch (error) {
+        res.status(500).json(response(500, error.message));
+    }
+};
+
+exports.listLiked = async (req, res) => {
+    try {
+        const { emailLiked } = req.params;
+
+        const dataFavorite = await Favorite.find({ 'userLiked.email': emailLiked });
+
+        const payload = {
+            total: dataFavorite.length,
+            favorites: dataFavorite
+        }
+
+        res.status(200).json(response(200, `Lấy danh sách yêu cầu kết bạn của ${emailLiked}`, payload));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
@@ -27,26 +40,39 @@ exports.list = async (req, res) => {
 
 exports.insert = async (req, res) => {
     try {
-        const { error, value } = validate.insertFavorite.validate(req.body);
-        if (error) return res.status(400).json(response(400, error.message));
+        const { emailBeLiked, emailLiked } = req.body;
 
-        const dataPersonal = await User.findOne({ email: value.emailPersonal });
-        if (!dataPersonal) return res.status(200).json(response(200, `${dataPersonal.email} không tồn tại`, dataPersonal));
-
-        const dataLike = await User.findOne({ email: value.emailLike });
-        if (!dataLike) return res.status(200).json(response(200, `${dataLike.email} không tồn tại`, dataLike));
-
-        if (dataPersonal.email == dataLike.email) return res.status(400).json(response(400, `Không thể tự yêu thích`));
+        const dataBeLiked = await User.findOne({ email: emailBeLiked });
+        const dataLiked = await User.findOne({ email: emailLiked });
 
         const payload = {
-            emailPersonal: dataPersonal.email,
-            emailLike: dataLike.email,
+            userBeLiked: dataBeLiked,
+            userLiked: dataLiked,
             status: false,
             createdAt: new Date()
         }
 
         await Favorite.create(payload);
-        res.status(201).json(response(201, `Yêu thích ${payload.emailLike} thành công`, payload));
+        res.status(201).json(response(200, `Yêu thích ${dataBeLiked.name}`, payload));
+
+    } catch (error) {
+        res.status(500).json(response(500, error.message));
+    }
+};
+
+exports.update = async (req, res) => {
+    try {
+        const { emailBeLiked, emailLiked } = req.body;
+
+        const payload = {
+            "userBeLiked.email": emailBeLiked,
+            'userLiked.email': emailLiked
+        }
+
+        const data = await Favorite.findOne(payload);
+
+        await Favorite.updateOne({ _id: data._id }, { status: true })
+        res.status(200).json(response(200, `Chấp nhận lời mời kết bạn với ${data.userLiked.name}`));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
@@ -55,14 +81,17 @@ exports.insert = async (req, res) => {
 
 exports.delete = async (req, res) => {
     try {
-        const { error, value } = validate.insertFavorite.validate(req.body);
-        if (error) return res.status(400).json(response(400, error.message));
+        const { emailBeLiked, emailLiked } = req.body;
 
-        const data = Favorite.findOne({ emailPersonal: value.emailPersonal, emailLike: value.emailLike });
-        if (!data) return res.status(200).json(response(200, "Lời mời kết bạn không tồn tại", data));
+        const payload = {
+            "userBeLiked.email": emailBeLiked,
+            'userLiked.email': emailLiked
+        }
+
+        const data = await Favorite.findOne(payload);
 
         await Favorite.deleteOne({ _id: data._id });
-        res.status(200).json(response(200, `Đã xóa ${data.emailLike} khỏi danh sách lời mời kết bạn`));
+        res.status(200).json(response(200, "Hủy yêu cầu thành công"));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));

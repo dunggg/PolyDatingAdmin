@@ -4,11 +4,9 @@ const validate = require("../../utils/validate");
 
 exports.list = async (req, res) => {
   try {
-    const { error, value } = validate.listUser.validate(req.query);
+    const { isShow } = req.query;
 
-    if (error) return res.status(400).json(response(400, error.message));
-
-    const data = await User.find({ isShow: value.isShow }).limit(parseInt(value.pageSize));
+    const data = await User.find({ isShow });
 
     const payload = {
       total: data.length,
@@ -45,16 +43,14 @@ exports.insert = async (req, res) => {
 
     if (req.files.length < 2) return res.status(400).json(response(400, "Cần chọn ít nhất 2 ảnh"));
 
-    const images = [];
+    let images = [];
     for (let index = 0; index < req.files.length; index++) {
-      images.push("public/data-image/" + req.files[index].filename)
+      images.push(`public/data_images/${req.files[index].filename}`)
     }
 
-    let hobbies = [];
-    hobbies = value.hobbies.slice(1, -1).split(',');
+    let hobbies = value.hobbies.slice(1, -1).split(',');
 
-    let isShow = [];
-    isShow = value.isShow.slice(1, -1).split(',');
+    let isShow = ["Mọi người", "Tất cả cơ sở", "Tất cả chuyên ngành", "Tất cả khóa học"];
 
     const payload = {
       email: value.email,
@@ -76,6 +72,45 @@ exports.insert = async (req, res) => {
 
     await User.create(payload);
     res.status(201).json(response(201, "Tạo tài khoản thành công"))
+
+  } catch (error) {
+    res.status(500).json(response(500, error.message));
+  }
+};
+
+exports.updateImages = async (req, res) => {
+  try {
+    const { _id } = req.body;
+
+    const data = await User.findOne({ _id });
+
+    let images = [];
+    for (let index = 0; index < req.files.length; index++) {
+      images.push(`public/data_images/${req.files[index].filename}`)
+    }
+
+    await User.updateOne({ _id: data._id }, { images })
+    res.status(200).json(response(200, "Cập nhật ảnh thành công"));
+
+  } catch (error) {
+    res.status(500).json(response(500, error.message));
+  }
+};
+
+exports.updateIsShow = async (req, res) => {
+  try {
+    const { _id, isShow } = req.body;
+
+    const data = await User.findOne({ _id });
+
+    let shows = isShow.slice(1, -1).split(',');
+
+    const payload = {
+      isShow: shows
+    }
+
+    await User.updateOne({ _id: data._id }, payload)
+    res.status(200).json(response(200, "Cập nhật hiển thị thành công"));
 
   } catch (error) {
     res.status(500).json(response(500, error.message));

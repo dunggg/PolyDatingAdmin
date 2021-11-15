@@ -4,7 +4,7 @@ const { response } = require("../utils/utils");
 /**  Multer upload image */
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "src/public/data-image/");
+        cb(null, "src/public/data_images/");
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
 const uploadMulter = multer({
     storage: storage,
     limits: {
-        fileSize: 1 * 1024 * 1024,
+        fileSize: 0.8 * 1024 * 1024,
         files: 6
     },
     fileFilter(req, file, cb) {
