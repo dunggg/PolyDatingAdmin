@@ -102,15 +102,15 @@
                             <hr>
                             <div class="row">
                                 <div class="col-md-4 mb-2">
-                                    <p class="fw-bold h5">Tổng người dùng: {{countUser}}</p>
+                                    <p class="fw-bold h5">Tổng người dùng: {{totalUser}}</p>
                                 </div>
 
                                 <div class="col-md-4 mb-2">
-                                    <p class="fw-bold h5">Sinh viên Nam: {{countUserMale}}</p>
+                                    <p class="fw-bold h5">Sinh viên Nam: {{totalUserMale}}</p>
                                 </div>
 
                                 <div class="col-md-4 mb-2">
-                                    <p class="fw-bold h5">Sinh viên Nữ: {{countUserFemale}}</p>
+                                    <p class="fw-bold h5">Sinh viên Nữ: {{totalUserFemale}}</p>
                                 </div>
 
                                 <div class="col-md-4 mb-2">
@@ -122,6 +122,14 @@
                                 </div>
                             </div>
                         </div>
+
+                        <input type="hidden" name="totalMatch" value="{{totalMatch}}" />
+                        <input type="hidden" name="totalActivityUser" value="{{totalActivityUser}}" />
+                        <input type="hidden" name="totalTimeActivityUser" value="{{totalTimeActivityUser}}" />
+                        <input type="hidden" name="totalReport" value="{{totalReport}}" />
+                        <input type="hidden" name="totalMessage" value="{{totalMessage}}" />
+                        <input type="hidden" name="totalBlock" value="{{totalBlock}}" />
+                        <input type="hidden" name="data" value="{{data}}" />
 
                         <div class="container" id="page-content" style="margin-bottom: 10px;">
                             <div class="row justify-content-center">
@@ -164,80 +172,5 @@
     </div>
 
     <script src="/public/js/theme.js"></script>
-    <script>
-        $(document).ready(function () {
-            var ctx = $("#chart-line");
-            var myLineChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
-                    datasets: [{
-                        data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
-                        label: "Số lượt match",
-                        borderColor: "#FF99FF",
-                        backgroundColor: '#FF99FF',
-                        fill: false,
-                    }, {
-                        data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
-                        label: "Thời gian hoạt động của người dùng",
-                        borderColor: "#458af7",
-                        fill: true,
-                        backgroundColor: '#458af7'
-                    }, {
-                        data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
-                        label: "Số lượng người dùng hoạt động",
-                        borderColor: "#33FF33",
-                        fill: false,
-                        backgroundColor: '#33FF33'
-                    }, {
-                        data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
-                        label: "Số lượt báo cáo",
-                        borderColor: "#FF9900",
-                        backgroundColor: '#FF9900',
-                        fill: false
-                    }, {
-                        data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
-                        label: "Số lượt tin nhắn",
-                        borderColor: "#3cba9f",
-                        fill: true,
-                        backgroundColor: '#3cba9f'
-                    }, {
-                        data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
-                        label: "Số lượt chặn",
-                        borderColor: "#FF0000",
-                        fill: false,
-                        backgroundColor: '#FF0000'
-                    }]
-                },
-                options: {
-                    title: {
-                        display: true,
-                        text: 'Thống kê'
-                    },
-                    scales: {
-                        xAxes: [{
-                            display: true,
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Ngày'
-                            },
-                            ticks: {
-                                major: {
-                                    fontStyle: 'bold',
-                                    fontColor: '#FF0000'
-                                }
-                            }
-                        }],
-                        yAxes: [{
-                            display: true,
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Số lượng'
-                            }
-                        }]
-                    }
-                }
-            });
-        });
-    </script>
+    <script src="/public/js/statistical.js"></script>
 </body>

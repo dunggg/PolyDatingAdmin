@@ -1,6 +1,7 @@
 const { updateOne } = require('../../models/user.schema');
 const User = require('../../models/user.schema');
 const _ = require('lodash');
+const moment = require('moment');
 const {
   course,
   hobbies,
@@ -98,8 +99,8 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     if (email == 'admin' && password == 'admin')
-      return res.redirect('/statistical');
-
+      return res.redirect('/statistical?format=0&timeStamp=' + moment().unix());
+    e;
     const data = await User.findOne({ email, password });
 
     if (!data)
@@ -111,7 +112,7 @@ exports.login = async (req, res) => {
     if (data.isActive != 'Kích hoạt')
       return res.render('index', { msgError: 'Tài khoản đã bị khóa' });
 
-    res.redirect('/statistical');
+    res.redirect('/statistical?format=0&timeStamp=' + moment().unix());
   } catch (error) {
     res.status(500).send(error.message);
   }
