@@ -15,7 +15,7 @@ hbs.registerHelper({
   },
 });
 
-hbs.registerHelper('compare', function (object) {
+hbs.registerHelper('compare', function (index, object) {
   const s1 = Number(object.data.root.page);
   const s2 = object.data.index + 1;
   const isSearch = object.data.root.isSearch;
@@ -26,9 +26,10 @@ hbs.registerHelper('compare', function (object) {
   const statusParams = object.data.root.statusParams;
   const reportParmas = object.data.root.reportParmas;
   const searchParams = object.data.root.searchParams;
-  return s1 === s2
+  const page = object.data.root.page;
+  return page === index
     ? isSearch
-      ? `<li class="page-item active"><a class="page-link" href="/users/page/${s1}${
+      ? `<li class="page-item active"><a class="page-link" href="/users/page/${index}${
           facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
         }${specializedParams ? `&specialized=${specializedParams}` : ''}${
           courseParams ? `&course=${courseParams}` : ''
@@ -36,10 +37,10 @@ hbs.registerHelper('compare', function (object) {
           reportParmas ? `&report=${reportParmas}` : ''
         }${statusParams ? `&status=${statusParams}` : ''}${
           searchParams ? `&email=${searchParams}` : ''
-        }">${s1}</a></li>`
-      : `<li class="page-item active"><a class="page-link" href="/users/page/${s1}">${s1}</a></li>`
+        }">${index}</a></li>`
+      : `<li class="page-item active"><a class="page-link" href="/users/page/${index}">${index}</a></li>`
     : isSearch
-    ? `<li class="page-item"><a class="page-link" href="/users/page/${s2}${
+    ? `<li class="page-item"><a class="page-link" href="/users/page/${index}${
         facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
       }${specializedParams ? `&specialized=${specializedParams}` : ''}${
         courseParams ? `&course=${courseParams}` : ''
@@ -47,8 +48,8 @@ hbs.registerHelper('compare', function (object) {
         reportParmas ? `&report=${reportParmas}` : ''
       }${statusParams ? `&status=${statusParams}` : ''}${
         searchParams ? `&email=${searchParams}` : ''
-      }">${s2}</a></li>`
-    : `<li class="page-item"><a class="page-link" href="/users/page/${s2}">${s2}</a></li>`;
+      }">${index}</a></li>`
+    : `<li class="page-item"><a class="page-link" href="/users/page/${index}">${index}</a></li>`;
 });
 
 hbs.registerHelper('optionReport', function (any, value, object) {

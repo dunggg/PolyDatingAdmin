@@ -31,21 +31,31 @@ exports.list = async (req, res) => {
   }
   try {
     let perPage = 1;
-    let page = req.params.page || 1;
+    let page = Number(req.params.page) || 1;
     const listUser = await User.find(search)
       .skip(perPage * page - perPage)
       .limit(perPage);
     const countDoc = await User.countDocuments(search);
-    const countPage = Math.ceil(countDoc / perPage);
+    // const countPage = Math.ceil(countDoc / perPage);
+    const countPage = 10;
     const arrPage = [];
-    if (countPage >= 5) {
-      if (page - 2 > 0) {
-        for (let i = page - 2; i <= page + 5; i++) {
+    // nếu tổng countPage - page >= 5
+    if (countPage - page >= 5) {
+      // nếu page - 1 khác 0 render từ page -1
+      if (page - 1) {
+        for (let i = page - 1; i <= page + 3; i++) {
+          arrPage.push(i);
+        }
+      } else {
+        // nếu page lớn hơn 1
+        for (let i = page; i <= page + 4; i++) {
           arrPage.push(i);
         }
       }
     } else {
-      for (let i = 1; i <= countPage; i++) {
+      // render 5 page cuối
+      const pageRest = countPage - page;
+      for (let i = page - (4 - pageRest); i <= page + pageRest; i++) {
         arrPage.push(i);
       }
     }
