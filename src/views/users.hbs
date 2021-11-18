@@ -200,30 +200,35 @@
                             <div class="row">
                                 <div class="col-md-6 align-self-center">
                                     <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Hiển
-                                        thị {{countFrom}} đến {{countTo}} của {{arrPage.length}}</p>
+                                        thị {{countFrom}} đến {{countTo}} của {{countPage}}</p>
                                 </div>
                                 <div class="col-md-6">
                                     <nav
                                         class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
                                         <ul class="pagination">
+                                            {{#if buttonFirt}}
                                             {{#if isSearch}}
                                             <li class="page-item"><a class="page-link"
-                                                    href="/users/page/{{pre}}{{#if facilitiesParams}}?facilities={{facilitiesParams}}{{else}}?{{/if}}{{#if specializedParams}}&specialized={{specializedParams}}{{/if}}{{#if courseParams}}&course={{courseParams}}{{/if}}{{#if genderParams}}&gender={{genderParams}}{{/if}}{{#if reportParams}}&report={{reportParams}}{{/if}}{{#if statusParams}}&status={{statusParams}}{{/if}}{{#if searchParams}}&email={{searchParams}}{{/if}}"
-                                                    aria-label="Next"><span aria-hidden="true">«</span></a></li>
+                                                    href="/users/page/1{{#if facilitiesParams}}?facilities={{facilitiesParams}}{{else}}?{{/if}}{{#if specializedParams}}&specialized={{specializedParams}}{{/if}}{{#if courseParams}}&course={{courseParams}}{{/if}}{{#if genderParams}}&gender={{genderParams}}{{/if}}{{#if reportParams}}&report={{reportParams}}{{/if}}{{#if statusParams}}&status={{statusParams}}{{/if}}{{#if searchParams}}&email={{searchParams}}{{/if}}"
+                                                    aria-label="Next"><span aria-hidden="true">Đầu</span></a></li>
                                             {{else}}
-                                            <li class="page-item"><a class="page-link" href="/users/page/{{pre}}"
-                                                    aria-label="Next"><span aria-hidden="true">«</span></a></li>
+                                            <li class="page-item"><a class="page-link" href="/users/page/1"
+                                                    aria-label="Next"><span aria-hidden="true">Đầu</span></a></li>
+                                            {{/if}}
                                             {{/if}}
                                             {{#each arrPage}}
                                             {{#compare this}} {{/compare}}
                                             {{/each}}
+                                            {{#if buttonLast}}
                                             {{#if isSearch}}
                                             <li class="page-item"><a class="page-link"
-                                                    href="/users/page/{{next}}{{#if facilitiesParams}}?facilities={{facilitiesParams}}{{else}}?{{/if}}{{#if specializedParams}}&specialized={{specializedParams}}{{/if}}{{#if courseParams}}&course={{courseParams}}{{/if}}{{#if genderParams}}&gender={{genderParams}}{{/if}}{{#if reportParams}}&report={{reportParams}}{{/if}}{{#if statusParams}}&status={{statusParams}}{{/if}}{{#if searchParams}}&email={{searchParams}}{{/if}}"
-                                                    aria-label="Next"><span aria-hidden="true">»</span></a></li>
+                                                    href="/users/page/{{countPage}}{{#if facilitiesParams}}?facilities={{facilitiesParams}}{{else}}?{{/if}}{{#if specializedParams}}&specialized={{specializedParams}}{{/if}}{{#if courseParams}}&course={{courseParams}}{{/if}}{{#if genderParams}}&gender={{genderParams}}{{/if}}{{#if reportParams}}&report={{reportParams}}{{/if}}{{#if statusParams}}&status={{statusParams}}{{/if}}{{#if searchParams}}&email={{searchParams}}{{/if}}"
+                                                    aria-label="Next"><span aria-hidden="true">Cuối</span></a></li>
+
                                             {{else}}
-                                            <li class="page-item"><a class="page-link" href="/users/page/{{next}}"
-                                                    aria-label="Next"><span aria-hidden="true">»</span></a></li>
+                                            <li class="page-item"><a class="page-link" href="/users/page/{{countPage}}"
+                                                    aria-label="Next"><span aria-hidden="true">Cuối</span></a></li>
+                                            {{/if}}
                                             {{/if}}
                                         </ul>
                                     </nav>

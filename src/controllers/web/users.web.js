@@ -30,14 +30,13 @@ exports.list = async (req, res) => {
     isSearch = true;
   }
   try {
-    let perPage = 1;
+    let perPage = 2;
     let page = Number(req.params.page) || 1;
     const listUser = await User.find(search)
       .skip(perPage * page - perPage)
       .limit(perPage);
     const countDoc = await User.countDocuments(search);
-    // const countPage = Math.ceil(countDoc / perPage);
-    const countPage = 10;
+    const countPage = Math.ceil(countDoc / perPage);
     const arrPage = [];
     // nếu tổng countPage - page >= 5
     if (countPage - page >= 5) {
@@ -54,9 +53,15 @@ exports.list = async (req, res) => {
       }
     } else {
       // render 5 page cuối
-      const pageRest = countPage - page;
-      for (let i = page - (4 - pageRest); i <= page + pageRest; i++) {
-        arrPage.push(i);
+      if (countPage >= 5) {
+        const pageRest = countPage - page;
+        for (let i = page - (5 - pageRest); i <= page + pageRest; i++) {
+          arrPage.push(i);
+        }
+      } else {
+        for (let i = 1; i <= countPage; i++) {
+          arrPage.push(i);
+        }
       }
     }
     let payload = {
@@ -71,6 +76,9 @@ exports.list = async (req, res) => {
       specialized,
       facilities,
       isSearch,
+      buttonFirt: page > 1 ? true : false,
+      buttonLast: page !== countPage ? true : false,
+      countPage,
     };
     if (!_.isEmpty(req.query)) {
       payload = {
