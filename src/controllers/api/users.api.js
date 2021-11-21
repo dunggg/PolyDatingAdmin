@@ -87,7 +87,7 @@ exports.updateImages = async (req, res) => {
     let images = data.images;
 
     //Remove item images
-    if (checkRemove == "1") {
+    if (checkRemove == "yes") {
       let index = images.indexOf(imageUrl);
 
       if (index != -1) {
