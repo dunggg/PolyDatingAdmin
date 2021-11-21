@@ -80,14 +80,14 @@ exports.insert = async (req, res) => {
 
 exports.updateImages = async (req, res) => {
   try {
-    const { _id, image } = req.body;
+    const { _id, image, checkRemove } = req.body;
 
     const data = await User.findOne({ _id });
 
     let images = data.images;
 
     //Remove item images
-    if (image) {
+    if (checkRemove == 1) {
       let index = images.indexOf(image);
 
       if (index != -1) {
