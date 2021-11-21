@@ -84,13 +84,10 @@ exports.updateImages = async (req, res) => {
 
     const data = await User.findOne({ _id });
 
-    let images = [];
-    for (let index = 0; index < req.files.length; index++) {
-      images.push(`public/data_images/${req.files[index].filename}`)
-    }
+    let images = `public/data_images/${req.files[0].filename}`;
 
     await User.updateOne({ _id: data._id }, { images })
-    res.status(200).json(response(200, "Cập nhật ảnh thành công"));
+    res.status(200).json(response(200, "Cập nhật ảnh thành công", images));
 
   } catch (error) {
     res.status(500).json(response(500, error.message));
