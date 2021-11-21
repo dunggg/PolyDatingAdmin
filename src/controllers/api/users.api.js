@@ -80,7 +80,7 @@ exports.insert = async (req, res) => {
 
 exports.updateImages = async (req, res) => {
   try {
-    const { _id, image, checkRemove } = req.body;
+    const { _id, imageUrl, checkRemove } = req.body;
 
     const data = await User.findOne({ _id });
 
@@ -88,7 +88,7 @@ exports.updateImages = async (req, res) => {
 
     //Remove item images
     if (checkRemove == "1") {
-      let index = images.indexOf(image);
+      let index = images.indexOf(imageUrl);
 
       if (index != -1) {
         images.splice(index, 1)
