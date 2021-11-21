@@ -88,7 +88,7 @@ exports.updateImages = async (req, res) => {
 
     //Remove item images
     if (checkRemove == "yes") {
-      if (images.length <= 2) return res.status(400).json(response(400, "Không thể xóa khi còn 2 ảnh"));
+      if (images.length <= 2) return res.status(201).json(response(400, "Không thể xóa khi còn 2 ảnh"));
 
       let index = images.indexOf(imageUrl);
 
