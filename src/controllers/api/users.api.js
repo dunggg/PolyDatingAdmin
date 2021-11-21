@@ -80,11 +80,24 @@ exports.insert = async (req, res) => {
 
 exports.updateImages = async (req, res) => {
   try {
-    const { _id } = req.body;
+    const { _id, image } = req.body;
 
     const data = await User.findOne({ _id });
 
-    let images = `public/data_images/${req.files[0].filename}`;
+    let images = data.images;
+
+    //Remove item images
+    if (image) {
+      let index = images.indexOf(image);
+
+      if (index != -1) {
+        images.splice(index, 1)
+      }
+    }
+    //Add images
+    else if (req.files.length > 0) {
+      images.push(`public/data_images/${req.files[0].filename}`);
+    }
 
     await User.updateOne({ _id: data._id }, { images })
     res.status(200).json(response(200, "Cập nhật ảnh thành công", images));
