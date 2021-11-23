@@ -115,7 +115,7 @@ exports.updateIsShow = async (req, res) => {
 
     const data = await User.findOne({ _id });
 
-    let shows = isShow.slice(1, -1).split(',');
+    let shows = isShow.slice(1, -1).split(', ');
 
     const payload = {
       isShow: shows
