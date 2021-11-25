@@ -79,7 +79,12 @@ exports.insert = async (req, res, next) => {
 
     await User.create(payload);
 
-    req.passRandom = passRandom;
+    const decode = {
+      email: payload.email,
+      passRandom
+    }
+
+    req.decoded = decode;
     next();
 
   } catch (error) {
