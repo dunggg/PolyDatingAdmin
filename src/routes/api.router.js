@@ -14,8 +14,8 @@ router.get("/master/list", master.list);
 
 // 2. Users
 router.get("/users/list", user.list);
-router.get("/users/find/:email", user.find);
-router.post("/users/insert", uploadFile, user.insert, sendMailNewUser);
+router.post("/users/sign_in", user.signIn);
+router.post("/users/sign_up", uploadFile, user.signUp, sendMailNewUser);
 router.post("/users/update/is_show", user.updateIsShow);
 router.post("/users/update/images", uploadFile, user.updateImages);
 // router.post("/users/delete/:_id", user.delete);

@@ -22,22 +22,28 @@ exports.list = async (req, res) => {
   }
 };
 
-exports.find = async (req, res) => {
+exports.signIn = async (req, res) => {
   try {
-    const { email } = req.params;
+    const { email } = req.body;
 
     const user = await User.findOne({ email });
 
-    if (!user) return res.status(404).json(response(404, `Người dùng không tồn tại`, null));
-
-    res.status(200).json(response(200, "Tìm kiếm người dùng thành công", user));
+    if (!user) {
+      res.status(404).json(response(404, `Người dùng không tồn tại`, null));
+    }
+    else if (user.isActive == false) {
+      res.status(400).json(response(400, `Tài khoản của bạn đã bị khóa`));
+    }
+    else {
+      res.status(200).json(response(200, "Đăng nhập thành công", user));
+    }
 
   } catch (error) {
     res.status(500).json(response(500, error.message));
   }
-};
+}
 
-exports.insert = async (req, res, next) => {
+exports.signUp = async (req, res, next) => {
   try {
     const { error, value } = insertUser.validate(req.body);
 
