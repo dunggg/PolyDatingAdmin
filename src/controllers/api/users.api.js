@@ -1,6 +1,8 @@
 const User = require("../../models/user.schema");
-const { response } = require("../../utils/utils");
-const validate = require("../../utils/validate");
+const { response, insertUser } = require("../../utils/utils");
+const info = require('../../config/info');
+const jwt = require('jsonwebtoken');
+const randomString = require('randomstring');
 
 exports.list = async (req, res) => {
   try {
@@ -24,20 +26,20 @@ exports.find = async (req, res) => {
   try {
     const { email } = req.params;
 
-    const data = await User.findOne({ email });
+    const user = await User.findOne({ email });
 
-    if (!data) return res.status(200).json(response(200, `Người dùng không tồn tại`, null));
+    if (!user) return res.status(404).json(response(404, `Người dùng không tồn tại`, null));
 
-    res.status(200).json(response(200, "Tìm kiếm người dùng thành công", { user: data }));
+    res.status(200).json(response(200, "Tìm kiếm người dùng thành công", user));
 
   } catch (error) {
     res.status(500).json(response(500, error.message));
   }
 };
 
-exports.insert = async (req, res) => {
+exports.insert = async (req, res, next) => {
   try {
-    const { error, value } = validate.insertUser.validate(req.body);
+    const { error, value } = insertUser.validate(req.body);
 
     if (error) return res.status(400).json(response(400, error.message));
 
@@ -48,13 +50,16 @@ exports.insert = async (req, res) => {
       images.push(`public/data_images/${req.files[index].filename}`)
     }
 
-    let hobbies = value.hobbies.slice(1, -1).split(',');
+    let hobbies = value.hobbies.slice(1, -1).split(', ');
 
     let isShow = ["Mọi người", "Tất cả cơ sở", "Tất cả chuyên ngành", "Tất cả khóa học"];
 
+    let passRandom = randomString.generate(10);
+    let hassPass = jwt.sign(passRandom, info.hassPassKey);
+
     const payload = {
       email: value.email,
-      password: null,
+      password: hassPass,
       name: value.name,
       images,
       hobbies,
@@ -67,11 +72,15 @@ exports.insert = async (req, res) => {
       isShow,
       isActive: true,
       status: true,
-      roleAdmin: false
+      roleAdmin: false,
+      createdAt: new Date(),
+      updatedAt: new Date()
     }
 
     await User.create(payload);
-    res.status(201).json(response(201, "Tạo tài khoản thành công"))
+
+    req.passRandom = passRandom;
+    next();
 
   } catch (error) {
     res.status(500).json(response(500, error.message));
@@ -101,7 +110,12 @@ exports.updateImages = async (req, res) => {
       images.push(`public/data_images/${req.files[0].filename}`);
     }
 
-    await User.updateOne({ _id: data._id }, { images })
+    const payload = {
+      images,
+      updatedAt: new Date()
+    }
+
+    await User.updateOne({ _id: data._id }, payload)
     res.status(200).json(response(200, "Cập nhật ảnh thành công", images));
 
   } catch (error) {
@@ -118,7 +132,8 @@ exports.updateIsShow = async (req, res) => {
     let shows = isShow.slice(1, -1).split(', ');
 
     const payload = {
-      isShow: shows
+      isShow: shows,
+      updatedAt: new Date()
     }
 
     await User.updateOne({ _id: data._id }, payload)

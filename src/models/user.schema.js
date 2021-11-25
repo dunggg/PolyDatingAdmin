@@ -16,9 +16,11 @@ const User = new mongoose.Schema(
     isShow: Array,
     isActive: Boolean,
     status: Boolean,
-    roleAdmin: Boolean
+    roleAdmin: Boolean,
+    createdAt: Date,
+    updatedAt: Date
   },
-  { timestamps: true }
+  { timestamps: false }
 );
 
 module.exports = mongoose.model("users", User);

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const uploadFile = require("../middlewares/uploadFile");
+const { sendMailNewUser } = require('../middlewares/sendMail');
 const master = require("../controllers/api/master.api");
 const user = require("../controllers/api/users.api");
 const favorite = require("../controllers/api/favorites.api");
@@ -14,7 +15,7 @@ router.get("/master/list", master.list);
 // 2. Users
 router.get("/users/list", user.list);
 router.get("/users/find/:email", user.find);
-router.post("/users/insert", uploadFile, user.insert);
+router.post("/users/insert", uploadFile, user.insert, sendMailNewUser);
 router.post("/users/update/is_show", user.updateIsShow);
 router.post("/users/update/images", uploadFile, user.updateImages);
 // router.post("/users/delete/:_id", user.delete);
