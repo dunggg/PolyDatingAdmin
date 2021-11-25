@@ -32,7 +32,7 @@ exports.signIn = async (req, res) => {
       res.status(404).json(response(404, `Người dùng không tồn tại`, null));
     }
     else if (user.isActive == false) {
-      res.status(400).json(response(400, `Tài khoản của bạn đã bị khóa`));
+      res.status(400).json(response(400, `Tài khoản của bạn đã bị khóa`, user));
     }
     else {
       res.status(200).json(response(200, "Đăng nhập thành công", user));
