@@ -14,9 +14,9 @@ router.get("/master/list", master.list);
 // 2. Users
 router.get("/users/list", user.list);
 router.get("/users/find/:email", user.find);
-router.post("/users/insert", uploadFile.uploadFile, user.insert);
+router.post("/users/insert", uploadFile, user.insert);
 router.post("/users/update/is_show", user.updateIsShow);
-router.post("/users/update/images", uploadFile.uploadFile, user.updateImages);
+router.post("/users/update/images", uploadFile, user.updateImages);
 // router.post("/users/delete/:_id", user.delete);
 
 // 3. Favorites
@@ -27,6 +27,6 @@ router.post("/favorites/update", favorite.update);
 router.post("/favorites/delete", favorite.delete);
 
 // 4. Reports
-router.post("/reports/insert", uploadFile.uploadFile, report.insert);
+router.post("/reports/insert", uploadFile, report.insert);
 
 module.exports = router;
