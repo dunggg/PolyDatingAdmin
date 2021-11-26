@@ -21,7 +21,7 @@ router.post("/users/update/is_show", getTimeZone, user.updateIsShow);
 router.post("/users/update/images", uploadFile, getTimeZone, user.updateImages);
 router.post("/users/change_password", getTimeZone, user.changePassword);
 router.post("/users/forgot_password", getTimeZone, user.forgotPassword, sendMailForgotPassword);
-// router.post("/users/delete/:_id", user.delete);
+router.post("/users/delete", user.delete);
 
 // 3. Favorites
 router.get("/favorites/list/be_liked/:emailBeLiked", favorite.listBeLiked);

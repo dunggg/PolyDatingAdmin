@@ -1,4 +1,5 @@
 const User = require("../../models/user.schema");
+const Favorite = require('../../models/favorite.schema');
 const { response, insertUser, checkPassword } = require("../../utils/utils");
 const info = require('../../config/info');
 const jwt = require('jsonwebtoken');
@@ -214,18 +215,31 @@ exports.forgotPassword = async (req, res, next) => {
   }
 };
 
-// exports.delete = async (req, res) => {
-//   try {
-//     const { _id } = req.params;
+exports.delete = async (req, res) => {
+  try {
+    const { _id, password } = req.body;
 
-//     const data = await User.findOne({ _id });
+    const data = await User.findOne({ _id });
 
-//     if (!data) return res.status(200).json(response(200, "Người dùng không tồn tại"));
+    if (password.length == 0) {
+      res.status(400).json(response(400, "Vui lòng nhập mật khẩu"));
+    }
+    else if (password !== data.password) {
+      res.status(400).json(response(400, "Sai mật khẩu"));
+    }
+    else {
+      const payload = {
+        'userBeLiked.email': data.email,
+        'userLiked.email': data.email
+      }
 
-//     await User.findByIdAndDelete({ _id: data._id });
-//     res.status(200).json(response(200, "Xóa người dùng thành công"));
+      await Favorite.deleteMany(payload)
+      await User.deleteOne({ _id: data._id });
 
-//   } catch (error) {
-//     res.status(500).json(response(500, error.message));
-//   }
-// };
+      res.status(200).json(response(200, "Xóa tài khoản thành công"));
+    }
+
+  } catch (error) {
+    res.status(500).json(response(500, error.message));
+  }
+};
