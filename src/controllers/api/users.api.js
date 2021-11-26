@@ -220,21 +220,21 @@ exports.delete = async (req, res) => {
     const { _id, password } = req.body;
 
     const data = await User.findOne({ _id });
-    // const verifyPass = jwt.verify(data.password, info.hassPassKey);
+    const verifyPass = jwt.verify(data.password, info.hassPassKey);
 
-    // if (!password) {
-    //   res.status(400).json(response(400, "Vui lòng nhập mật khẩu"));
-    // }
-    // else if (password !== verifyPass) {
-    //   res.status(400).json(response(400, "Sai mật khẩu"));
-    // }
-    // else {
-    await Favorite.deleteMany({ 'userBeLiked.email': data.email })
-    await Favorite.deleteMany({ 'userLiked.email': data.email })
-    await User.deleteOne({ _id: data._id });
+    if (!password) {
+      res.status(400).json(response(400, "Vui lòng nhập mật khẩu"));
+    }
+    else if (password !== verifyPass) {
+      res.status(400).json(response(400, "Sai mật khẩu"));
+    }
+    else {
+      await Favorite.deleteMany({ 'userBeLiked.email': data.email })
+      await Favorite.deleteMany({ 'userLiked.email': data.email })
+      await User.deleteOne({ _id: data._id });
 
-    res.status(200).json(response(200, "Xóa tài khoản thành công"));
-    // }
+      res.status(200).json(response(200, "Xóa tài khoản thành công"));
+    }
 
   } catch (error) {
     res.status(500).json(response(500, error.message));
