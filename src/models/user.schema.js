@@ -17,8 +17,8 @@ const User = new mongoose.Schema(
     isActive: Boolean,
     status: Boolean,
     roleAdmin: Boolean,
-    createdAt: Date,
-    updatedAt: Date
+    createdAt: String,
+    updatedAt: String
   },
   { timestamps: false }
 );

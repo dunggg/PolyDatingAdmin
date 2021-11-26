@@ -126,6 +126,8 @@ exports.updateImages = async (req, res) => {
       updatedAt: getTime
     }
 
+    console.log(payload);
+
     await User.updateOne({ _id: data._id }, payload)
     res.status(200).json(response(200, "Cập nhật ảnh thành công", images));
 

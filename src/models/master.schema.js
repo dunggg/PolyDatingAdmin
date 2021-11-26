@@ -8,9 +8,7 @@ const Master = new mongoose.Schema(
         reports: Array,
         hobbies: Array
     },
-    {
-        timestamps: false,
-    }
+    { timestamps: false }
 );
 
 module.exports = mongoose.model("masters", Master);

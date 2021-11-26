@@ -1,11 +1,7 @@
 const joi = require("joi");
 
 /** Get Date Timezone gmt+7 */
-const getTime = () => {
-  let timestamps = new Date();
-  timestamps.setHours(timestamps.getHours + 2);
-  return timestamps
-}
+let getTime = new Date().toLocaleString("VN", { timeZone: "Asia/Ho_Chi_Minh" });
 
 /** Base Response */
 const response = (statusCode, message, data = undefined) => {

@@ -8,7 +8,7 @@ const Notification = new mongoose.Schema(
     link: String,
     facilities: String,
     specialized: String,
-    createdAt: Date
+    createdAt: String
   },
   { timestamps: false }
 );
