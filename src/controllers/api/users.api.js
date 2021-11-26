@@ -222,13 +222,13 @@ exports.delete = async (req, res) => {
     const data = await User.findOne({ _id });
     const verifyPass = jwt.verify(data.password, info.hassPassKey);
 
-    if (!password) {
-      res.status(400).json(response(400, "Vui lòng nhập mật khẩu"));
-    }
-    else if (password !== verifyPass) {
-      res.status(400).json(response(400, "Sai mật khẩu"));
-    }
-    else {
+    // if (!password) {
+    //   res.status(400).json(response(400, "Vui lòng nhập mật khẩu"));
+    // }
+    // else if (password !== verifyPass) {
+    //   res.status(400).json(response(400, "Sai mật khẩu"));
+    // }
+    // else {
       const payload = {
         'userBeLiked.email': data.email,
       }
@@ -237,7 +237,7 @@ exports.delete = async (req, res) => {
       await User.deleteOne({ _id: data._id });
 
       res.status(200).json(response(200, "Xóa tài khoản thành công"));
-    }
+    // }
 
   } catch (error) {
     res.status(500).json(response(500, error.message));
