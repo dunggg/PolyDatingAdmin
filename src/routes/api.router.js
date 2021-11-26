@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const uploadFile = require("../middlewares/uploadFile");
 const getTimeZone = require('../middlewares/getTime');
-const { sendMailNewUser } = require('../middlewares/sendMail');
+const { sendMailNewUser, sendMailChangePassword } = require('../middlewares/sendMail');
 const master = require("../controllers/api/master.api");
 const user = require("../controllers/api/users.api");
 const favorite = require("../controllers/api/favorites.api");
@@ -19,6 +19,7 @@ router.post("/users/sign_in", user.signIn);
 router.post("/users/sign_up", uploadFile, getTimeZone, user.signUp, sendMailNewUser);
 router.post("/users/update/is_show", getTimeZone, user.updateIsShow);
 router.post("/users/update/images", uploadFile, getTimeZone, user.updateImages);
+router.post("/users/change_password", getTimeZone, user.changePassword, sendMailChangePassword);
 // router.post("/users/delete/:_id", user.delete);
 
 // 3. Favorites

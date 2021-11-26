@@ -1,5 +1,5 @@
 const User = require("../../models/user.schema");
-const { response, insertUser } = require("../../utils/utils");
+const { response, insertUser, checkPassword } = require("../../utils/utils");
 const info = require('../../config/info');
 const jwt = require('jsonwebtoken');
 const randomString = require('randomstring');
@@ -154,6 +154,46 @@ exports.updateIsShow = async (req, res) => {
     res.status(500).json(response(500, error.message));
   }
 };
+
+exports.changePassword = async (req, res, next) => {
+  try {
+    const { error, value } = checkPassword.validate(req.body);
+
+    if (error) return res.status(400).json(response(400, error.message));
+
+    const data = await User.findOne({ _id: value._id });
+
+    const verifyPass = jwt.verify(data.password, info.hassPassKey);
+
+    if (value.passOld !== verifyPass) {
+      res.status(400).json(response(400, "Sai mật khẩu cũ"));
+    }
+    else if (value.passNew !== value.passConfirm) {
+      res.status(400).json(response(400, "Vui lòng nhập đúng mật khẩu"));
+    }
+    else {
+      const password = jwt.sign(value.passNew, info.hassPassKey)
+
+      const payload = {
+        password,
+        updatedAt: req.getTime
+      }
+
+      await User.updateOne({ _id: data._id }, payload)
+
+      const decode = {
+        email: data.email,
+        passNew: value.passNew
+      }
+
+      req.decoded = decode;
+      next();
+    }
+
+  } catch (error) {
+    res.status(500).json(response(500, error.message));
+  }
+}
 
 // exports.delete = async (req, res) => {
 //   try {
