@@ -174,26 +174,45 @@ exports.changePassword = async (req, res, next) => {
     else {
       const password = jwt.sign(value.passNew, info.hassPassKey)
 
-      const payload = {
-        password,
-        updatedAt: req.getTime
-      }
-
-      await User.updateOne({ _id: data._id }, payload)
-
-      const decode = {
-        email: data.email,
-        passNew: value.passNew
-      }
-
-      req.decoded = decode;
-      next();
+      await User.updateOne({ _id: data._id }, { password })
+      res.status(200).json(response(200, "Thay đổi mật khẩu thành công"));
     }
 
   } catch (error) {
     res.status(500).json(response(500, error.message));
   }
-}
+};
+
+exports.forgotPassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    const data = await User.findOne({ email });
+
+    if (!data) return res.status(404).json(response(404, "Email không tồn tại"));
+
+    let passRandom = randomString.generate(10);
+    let hassPass = jwt.sign(passRandom, info.hassPassKey);
+
+    const payload = {
+      password: hassPass,
+      updatedAt: req.getTime
+    }
+
+    await User.updateOne({ _id: data._id }, payload);
+
+    const decode = {
+      email,
+      passRandom
+    }
+
+    req.decoded = decode;
+    next()
+
+  } catch (error) {
+    res.status(500).json(response(500, error.message));
+  }
+};
 
 // exports.delete = async (req, res) => {
 //   try {

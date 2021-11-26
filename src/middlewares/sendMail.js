@@ -28,15 +28,15 @@ const sendMailNewUser = async (req, res) => {
     }
 }
 
-const sendMailChangePassword = async (req, res) => {
+const sendMailForgotPassword = async (req, res) => {
     try {
         await transporter.sendMail({
             from: '"Poly Dating" <quannhph11150@fpt.edu.vn>', // sender address
             to: `${req.decoded.email}`, // list of receivers
-            subject: "Thay đổi mật khẩu thành công", // Subject line
-            html: `<h3>Cảm ơn bạn đã thay đổi mật khẩu!</h3> 
-                  <p>Mật khẩu mới: ${req.decoded.passNew}</p>
-                  <img src="https://f42-zpg.zdn.vn/6960682428680983532/966d3fa482ad49f310bc.jpg"> `, // html body
+            subject: "Yêu cầu cập nhật mật khẩu mới", // Subject line
+            html: `<h3>Đây là mật khẩu mới!</h3> 
+                  <p>Mật khẩu mới: ${req.decoded.passRandom}</p>
+                  <img src="https://f18-zpg.zdn.vn/6378515596215431194/7160a5fe91ec5ab203fd.jpg"> `, // html body
         });
 
         res.status(200).json(response(200, "Thay đổi mật khẩu thành công"));
@@ -46,4 +46,4 @@ const sendMailChangePassword = async (req, res) => {
     }
 }
 
-module.exports = { sendMailNewUser,sendMailChangePassword }
+module.exports = { sendMailNewUser, sendMailForgotPassword }
