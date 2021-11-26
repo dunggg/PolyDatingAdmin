@@ -222,7 +222,7 @@ exports.delete = async (req, res) => {
     const data = await User.findOne({ _id });
     const verifyPass = jwt.verify(data.password, info.hassPassKey);
 
-    if (password.length == 0) {
+    if (!password) {
       res.status(400).json(response(400, "Vui lòng nhập mật khẩu"));
     }
     else if (password !== verifyPass) {
