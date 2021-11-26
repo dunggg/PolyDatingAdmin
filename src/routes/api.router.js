@@ -26,7 +26,7 @@ router.post("/users/delete", user.delete);
 // 3. Favorites
 router.get("/favorites/list/be_liked/:emailBeLiked", favorite.listBeLiked);
 router.get("/favorites/list/liked/:emailLiked", favorite.listLiked);
-router.post("/favorites/insert", favorite.insert);
+router.post("/favorites/insert", getTimeZone, favorite.insert);
 router.post("/favorites/update", favorite.update);
 router.post("/favorites/delete", favorite.delete);
 

@@ -49,7 +49,7 @@ exports.insert = async (req, res) => {
             userBeLiked: dataBeLiked,
             userLiked: dataLiked,
             status: false,
-            createdAt: new Date()
+            createdAt: req.getTime
         }
 
         await Favorite.create(payload);
