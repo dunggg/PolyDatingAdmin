@@ -231,7 +231,6 @@ exports.delete = async (req, res) => {
     else {
       const payload = {
         'userBeLiked.email': data.email,
-        'userLiked.email': data.email
       }
 
       await Favorite.deleteMany(payload)
