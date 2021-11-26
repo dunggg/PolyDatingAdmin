@@ -1,5 +1,12 @@
 const joi = require("joi");
 
+/** Get Date Timezone gmt+7 */
+const getTime = () => {
+  let timestamps = new Date();
+  timestamps.setHours(timestamps.getHours + 2);
+  return timestamps
+}
+
 /** Base Response */
 const response = (statusCode, message, data = undefined) => {
   return { statusCode, message, data };
@@ -24,4 +31,4 @@ const insertReport = joi.object({
   content: joi.string().min(20).max(200).required()
 });
 
-module.exports = { response, insertUser, insertReport };
+module.exports = { response, getTime, insertUser, insertReport };
