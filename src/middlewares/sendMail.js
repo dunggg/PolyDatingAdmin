@@ -26,7 +26,7 @@ const sendMailNewUser = async (req, res) => {
     } catch (error) {
         res.status(500).json(response(500, error.message));
     }
-}
+};
 
 const sendMailForgotPassword = async (req, res) => {
     try {
@@ -39,11 +39,11 @@ const sendMailForgotPassword = async (req, res) => {
                   <img src="https://f18-zpg.zdn.vn/6378515596215431194/7160a5fe91ec5ab203fd.jpg"> `, // html body
         });
 
-        res.status(200).json(response(200, "Thay đổi mật khẩu thành công"));
+        res.status(200).json(response(200, "Yêu cầu cập nhật mật khẩu thành công"));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
     }
-}
+};
 
 module.exports = { sendMailNewUser, sendMailForgotPassword }
