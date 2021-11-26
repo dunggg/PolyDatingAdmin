@@ -1,5 +1,5 @@
 const User = require("../../models/user.schema");
-const { response, getTime, insertUser } = require("../../utils/utils");
+const { response, insertUser } = require("../../utils/utils");
 const info = require('../../config/info');
 const jwt = require('jsonwebtoken');
 const randomString = require('randomstring');
@@ -79,8 +79,8 @@ exports.signUp = async (req, res, next) => {
       isActive: true,
       status: true,
       roleAdmin: false,
-      createdAt: getTime,
-      updatedAt: getTime
+      createdAt: req.getTime,
+      updatedAt: req.getTime
     }
 
     await User.create(payload);
@@ -123,10 +123,8 @@ exports.updateImages = async (req, res) => {
 
     const payload = {
       images,
-      updatedAt: getTime
+      updatedAt: req.getTime
     }
-
-    console.log(payload);
 
     await User.updateOne({ _id: data._id }, payload)
     res.status(200).json(response(200, "Cập nhật ảnh thành công", images));
@@ -146,7 +144,7 @@ exports.updateIsShow = async (req, res) => {
 
     const payload = {
       isShow: shows,
-      updatedAt: getTime
+      updatedAt: req.getTime
     }
 
     await User.updateOne({ _id: data._id }, payload)
