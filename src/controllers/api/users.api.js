@@ -156,14 +156,13 @@ exports.updateIsShow = async (req, res) => {
   }
 };
 
-exports.changePassword = async (req, res, next) => {
+exports.changePassword = async (req, res) => {
   try {
     const { error, value } = checkPassword.validate(req.body);
 
     if (error) return res.status(400).json(response(400, error.message));
 
     const data = await User.findOne({ _id: value._id });
-
     const verifyPass = jwt.verify(data.password, info.hassPassKey);
 
     if (value.passOld !== verifyPass) {
