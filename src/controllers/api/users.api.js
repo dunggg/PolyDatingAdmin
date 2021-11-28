@@ -7,17 +7,26 @@ const randomString = require('randomstring');
 
 exports.list = async (req, res) => {
   try {
-    const { hobbies, isShow } = req.query;
+    const { isShow, hobbies, checkHobbies } = req.query;
 
     let hobby = hobbies.slice(1, -1).split(', ');
     let show = isShow.slice(1, -1).split(', ');
 
-    const option = {
-      hobbies: { $all: hobby },
-      isShow: show
-    }
+    let data;
 
-    const data = await User.find(option);
+    // Nếu tìm kiếm sở thích giống mình
+    if (checkHobbies == "yes") {
+      const option = {
+        hobbies: { $all: hobby },
+        isShow: show
+      }
+
+      data = await User.find(option);
+    }
+    // Không tìm cùng
+    else {
+      data = await User.find({ isShow: show });
+    }
 
     const payload = {
       total: data.length,
