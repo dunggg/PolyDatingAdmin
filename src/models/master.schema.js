@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 
 const Master = new mongoose.Schema(
     {
-        facilities: Array,
-        specialized: Array,
-        course: Array,
-        reports: Array,
-        hobbies: Array
+        facilities: [String],
+        specialized: [String],
+        course: [String],
+        reports: [String],
+        hobbies: [String]
     },
     { timestamps: false }
 );

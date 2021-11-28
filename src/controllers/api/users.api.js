@@ -7,9 +7,17 @@ const randomString = require('randomstring');
 
 exports.list = async (req, res) => {
   try {
-    const { isShow } = req.query;
+    const { hobbies, isShow } = req.body;
 
-    const data = await User.find({ isShow });
+    let hobby = hobbies.slice(1, -1).split(', ');
+    let show = isShow.slice(1, -1).split(', ');
+
+    const option = {
+      hobbies: { $all: hobby },
+      isShow: show
+    }
+
+    const data = await User.find(option);
 
     const payload = {
       total: data.length,

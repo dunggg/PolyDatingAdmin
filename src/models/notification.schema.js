@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Notification = new mongoose.Schema(
   {
-    emailReceiver: Array,
+    emailReceiver: [String],
     title: String,
     content: String,
     link: String,
