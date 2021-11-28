@@ -5,6 +5,8 @@ const info = require('../../config/info');
 const jwt = require('jsonwebtoken');
 const randomString = require('randomstring');
 
+let pathUrl = "https://poly-dating.herokuapp.com/public/data_images/";
+
 exports.list = async (req, res) => {
   try {
     const { isShow, hobbies, statusHobby } = req.query;
@@ -71,7 +73,7 @@ exports.signUp = async (req, res, next) => {
 
     let images = [];
     for (let index = 0; index < req.files.length; index++) {
-      images.push(`https://poly-dating.herokuapp.com/public/data_images${req.files[index].filename}`);
+      images.push(pathUrl + req.files[index].filename);
     }
 
     let hobbies = value.hobbies.slice(1, -1).split(', ');
@@ -137,7 +139,7 @@ exports.updateImages = async (req, res) => {
     }
     // Thêm ảnh
     else if (req.files.length > 0) {
-      images.push(`https://poly-dating.herokuapp.com/public/data_images${req.files[0].filename}`);
+      images.push(pathUrl + req.files[0].filename);
     }
 
     const payload = {
