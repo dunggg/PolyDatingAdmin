@@ -18,7 +18,7 @@ exports.list = async (req, res) => {
     if (statusHobby === "true") {
       const option = {
         isShow: shows,
-        hobbies: { $all: hobby },
+        hobbies: { $all: hobby }
       }
 
       data = await User.find(option);
@@ -126,7 +126,7 @@ exports.updateImages = async (req, res) => {
     let images = data.images;
 
     // Xóa ảnh
-    if (checkRemove == "yes") {
+    if (checkRemove === "true") {
       if (images.length <= 2) return res.status(400).json(response(400, "Không thể xóa khi còn 2 ảnh"));
 
       let index = images.indexOf(imageUrl);
