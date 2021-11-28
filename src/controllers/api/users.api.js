@@ -166,6 +166,7 @@ exports.updateInformation = async (req, res) => {
       hobbies,
       facilities: value.facilities,
       specialized: value.specialized,
+      updatedAt: req.getTime
     }
 
     await User.findOneAndUpdate({ _id: value._id }, payload);
