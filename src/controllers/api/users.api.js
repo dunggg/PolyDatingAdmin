@@ -9,23 +9,23 @@ exports.list = async (req, res) => {
   try {
     const { isShow, hobbies, statusHobby } = req.query;
 
+    let shows = isShow.slice(1, -1).split(', ');
     let hobby = hobbies.slice(1, -1).split(', ');
-    let show = isShow.slice(1, -1).split(', ');
 
     let data;
 
     // Nếu tìm kiếm sở thích giống mình
-    if (statusHobby == true) {
+    if (statusHobby === "true") {
       const option = {
+        isShow: shows,
         hobbies: { $all: hobby },
-        isShow: show
       }
 
       data = await User.find(option);
     }
     // Không tìm cùng
     else {
-      data = await User.find({ isShow: show });
+      data = await User.find({ isShow: shows });
     }
 
     const payload = {
@@ -125,7 +125,7 @@ exports.updateImages = async (req, res) => {
 
     let images = data.images;
 
-    //Remove item images
+    // Xóa ảnh
     if (checkRemove == "yes") {
       if (images.length <= 2) return res.status(400).json(response(400, "Không thể xóa khi còn 2 ảnh"));
 
@@ -135,7 +135,7 @@ exports.updateImages = async (req, res) => {
         images.splice(index, 1)
       }
     }
-    //Add images
+    // Thêm ảnh
     else if (req.files.length > 0) {
       images.push(`public/data_images/${req.files[0].filename}`);
     }
@@ -157,8 +157,6 @@ exports.updateIsShow = async (req, res) => {
   try {
     const { _id, isShow } = req.body;
 
-    const data = await User.findOne({ _id });
-
     let shows = isShow.slice(1, -1).split(', ');
 
     const payload = {
@@ -166,8 +164,25 @@ exports.updateIsShow = async (req, res) => {
       updatedAt: req.getTime
     }
 
-    await User.updateOne({ _id: data._id }, payload)
+    await User.findOneAndUpdate({ _id }, payload);
     res.status(200).json(response(200, "Cập nhật hiển thị thành công"));
+
+  } catch (error) {
+    res.status(500).json(response(500, error.message));
+  }
+};
+
+exports.updateStatusHobby = async (req, res) => {
+  try {
+    const { _id, statusHobby } = req.body;
+
+    const payload = {
+      statusHobby,
+      updatedAt: req.getTime
+    }
+
+    await User.findOneAndUpdate({ _id }, payload);
+    res.status(200).json(response(200, "Cập nhật tìm kiếm sở thích thành công"));
 
   } catch (error) {
     res.status(500).json(response(500, error.message));
