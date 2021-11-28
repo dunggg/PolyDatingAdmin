@@ -16,6 +16,7 @@ const User = new mongoose.Schema(
     isShow: [String],
     isActive: Boolean,
     status: Boolean,
+    statusHobby: Boolean,
     roleAdmin: Boolean,
     createdAt: String,
     updatedAt: String

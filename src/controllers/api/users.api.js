@@ -7,7 +7,7 @@ const randomString = require('randomstring');
 
 exports.list = async (req, res) => {
   try {
-    const { isShow, hobbies, checkHobbies } = req.query;
+    const { isShow, hobbies, statusHobby } = req.query;
 
     let hobby = hobbies.slice(1, -1).split(', ');
     let show = isShow.slice(1, -1).split(', ');
@@ -15,7 +15,7 @@ exports.list = async (req, res) => {
     let data;
 
     // Nếu tìm kiếm sở thích giống mình
-    if (checkHobbies == "yes") {
+    if (statusHobby == true) {
       const option = {
         hobbies: { $all: hobby },
         isShow: show
@@ -96,6 +96,7 @@ exports.signUp = async (req, res, next) => {
       isShow,
       isActive: true,
       status: true,
+      statusHobby: false,
       roleAdmin: false,
       createdAt: req.getTime,
       updatedAt: req.getTime
