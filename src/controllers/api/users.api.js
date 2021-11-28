@@ -31,7 +31,7 @@ exports.list = async (req, res) => {
     const payload = {
       total: data.length,
       users: data
-    };
+    }
 
     res.status(200).json(response(200, "Lấy danh sách người dùng thành công", payload));
 
@@ -71,7 +71,7 @@ exports.signUp = async (req, res, next) => {
 
     let images = [];
     for (let index = 0; index < req.files.length; index++) {
-      images.push(`public/data_images/${req.files[index].filename}`)
+      images.push(`https://poly-dating.herokuapp.com/public/data_images${req.files[index].filename}`);
     }
 
     let hobbies = value.hobbies.slice(1, -1).split(', ');
@@ -137,7 +137,7 @@ exports.updateImages = async (req, res) => {
     }
     // Thêm ảnh
     else if (req.files.length > 0) {
-      images.push(`public/data_images/${req.files[0].filename}`);
+      images.push(`https://poly-dating.herokuapp.com/public/data_images${req.files[0].filename}`);
     }
 
     const payload = {
