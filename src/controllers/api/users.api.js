@@ -1,6 +1,6 @@
 const User = require("../../models/user.schema");
 const Favorite = require('../../models/favorite.schema');
-const { response, insertUser, checkPassword } = require("../../utils/utils");
+const { response, insertUser, updateUser, checkPassword } = require("../../utils/utils");
 const info = require('../../config/info');
 const jwt = require('jsonwebtoken');
 const randomString = require('randomstring');
@@ -147,6 +147,29 @@ exports.updateImages = async (req, res) => {
 
     await User.updateOne({ _id: data._id }, payload)
     res.status(200).json(response(200, "Cập nhật ảnh thành công", images));
+
+  } catch (error) {
+    res.status(500).json(response(500, error.message));
+  }
+};
+
+exports.updateInformation = async (req, res) => {
+  try {
+    const { error, value } = updateUser.validate(req.body);
+
+    if (error) return res.status(400).json(response(400, error.message));
+
+    let hobbies = value.hobbies.slice(1, -1).split(', ');
+
+    const payload = {
+      description: value.description,
+      hobbies,
+      facilities: value.facilities,
+      specialized: value.specialized,
+    }
+
+    await User.findOneAndUpdate({ _id: value._id }, payload);
+    res.status(200).json(response(200, "Cập nhật thông tin thành công"));
 
   } catch (error) {
     res.status(500).json(response(500, error.message));

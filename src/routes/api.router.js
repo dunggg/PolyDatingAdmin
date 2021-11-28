@@ -19,6 +19,7 @@ router.get("/users/list", user.list);
 router.post("/users/sign_in", user.signIn);
 router.post("/users/sign_up", uploadFile, user.signUp, sendMailNewUser);
 router.post("/users/update/images", uploadFile, user.updateImages);
+router.post("/users/update/information", user.updateInformation);
 router.post("/users/update/is_show", user.updateIsShow);
 router.post("/users/update/status_hobby", user.updateStatusHobby);
 router.post("/users/change_password", user.changePassword);

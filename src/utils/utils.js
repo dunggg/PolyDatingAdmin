@@ -17,6 +17,14 @@ const insertUser = joi.object({
   course: joi.string().required(),
 });
 
+const updateUser = joi.object({
+  _id: joi.any(),
+  description: joi.string().min(10).max(200).required(),
+  hobbies: joi.string().required(),
+  facilities: joi.string().required(),
+  specialized: joi.string().required(),
+});
+
 const checkPassword = joi.object({
   _id: joi.any(),
   passOld: joi.string().required(),
@@ -31,4 +39,4 @@ const insertReport = joi.object({
   content: joi.string().min(20).max(200).required()
 });
 
-module.exports = { response, insertUser, insertReport, checkPassword };
+module.exports = { response, insertUser, updateUser, checkPassword, insertReport };
