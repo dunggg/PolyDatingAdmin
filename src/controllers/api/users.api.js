@@ -7,7 +7,7 @@ const randomString = require('randomstring');
 
 exports.list = async (req, res) => {
   try {
-    const { hobbies, isShow } = req.body;
+    const { hobbies, isShow } = req.query;
 
     let hobby = hobbies.slice(1, -1).split(', ');
     let show = isShow.slice(1, -1).split(', ');
