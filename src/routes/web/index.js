@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const statistical = require('./statistical');
+const utils = require('./utils');
 
 //Web
 router.get('/', (req, res) => {
@@ -8,6 +9,8 @@ router.get('/', (req, res) => {
 });
 
 router.use('/statistical', statistical);
+
+router.use('/utils', utils);
 
 router.get('/reports', (req, res) => {
   res.render('reports');
