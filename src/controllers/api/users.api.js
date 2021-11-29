@@ -233,7 +233,12 @@ exports.changePassword = async (req, res) => {
     else {
       const password = jwt.sign(value.passNew, info.hassPassKey)
 
-      await User.updateOne({ _id: data._id }, { password })
+      const payload = {
+        password,
+        updatedAt: req.getTime
+      }
+
+      await User.updateOne({ _id: data._id }, payload)
       res.status(200).json(response(200, "Thay đổi mật khẩu thành công"));
     }
 
