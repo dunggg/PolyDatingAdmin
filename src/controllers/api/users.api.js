@@ -1,6 +1,6 @@
-const User = require("../../models/user.schema");
-const { response } = require("../../utils/utils");
-const validate = require("../../utils/validate");
+const User = require('../../models/user.schema');
+const { response } = require('../../utils/utils');
+const validate = require('../../utils/validate');
 
 exports.list = async (req, res) => {
   try {
@@ -10,11 +10,12 @@ exports.list = async (req, res) => {
 
     const payload = {
       total: data.length,
-      users: data
+      users: data,
     };
 
-    res.status(200).json(response(200, "Lấy danh sách người dùng thành công", payload));
-
+    res
+      .status(200)
+      .json(response(200, 'Lấy danh sách người dùng thành công', payload));
   } catch (error) {
     res.status(500).json(response(500, error.message));
   }
@@ -26,10 +27,14 @@ exports.find = async (req, res) => {
 
     const data = await User.findOne({ email });
 
-    if (!data) return res.status(200).json(response(200, `Người dùng không tồn tại`, null));
+    if (!data)
+      return res
+        .status(200)
+        .json(response(200, `Người dùng không tồn tại`, null));
 
-    res.status(200).json(response(200, "Tìm kiếm người dùng thành công", { user: data }));
-
+    res
+      .status(200)
+      .json(response(200, 'Tìm kiếm người dùng thành công', { user: data }));
   } catch (error) {
     res.status(500).json(response(500, error.message));
   }
@@ -41,16 +46,22 @@ exports.insert = async (req, res) => {
 
     if (error) return res.status(400).json(response(400, error.message));
 
-    if (req.files.length < 2) return res.status(400).json(response(400, "Cần chọn ít nhất 2 ảnh"));
+    if (req.files.length < 2)
+      return res.status(400).json(response(400, 'Cần chọn ít nhất 2 ảnh'));
 
     let images = [];
     for (let index = 0; index < req.files.length; index++) {
-      images.push(`public/data_images/${req.files[index].filename}`)
+      images.push(`public/data_images/${req.files[index].filename}`);
     }
 
     let hobbies = value.hobbies.slice(1, -1).split(',');
 
-    let isShow = ["Mọi người", "Tất cả cơ sở", "Tất cả chuyên ngành", "Tất cả khóa học"];
+    let isShow = [
+      'Mọi người',
+      'Tất cả cơ sở',
+      'Tất cả chuyên ngành',
+      'Tất cả khóa học',
+    ];
 
     const payload = {
       email: value.email,
@@ -60,19 +71,18 @@ exports.insert = async (req, res) => {
       hobbies,
       birthDay: value.birthDay,
       gender: value.gender,
-      description: "Không có gì để hiển thị",
+      description: 'Không có gì để hiển thị',
       facilities: value.facilities,
       specialized: value.specialized,
       course: value.course,
       isShow,
       isActive: true,
       status: true,
-      roleAdmin: false
-    }
+      roleAdmin: false,
+    };
 
     await User.create(payload);
-    res.status(201).json(response(201, "Tạo tài khoản thành công"))
-
+    res.status(201).json(response(201, 'Tạo tài khoản thành công'));
   } catch (error) {
     res.status(500).json(response(500, error.message));
   }
@@ -86,12 +96,11 @@ exports.updateImages = async (req, res) => {
 
     let images = [];
     for (let index = 0; index < req.files.length; index++) {
-      images.push(`public/data_images/${req.files[index].filename}`)
+      images.push(`public/data_images/${req.files[index].filename}`);
     }
 
-    await User.updateOne({ _id: data._id }, { images })
-    res.status(200).json(response(200, "Cập nhật ảnh thành công"));
-
+    await User.updateOne({ _id: data._id }, { images });
+    res.status(200).json(response(200, 'Cập nhật ảnh thành công'));
   } catch (error) {
     res.status(500).json(response(500, error.message));
   }
@@ -106,12 +115,11 @@ exports.updateIsShow = async (req, res) => {
     let shows = isShow.slice(1, -1).split(',');
 
     const payload = {
-      isShow: shows
-    }
+      isShow: shows,
+    };
 
-    await User.updateOne({ _id: data._id }, payload)
-    res.status(200).json(response(200, "Cập nhật hiển thị thành công"));
-
+    await User.updateOne({ _id: data._id }, payload);
+    res.status(200).json(response(200, 'Cập nhật hiển thị thành công'));
   } catch (error) {
     res.status(500).json(response(500, error.message));
   }
