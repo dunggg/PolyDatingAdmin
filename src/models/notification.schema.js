@@ -2,16 +2,13 @@ const mongoose = require("mongoose");
 
 const Notification = new mongoose.Schema(
   {
-    emailReceiver: Array,
+    emailReceiver: [String],
     title: String,
     content: String,
     link: String,
     facilities: String,
     specialized: String,
-    createdAt: {
-      type: Date,
-      default: Date.now(),
-    },
+    createdAt: String
   },
   { timestamps: false }
 );

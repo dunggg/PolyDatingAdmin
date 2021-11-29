@@ -26,7 +26,7 @@ const uploadMulter = multer({
     },
 }).array("images", 6);
 
-exports.uploadFile = (req, res, next) => {
+const uploadFile = (req, res, next) => {
     try {
         uploadMulter(req, res, (err) => {
             if (err instanceof multer.MulterError) {
@@ -43,3 +43,5 @@ exports.uploadFile = (req, res, next) => {
         res.status(500).json(response(500, error.message));
     }
 };
+
+module.exports = uploadFile;

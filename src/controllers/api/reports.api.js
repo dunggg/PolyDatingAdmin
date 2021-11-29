@@ -1,10 +1,9 @@
 const Report = require('../../models/report.schema');
-const { response } = require("../../utils/utils");
-const validate = require("../../utils/validate");
+const { response, insertReport } = require("../../utils/utils");
 
 exports.insert = async (req, res) => {
     try {
-        const { error, value } = validate.insertReport.validate(req.body);
+        const { error, value } = insertReport.validate(req.body);
         if (error) return res.status(400).json(response(400, error.message));
 
         let images;

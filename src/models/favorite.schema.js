@@ -5,11 +5,9 @@ const Favorite = new mongoose.Schema(
     userBeLiked: Object,
     userLiked: Object,
     status: Boolean,
-    createdAt: Date
+    createdAt: String
   },
-  {
-    timestamps: false,
-  }
+  { timestamps: false, }
 );
 
 module.exports = mongoose.model("favorites", Favorite);
