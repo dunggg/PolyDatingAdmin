@@ -1,6 +1,8 @@
 const Report = require('../../models/report.schema');
 const { response, insertReport } = require("../../utils/utils");
 
+let pathUrl = "https://poly-dating.herokuapp.com/public/data_images/";
+
 exports.insert = async (req, res) => {
     try {
         const { error, value } = insertReport.validate(req.body);
@@ -8,8 +10,8 @@ exports.insert = async (req, res) => {
 
         let images;
 
-        if (req.files) {
-            images = `public/data-image/${req.files[0].filename}`
+        if (req.files.length > 0) {
+            images = pathUrl + req.files[0].filename;
         }
 
         const payload = {
@@ -18,7 +20,7 @@ exports.insert = async (req, res) => {
             title: value.title,
             content: value.content,
             images,
-            createdAt: new Date(),
+            createdAt: req.getTime
         }
 
         await Report.create(payload)

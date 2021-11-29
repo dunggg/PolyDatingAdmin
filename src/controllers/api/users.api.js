@@ -113,6 +113,7 @@ exports.signUp = async (req, res, next) => {
 
     req.decoded = decode;
     next();
+    // send email
 
   } catch (error) {
     res.status(500).json(response(500, error.message));
@@ -231,14 +232,14 @@ exports.changePassword = async (req, res) => {
       res.status(400).json(response(400, "Vui lòng nhập đúng mật khẩu"));
     }
     else {
-      const password = jwt.sign(value.passNew, info.hassPassKey)
+      const password = jwt.sign(value.passNew, info.hassPassKey);
 
       const payload = {
         password,
         updatedAt: req.getTime
       }
 
-      await User.updateOne({ _id: data._id }, payload)
+      await User.updateOne({ _id: data._id }, payload);
       res.status(200).json(response(200, "Thay đổi mật khẩu thành công"));
     }
 
@@ -272,6 +273,7 @@ exports.forgotPassword = async (req, res, next) => {
 
     req.decoded = decode;
     next()
+    // send email
 
   } catch (error) {
     res.status(500).json(response(500, error.message));

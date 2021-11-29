@@ -19,8 +19,8 @@ const uploadMulter = multer({
         files: 6
     },
     fileFilter(req, file, cb) {
-        if (file.mimetype != "image/png" && file.mimetype != "image/jpg" && file.mimetype != "image/jpeg") {
-            return cb(new Error("Chỉ được chọn hình ảnh có định dạng png, jpg, jpeg"), false);
+        if (file.mimetype != "image/jpg" && file.mimetype != "image/jpeg") {
+            return cb(new Error("Chỉ được chọn hình ảnh có định dạng jpg"), false);
         }
         cb(null, true);
     },

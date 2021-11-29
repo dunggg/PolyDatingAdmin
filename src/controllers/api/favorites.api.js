@@ -2,6 +2,7 @@ const Favorite = require('../../models/favorite.schema');
 const User = require('../../models/user.schema');
 const { response } = require("../../utils/utils");
 
+// Lấy danh sách lời mời kết bạn
 exports.listBeLiked = async (req, res) => {
     try {
         const { emailBeLiked } = req.params;
@@ -20,6 +21,7 @@ exports.listBeLiked = async (req, res) => {
     }
 };
 
+// Lấy danh sách yêu cầu kết bạn đã gửi
 exports.listLiked = async (req, res) => {
     try {
         const { emailLiked } = req.params;
@@ -69,9 +71,7 @@ exports.update = async (req, res) => {
             'userLiked.email': emailLiked
         }
 
-        const data = await Favorite.findOne(payload);
-
-        await Favorite.updateOne({ _id: data._id }, { status: true })
+        const data = await Favorite.findOneAndUpdate(payload, { status: true });
         res.status(200).json(response(200, `Chấp nhận lời mời kết bạn với ${data.userLiked.name}`));
 
     } catch (error) {
@@ -88,9 +88,7 @@ exports.delete = async (req, res) => {
             'userLiked.email': emailLiked
         }
 
-        const data = await Favorite.findOne(payload);
-
-        await Favorite.deleteOne({ _id: data._id });
+        await Favorite.findOneAndDelete(payload)
         res.status(200).json(response(200, "Hủy yêu cầu thành công"));
 
     } catch (error) {
