@@ -7,7 +7,7 @@ const response = (statusCode, message, data = undefined) => {
 
 /** Validate */
 const insertUser = joi.object({
-  email: joi.string().email().min(10).max(30).required(),
+  email: joi.string().email().min(10).max(50).required(),
   name: joi.string().min(5).max(20).required(),
   hobbies: joi.string().required(),
   birthDay: joi.string().required(),
