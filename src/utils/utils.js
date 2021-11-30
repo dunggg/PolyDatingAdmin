@@ -7,8 +7,8 @@ const response = (statusCode, message, data = undefined) => {
 
 /** Validate */
 const insertUser = joi.object({
-  email: joi.string().email().min(1).required(),
-  name: joi.string().min(1).max(25).required(),
+  email: joi.string().email().min(10).max(50).required(),
+  name: joi.string().min(5).max(20).required(),
   hobbies: joi.string().required(),
   birthDay: joi.string().required(),
   gender: joi.string().required(),
@@ -36,7 +36,7 @@ const insertReport = joi.object({
   emailReport: joi.string().email().required(),
   emailReported: joi.string().email().required(),
   title: joi.string().required(),
-  content: joi.string().min(20).max(200).required()
+  content: joi.string().min(10).max(200).required()
 });
 
 module.exports = { response, insertUser, updateUser, checkPassword, insertReport };
