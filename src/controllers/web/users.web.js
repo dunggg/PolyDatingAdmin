@@ -118,7 +118,7 @@ exports.login = async (req, res) => {
 
     if (email == 'admin' && password == 'admin')
       return res.redirect('/statistical?format=0&timeStamp=' + moment().unix());
-    e;
+  
     const data = await User.findOne({ email, password });
 
     if (!data)
