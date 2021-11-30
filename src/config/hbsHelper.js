@@ -104,4 +104,26 @@ hbs.registerHelper('optionStatus', function (any, value, object) {
     : `<option value=${val}>${value}</option>`;
 });
 
+hbs.registerHelper('optionTime', function (any, value, object) {
+  const time = object?.data?.root.timeParams;
+  let valTime = '';
+  switch (value) {
+    case 0:
+      valTime = 'Ngày';
+      break;
+    case 1:
+      valTime = 'Tháng';
+      break;
+    case 2:
+      valTime = 'Năm';
+      break;
+    default:
+      valTime = 'Ngày';
+  }
+
+  return time === value.toString()
+    ? `<option selected value=${value}>${valTime}</option>`
+    : `<option value=${value}>${valTime}</option>`;
+});
+
 module.exports = hbs;

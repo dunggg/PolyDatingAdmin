@@ -11,7 +11,8 @@
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item"><a class="nav-link active" href="/statistical"><i
+                    <li class="nav-item"><a class="nav-link active"
+                            href="/statistical?format=0&timeStamp={{timeStamp}}"><i
                                 class="fas fa-tachometer-alt"></i><span>Thống kê</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/users/page/1"><i
                                 class="fas fa-user"></i></i><span>Người dùng</span></a></li>
@@ -27,6 +28,8 @@
                         id="sidebarToggle" type="button"></button></div>
             </div>
         </nav>
+
+        <input hidden id='titleChart' value='{{title}}' />
 
         <div class="d-flex flex-column" id="content-wrapper">
             <div id="content">
@@ -50,10 +53,9 @@
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
                                             <select class="d-inline-block form-select form-select-sm">
-                                                <option value="" selected="">Cơ sở</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
+                                                {{#each facilities}}
+                                                {{#optionFacilities "" this}}{{/optionFacilities}}
+                                                {{/each}}
                                             </select>
                                         </label>
                                     </div>
@@ -63,10 +65,9 @@
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
                                             <select class="d-inline-block form-select form-select-sm">
-                                                <option value="" selected="">Chuyên nghành</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
+                                                {{#each specialized}}
+                                                {{#optionSpecialized "" this}} {{/optionSpecialized}}
+                                                {{/each}}
                                             </select>
                                         </label>
                                     </div>
@@ -76,10 +77,9 @@
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
                                             <select class="d-inline-block form-select form-select-sm">
-                                                <option value="" selected="">Khóa</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
+                                                {{#each course}}
+                                                {{#optionCourse "" this}} {{/optionCourse}}
+                                                {{/each}}
                                             </select>
                                         </label>
                                     </div>
@@ -89,15 +89,23 @@
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
                                             <select class="d-inline-block form-select form-select-sm">
-                                                <option value="" selected="">Ngày</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
+                                                {{#optionTime "" 0}} {{/optionTime}}
+                                                {{#optionTime "" 1}} {{/optionTime}}
+                                                {{#optionTime "" 2}} {{/optionTime}}
                                             </select>
                                         </label>
                                     </div>
                                 </div>
+                                <button id="btnSearch" type="button" class="btn btn-primary">Search</button>
                             </div>
+
+                            <form action="/statistical">
+                                <input hidden name="facilities" />
+                                <input hidden name="specialized" />
+                                <input hidden name="course" />
+                                <input hidden name="format" value="0" />
+                                <input hidden name="timeStamp" value="{{timeStamp}}" />
+                            </form>
 
                             <hr>
                             <div class="row">

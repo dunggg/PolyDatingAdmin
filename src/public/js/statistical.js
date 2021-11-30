@@ -7,13 +7,16 @@ $(document).ready(function () {
   const totalMessage = $('input[name="totalMessage"]')[0];
   const totalBlock = $('input[name="totalBlock"]')[0];
   const data = $('input[name="data"]')[0];
+  const titleChart = $('#titleChart');
 
   let labelString = '';
 
-  if (data.value.split(',').length > 12) {
-    labelString = 'Ngày';
-  } else {
+  if (data.value.split(',').length === 12) {
     labelString = 'Tháng';
+  } else if (data.value.split(',').length === 11) {
+    labelString = 'Năm';
+  } else {
+    labelString = 'Ngày';
   }
 
   const arrLabel = data.value.split(',').map((value) => Number(value));
@@ -93,7 +96,7 @@ $(document).ready(function () {
     options: {
       title: {
         display: true,
-        text: 'Thống kê',
+        text: `Thống kê ${titleChart[0].value}`,
       },
       scales: {
         xAxes: [
@@ -122,5 +125,24 @@ $(document).ready(function () {
         ],
       },
     },
+  });
+
+  // form input action
+  const form = $('form');
+  const btnSearch = $('#btnSearch')[0];
+  const select = $('select');
+  const input = $('form>input');
+  btnSearch.addEventListener('click', function () {
+    select[0].value.trim() === 'Lựa chọn cơ sở'
+      ? input[0].remove()
+      : (input[0].value = select[0].value);
+    select[1].value.trim() === 'Lựa chọn ngành học'
+      ? input[1].remove()
+      : (input[1].value = select[1].value);
+    select[2].value.trim() === 'Lựa chọn khóa học'
+      ? input[2].remove()
+      : (input[2].value = select[2].value);
+    input[3].value = select[3].value;
+    form[0].submit();
   });
 });
