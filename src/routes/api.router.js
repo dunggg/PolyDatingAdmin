@@ -14,6 +14,29 @@ const report = require("../controllers/api/reports.api");
 router.get("/master/list", master.list);
 router.use(getTimeZone);
 
+router.post('send', async (req, res) => {
+    const nofiti = {
+        'title': "Hello",
+        'text': "Xin chao"
+    }
+
+    const token = "cdtVmkqZQqSpfO5qYpKQAl:APA91bGAFMKvk2F5VyJHDhQH-ToZahrFEbumfI4AhGzimHAcqnhVUy-4qCp9qRAMsawem943w_rPSfUYCMpRLUOSSJzrKImFnt9blnMk5H2_rYldZhtnncAdAvX0f1ymuIM-bviQIdgG";
+
+    const nofibody = {
+        'data': nofiti,
+        "to": token
+    }
+
+    fetch('https://fcm.googleapis.com/fcm/send', {
+        'method': 'POST',
+        'headers': {
+            'Authorization': 'key=AAAADA1pGPA:APA91bFlWaA0XXZUqsOKtwVxZ6pUykWheUn30oWghmA-DqnSfj1_yIT3iPmKAzahRXuqUUCPewnyfxF1Bd7e_8H-Kg86FHv0iuflMNmE9gtnqL2cYUuyMmM83k4pAOa1-6a-W_Ns5n_z',
+            'Content-Type': 'application/json'
+        },
+        'body': JSON.stringify(nofibody)
+    }).then(() => res.json("ok")).catch((err) => console.log(err))
+});
+
 // 2. Users
 router.get("/users/list", user.list);
 router.post("/users/sign_in", user.signIn);
