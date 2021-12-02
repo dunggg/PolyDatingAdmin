@@ -30,7 +30,7 @@ const uploadFile = (req, res, next) => {
     try {
         uploadMulter(req, res, (err) => {
             if (err instanceof multer.MulterError || err) {
-                res.status(400).json(response(400, err.message));
+                res.status(200).json(response(400, err.message));
             }
             else {
                 next();
