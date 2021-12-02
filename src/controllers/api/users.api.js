@@ -9,10 +9,11 @@ let pathUrl = "https://poly-dating.herokuapp.com/public/data_images/";
 
 exports.list = async (req, res) => {
   try {
-    const { isShow, hobbies, statusHobby } = req.query;
+    const { isShow, hobbies, statusHobby, emailBeLiked } = req.query;
 
     let shows = isShow.slice(1, -1).split(', ');
     let hobby = hobbies.slice(1, -1).split(', ');
+    let emailBK = emailBeLiked.slice(1, -1).split(', ');
 
     let data;
 
@@ -28,6 +29,17 @@ exports.list = async (req, res) => {
     // Không tìm cùng
     else {
       data = await User.find({ isShow: shows });
+    }
+
+    // Nếu user A đã thích user B thì trả về list của user A sẽ không có user B
+    for (let i = 0; i < data.length; i++) {
+      for (let j = 0; j < emailBK.length; j++) {
+
+        if (data[i].email === emailBK[j]) {
+          data.splice(i, emailBK.length);
+          break;
+        }
+      }
     }
 
     const payload = {
