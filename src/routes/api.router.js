@@ -33,8 +33,7 @@ router.post('/send', async (req, res) => {
     fetch('https://fcm.googleapis.com/fcm/send', {
         'method': 'POST',
         'headers': {
-            'Authorization': `key=AAAADA1pGPA:APA91bFlWaA0XXZUqsOKtwVxZ6pUykWheUn30oWgh
-            mA-DqnSfj1_yIT3iPmKAzahRXuqUUCPewnyfxF1Bd7e_8H-Kg86FHv0iuflMNmE9gtnqL2cYUuyMmM83k4pAOa1-6a-W_Ns5n_z`,
+            'Authorization': `key=AAAADA1pGPA:APA91bFlWaA0XXZUqsOKtwVxZ6pUykWheUn30oWghmA-DqnSfj1_yIT3iPmKAzahRXuqUUCPewnyfxF1Bd7e_8H-Kg86FHv0iuflMNmE9gtnqL2cYUuyMmM83k4pAOa1-6a-W_Ns5n_z`,
             'Content-Type': 'application/json'
         },
         'body': JSON.stringify(nofibody)
