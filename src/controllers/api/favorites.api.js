@@ -44,10 +44,8 @@ exports.insert = async (req, res) => {
     try {
         const { emailBeLiked, emailLiked } = req.body;
 
-        const dataBeLiked = await User.findOne({ email: emailBeLiked }); //B
-        const dataLiked = await User.findOne({ email: emailLiked }); // A
-
-        // neu A gui loi ket ban voi B roi thi se hien thi thanh Huy ket ban
+        const dataBeLiked = await User.findOne({ email: emailBeLiked });
+        const dataLiked = await User.findOne({ email: emailLiked });
 
         const option = {
             'userBeLiked.email': emailBeLiked,
@@ -55,7 +53,8 @@ exports.insert = async (req, res) => {
         }
 
         const userFavorite = await Favorite.findOne(option);
-        if (userFavorite) return res.status(400).json(response(400, 'Đã gửi lời mời'))
+        if (userFavorite)
+            return res.status(400).json(response(400, `Bạn đã gửi lời mời tới ${dataBeLiked.name}, vui lòng chờ đợi`));
 
         const payload = {
             userBeLiked: dataBeLiked,
