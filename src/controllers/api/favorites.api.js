@@ -53,19 +53,21 @@ exports.insert = async (req, res) => {
         }
 
         const userFavorite = await Favorite.findOne(option);
+        
         if (userFavorite)
-            return res.status(400).json(response(400, `Bạn đã gửi lời mời tới ${dataBeLiked.name}, vui lòng chờ đợi`));
+            res.status(400).json(response(400, `Bạn đã gửi lời mời tới ${dataBeLiked.name}, vui lòng chờ đợi`));
 
-        const payload = {
-            userBeLiked: dataBeLiked,
-            userLiked: dataLiked,
-            status: false,
-            createdAt: req.getTime
+        else {
+            const payload = {
+                userBeLiked: dataBeLiked,
+                userLiked: dataLiked,
+                status: false,
+                createdAt: req.getTime
+            }
+
+            await Favorite.create(payload);
+            res.status(200).json(response(200, `Yêu thích ${dataBeLiked.name}`, payload));
         }
-
-        await Favorite.create(payload);
-        res.status(201).json(response(200, `Yêu thích ${dataBeLiked.name}`, payload));
-
     } catch (error) {
         res.status(500).json(response(500, error.message));
     }
