@@ -22,8 +22,7 @@ router.post('/send', async (req, res) => {
         'text': "Xin chao"
     }
 
-    const token = `cdtVmkqZQqSpfO5qYpKQAl:APA91bGAFMKvk2F5VyJHDhQH-ToZahrFEbumfI4AhGzimHAcqnhVU
-    y-4qCp9qRAMsawem943w_rPSfUYCMpRLUOSSJzrKImFnt9blnMk5H2_rYldZhtnncAdAvX0f1ymuIM-bviQIdgG`;
+    const token = `fCA-AdGbQe-zeycErgcJHS:APA91bEPL4X1t6OIapxkj7gK_qOrNoKVvGDy6PA9nQ64moeiIEWdOorQu0Iqv6YMzEfBSXpdEed0i1-Gd6E1iiY1Xt4xyF9Vk8N6-bcyKPSQ3KAsSxqZF5cunaZOb2EKWUpvIDyubQNt`;
 
     const nofibody = {
         'data': nofiti,
@@ -33,7 +32,7 @@ router.post('/send', async (req, res) => {
     fetch('https://fcm.googleapis.com/fcm/send', {
         'method': 'POST',
         'headers': {
-            'Authorization': `key=AAAADA1pGPA:APA91bFlWaA0XXZUqsOKtwVxZ6pUykWheUn30oWghmA-DqnSfj1_yIT3iPmKAzahRXuqUUCPewnyfxF1Bd7e_8H-Kg86FHv0iuflMNmE9gtnqL2cYUuyMmM83k4pAOa1-6a-W_Ns5n_z`,
+            'Authorization': `key=AAAAMd_48v0:APA91bErb8B8aqTLeOTKyHVYuPtMagfrxYVhAkHB1gfMDPDI8ARHEBI4mjwqlheasCTlSgpZbHRaXPPMeUTzTNEPI1Mp_qzZNartaLkwfkk6ax1S-8jp5CgH5Y910T34gPwF2wZsQdbO`,
             'Content-Type': 'application/json'
         },
         'body': JSON.stringify(nofibody)
