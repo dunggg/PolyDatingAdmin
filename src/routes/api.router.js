@@ -18,15 +18,15 @@ router.use(getTimeZone);
 
 router.post('/send', async (req, res) => {
     const nofiti = {
-        'title': "Hello",
-        'text': "Xin chao"
+        'title': "Hello 123",
+        'content': "Xin chao"
     }
 
-    const token = `fCA-AdGbQe-zeycErgcJHS:APA91bEPL4X1t6OIapxkj7gK_qOrNoKVvGDy6PA9nQ64moeiIEWdOorQu0Iqv6YMzEfBSXpdEed0i1-Gd6E1iiY1Xt4xyF9Vk8N6-bcyKPSQ3KAsSxqZF5cunaZOb2EKWUpvIDyubQNt`;
+    const token = [`cjaBMOb6Tg6ajy4PsxFl4p:APA91bHfXBfpmU0LHiX1rhk5MIUtLwIHczVnlRqKrwSmaSYUogvserOD2FM5UBI3hezVu5z6ulaj1lVbQS8dW6L8PdXY4FdRzreEQxDKQznVqh8D2KJtwZ7Al3cldEHZVOkZ7Zq5aoaV`];
 
     const nofibody = {
         'data': nofiti,
-        "to": token
+        "registration_ids": token
     }
 
     fetch('https://fcm.googleapis.com/fcm/send', {
