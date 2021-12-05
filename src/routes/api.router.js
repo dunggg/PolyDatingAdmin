@@ -61,7 +61,9 @@ router.post("/favorites/insert", favorite.insert);
 router.post("/favorites/delete", favorite.delete);
 
 // 4. Friends
+router.get("/friends/list/:email", friends.list);
 router.post("/friends/insert", friends.insert);
+router.post("/friends/delete", friends.delete);
 
 // 5. Reports
 router.post("/reports/insert", uploadFile, report.insert);

@@ -2,6 +2,26 @@ const Friend = require('../../models/friend.schema');
 const User = require('../../models/user.schema');
 const { response } = require("../../utils/utils");
 
+exports.list = async (req, res) => {
+    try {
+        const { email } = req.params;
+
+        const data = await Friend.findOne({ myEmail: email });
+
+        if (!data) return res.status(404).json(response(404, `Người dùng không tồn tại`));
+
+        const payload = {
+            total: data.friends.length,
+            friends: data.friends
+        }
+
+        res.status(200).json(response(200, `Lấy danh sách bạn bè của ${data.myEmail}`, payload));
+
+    } catch (error) {
+        res.status(500).json(response(500, error.message));
+    }
+};
+
 exports.insert = async (req, res) => {
     try {
         const { myEmail, emailFriends } = req.body;
@@ -71,6 +91,40 @@ exports.insert = async (req, res) => {
             await Friend.create(option2);
             res.status(200).json(response(200, `Chấp nhận kết bạn với ${dataUser.name}`));
         }
+    } catch (error) {
+        res.status(500).json(response(500, error.message));
+    }
+};
+
+exports.delete = async (req, res) => {
+    try {
+        const { myEmail, emailFriends } = req.body;
+
+        const data = await Friend.findOne({ myEmail });
+        const dataFriend = await Friend.findOne({ myEmail: emailFriends });
+        const dataUserFriend = await User.findOne({ email: emailFriends });
+
+        const friends = data.friends;
+        const friends2 = dataFriend.friends;
+
+        const index = friends.map((v) => {
+            return v.data.email;
+        }).indexOf(emailFriends);
+
+        const index2 = friends2.map((v) => {
+            return v.data.email;
+        }).indexOf(myEmail);
+
+        if (index != -1 && index2 != -1) {
+            friends.splice(index, 1);
+            friends2.splice(index2, 1);
+        }
+
+        await Friend.updateOne({ myEmail }, { friends });
+        await Friend.updateOne({ myEmail: emailFriends }, { friends: friends2 });
+
+        res.status(200).json(response(200, `Xóa ${dataUserFriend.name} khỏi danh sách bạn bè`));
+
     } catch (error) {
         res.status(500).json(response(500, error.message));
     }
