@@ -7,7 +7,7 @@ const Favorite = new mongoose.Schema(
     status: Boolean,
     createdAt: String
   },
-  { timestamps: false, }
+  { timestamps: false }
 );
 
 module.exports = mongoose.model("favorites", Favorite);

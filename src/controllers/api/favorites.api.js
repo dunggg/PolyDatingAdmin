@@ -53,9 +53,14 @@ exports.insert = async (req, res) => {
         }
 
         const userFavorite = await Favorite.findOne(option);
-        
-        if (userFavorite)
+
+        if (userFavorite) {
             res.status(400).json(response(400, `Bạn đã gửi lời mời tới ${dataBeLiked.name}, vui lòng chờ đợi`));
+        }
+
+        else if (!option) {
+
+        }
 
         else {
             const payload = {
