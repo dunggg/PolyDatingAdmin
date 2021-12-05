@@ -6,6 +6,7 @@ const { sendMailNewUser, sendMailForgotPassword } = require('../middlewares/send
 const master = require("../controllers/api/master.api");
 const user = require("../controllers/api/users.api");
 const favorite = require("../controllers/api/favorites.api");
+const friends = require("../controllers/api/friends.api");
 const report = require("../controllers/api/reports.api");
 
 const fetch = require('node-fetch');
@@ -55,11 +56,14 @@ router.post("/users/delete", user.delete);
 // 3. Favorites
 router.get("/favorites/list/be_liked/:emailBeLiked", favorite.listBeLiked);
 router.get("/favorites/list/liked/:emailLiked", favorite.listLiked);
-router.post("/favorites/insert", getTimeZone, favorite.insert);
-router.post("/favorites/update", favorite.update);
+router.post("/favorites/insert", favorite.insert);
+// router.post("/favorites/update", favorite.update);
 router.post("/favorites/delete", favorite.delete);
 
-// 4. Reports
+// 4. Friends
+router.post("/friends/insert", friends.insert);
+
+// 5. Reports
 router.post("/reports/insert", uploadFile, report.insert);
 
 module.exports = router;

@@ -44,23 +44,24 @@ exports.insert = async (req, res) => {
     try {
         const { emailBeLiked, emailLiked } = req.body;
 
-        const dataBeLiked = await User.findOne({ email: emailBeLiked });
-        const dataLiked = await User.findOne({ email: emailLiked });
+        const dataBeLiked = await User.findOne({ email: emailBeLiked }); //Người được kết bạn
+        const dataLiked = await User.findOne({ email: emailLiked }); //Người gửi kết bạn
 
         const option = {
-            'userBeLiked.email': emailBeLiked,
-            'userLiked.email': emailLiked
+            'userBeLiked.email': emailBeLiked, //A
+            'userLiked.email': emailLiked //B
         }
-        //
 
-        const userFavorite = await Favorite.findOne(option);
+        const option2 = {
+            'userBeLiked.email': emailLiked, //B
+            'userLiked.email': emailBeLiked //A
+        }
 
-        if (userFavorite) {
+        const userLike = await Favorite.findOne(option);
+        // const user
+
+        if (userLike) {
             res.status(400).json(response(400, `Bạn đã gửi lời mời tới ${dataBeLiked.name}, vui lòng chờ đợi`));
-        }
-
-        else if (!option) {
-
         }
 
         else {
@@ -79,22 +80,22 @@ exports.insert = async (req, res) => {
     }
 };
 
-exports.update = async (req, res) => {
-    try {
-        const { emailBeLiked, emailLiked } = req.body;
+// exports.update = async (req, res) => {
+//     try {
+//         const { emailBeLiked, emailLiked } = req.body;
 
-        const payload = {
-            "userBeLiked.email": emailBeLiked,
-            'userLiked.email': emailLiked
-        }
+//         const payload = {
+//             "userBeLiked.email": emailBeLiked,
+//             'userLiked.email': emailLiked
+//         }
 
-        const data = await Favorite.findOneAndUpdate(payload, { status: true });
-        res.status(200).json(response(200, `Chấp nhận lời mời kết bạn với ${data.userLiked.name}`));
+//         const data = await Favorite.findOneAndUpdate(payload, { status: true });
+//         res.status(200).json(response(200, `Chấp nhận lời mời kết bạn với ${data.userLiked.name}`));
 
-    } catch (error) {
-        res.status(500).json(response(500, error.message));
-    }
-};
+//     } catch (error) {
+//         res.status(500).json(response(500, error.message));
+//     }
+// };
 
 exports.delete = async (req, res) => {
     try {
