@@ -80,23 +80,6 @@ exports.insert = async (req, res) => {
     }
 };
 
-// exports.update = async (req, res) => {
-//     try {
-//         const { emailBeLiked, emailLiked } = req.body;
-
-//         const payload = {
-//             "userBeLiked.email": emailBeLiked,
-//             'userLiked.email': emailLiked
-//         }
-
-//         const data = await Favorite.findOneAndUpdate(payload, { status: true });
-//         res.status(200).json(response(200, `Chấp nhận lời mời kết bạn với ${data.userLiked.name}`));
-
-//     } catch (error) {
-//         res.status(500).json(response(500, error.message));
-//     }
-// };
-
 exports.delete = async (req, res) => {
     try {
         const { emailBeLiked, emailLiked } = req.body;

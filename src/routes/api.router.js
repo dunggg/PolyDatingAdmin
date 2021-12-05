@@ -57,7 +57,6 @@ router.post("/users/delete", user.delete);
 router.get("/favorites/list/be_liked/:emailBeLiked", favorite.listBeLiked);
 router.get("/favorites/list/liked/:emailLiked", favorite.listLiked);
 router.post("/favorites/insert", favorite.insert);
-// router.post("/favorites/update", favorite.update);
 router.post("/favorites/delete", favorite.delete);
 
 // 4. Friends
