@@ -70,6 +70,7 @@ exports.insert = async (req, res) => {
         // A kết bạn ở màn home thay vì chấp nhận ở màn bạn bè
         // Thì A sẽ kết bạn với B thay vì gửi lời kết bạn
         else if (userBeLike) {
+
             const obj = {
                 myEmail: emailBeLiked,
                 friends: dataLiked,
