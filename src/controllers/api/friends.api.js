@@ -1,4 +1,5 @@
 const Friend = require('../../models/friend.schema');
+const Favorite = require('../../models/favorite.schema');
 const User = require('../../models/user.schema');
 const { response } = require("../../utils/utils");
 
@@ -57,6 +58,11 @@ exports.insert = async (req, res) => {
             friends: obj2,
         }
 
+        const optionDelete = {
+            'userBeLiked.email': myEmail,
+            'userLiked.email': emailFriends
+        }
+
         // Nếu A và B tồn tại trong DB thì cả 2 sẽ thêm bạn bè
         if (dataMyUserFriend && dataUserFriend) {
 
@@ -68,6 +74,7 @@ exports.insert = async (req, res) => {
 
             await Friend.updateOne({ myEmail: myEmail }, { friends: myFriends });
             await Friend.updateOne({ myEmail: emailFriends }, { friends: userFriends });
+            await Favorite.deleteOne(optionDelete);
 
             res.status(200).json(response(200, `Chấp nhận kết bạn với ${dataUser.name}`));
         }
@@ -81,6 +88,7 @@ exports.insert = async (req, res) => {
 
             await Friend.updateOne({ myEmail: myEmail }, { friends: myFriends2 });
             await Friend.create(option2);
+            await Favorite.deleteOne(optionDelete);
 
             res.status(200).json(response(200, `Chấp nhận kết bạn với ${dataUser.name}`));
         }
@@ -89,6 +97,8 @@ exports.insert = async (req, res) => {
         else {
             await Friend.create(option);
             await Friend.create(option2);
+            await Favorite.deleteOne(optionDelete);
+
             res.status(200).json(response(200, `Chấp nhận kết bạn với ${dataUser.name}`));
         }
     } catch (error) {
