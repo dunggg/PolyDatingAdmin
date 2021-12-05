@@ -87,7 +87,7 @@ exports.insert = async (req, res) => {
             await Friend.create(obj2);
             await Favorite.deleteOne(option2);
 
-            res.status(200).json(response(200, `Chấp nhận lời kết bạn với ${dataLiked.name}`));
+            res.status(200).json(response(200, `Chấp nhận lời kết bạn với ${userBeLike.userLiked.name}`));
         }
 
         else {
@@ -98,7 +98,7 @@ exports.insert = async (req, res) => {
             }
 
             await Favorite.create(payload);
-            res.status(200).json(response(200, `Yêu thích ${dataBeLiked.name}`, payload));
+            res.status(200).json(response(200, `Yêu thích ${dataBeLiked.name} `, payload));
         }
     } catch (error) {
         res.status(500).json(response(500, error.message));
