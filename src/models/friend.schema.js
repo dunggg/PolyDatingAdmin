@@ -2,11 +2,9 @@ const mongoose = require("mongoose");
 
 const Friend = new mongoose.Schema(
     {
-        myEmail: {
-            type: String,
-            unique: true
-        },
-        friends: [Object]
+        myEmail: String,
+        friends: Object,
+        createdAt: String
     },
     { timestamps: false }
 );

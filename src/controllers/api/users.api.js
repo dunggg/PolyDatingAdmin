@@ -1,4 +1,5 @@
 const User = require("../../models/user.schema");
+const Friend = require('../../models/friend.schema');
 const Favorite = require('../../models/favorite.schema');
 const { response, insertUser, updateUser, checkPassword } = require("../../utils/utils");
 const info = require('../../config/info');
@@ -293,6 +294,11 @@ exports.delete = async (req, res) => {
       res.status(400).json(response(400, "Sai mật khẩu"));
     }
     else {
+      await Friend.deleteOne({ myEmail: data.email });
+      
+      
+
+
       await Favorite.deleteMany({ 'userBeLiked.email': data.email })
       await Favorite.deleteMany({ 'userLiked.email': data.email })
       await User.deleteOne({ _id: data._id });
