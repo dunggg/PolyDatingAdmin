@@ -1,4 +1,5 @@
 const Favorite = require('../../models/favorite.schema');
+const Friend = require('../../models/friend.schema');
 const User = require('../../models/user.schema');
 const { response } = require("../../utils/utils");
 
@@ -44,8 +45,8 @@ exports.insert = async (req, res) => {
     try {
         const { emailBeLiked, emailLiked } = req.body;
 
-        const dataBeLiked = await User.findOne({ email: emailBeLiked }); //Người được kết bạn
-        const dataLiked = await User.findOne({ email: emailLiked }); //Người gửi kết bạn
+        const dataBeLiked = await User.findOne({ email: emailBeLiked }); //Người được kết bạn A
+        const dataLiked = await User.findOne({ email: emailLiked }); //Người gửi kết bạn B
 
         const option = {
             'userBeLiked.email': emailBeLiked, //A
@@ -58,17 +59,40 @@ exports.insert = async (req, res) => {
         }
 
         const userLike = await Favorite.findOne(option);
-        // const user
+        const userBeLike = await Favorite.findOne(option2);
 
+        // B gửi lời kết bạn cho A, chỉ yêu cầu 1 lần
         if (userLike) {
             res.status(400).json(response(400, `Bạn đã gửi lời mời tới ${dataBeLiked.name}, vui lòng chờ đợi`));
+        }
+
+        // Nếu A nhận lời mời kết bạn của B mà chưa chấp nhận
+        // A kết bạn ở màn home thay vì chấp nhận ở màn bạn bè
+        // Thì A sẽ kết bạn với B thay vì gửi lời kết bạn
+        else if (userBeLike) {
+            const obj = {
+                myEmail: emailBeLiked,
+                friends: dataLiked,
+                createdAt: req.getTime,
+            }
+
+            const obj2 = {
+                myEmail: emailLiked,
+                friends: dataBeLiked,
+                createdAt: req.getTime,
+            }
+
+            await Friend.create(obj);
+            await Friend.create(obj2);
+            await Favorite.deleteOne(option2);
+
+            res.status(200).json(response(200, `Chấp nhận lời kết bạn với ${dataLiked.name}`));
         }
 
         else {
             const payload = {
                 userBeLiked: dataBeLiked,
                 userLiked: dataLiked,
-                status: false,
                 createdAt: req.getTime
             }
 
