@@ -51,6 +51,7 @@ exports.insert = async (req, res) => {
             'userBeLiked.email': emailBeLiked,
             'userLiked.email': emailLiked
         }
+        //
 
         const userFavorite = await Favorite.findOne(option);
 
