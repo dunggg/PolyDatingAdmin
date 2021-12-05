@@ -294,13 +294,10 @@ exports.delete = async (req, res) => {
       res.status(400).json(response(400, "Sai mật khẩu"));
     }
     else {
-      await Friend.deleteOne({ myEmail: data.email });
-      
-      
-
-
-      await Favorite.deleteMany({ 'userBeLiked.email': data.email })
-      await Favorite.deleteMany({ 'userLiked.email': data.email })
+      await Favorite.deleteMany({ 'userBeLiked.email': data.email });
+      await Favorite.deleteMany({ 'userLiked.email': data.email });
+      await Friend.deleteMany({ myEmail: data.email });
+      await Friend.deleteMany({ 'friends.email': data.email });
       await User.deleteOne({ _id: data._id });
 
       res.status(200).json(response(200, "Xóa tài khoản thành công"));

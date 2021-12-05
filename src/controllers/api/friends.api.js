@@ -9,16 +9,12 @@ exports.list = async (req, res) => {
 
         const data = await Friend.find({ myEmail: email });
 
-        if (!data) return res.status(404).json(response(404, `Người dùng không tồn tại`));
-
         const payload = {
-            total: data.friends.length,
-            friends: data.friends
+            total: data.length,
+            friends: data
         }
 
-        console.log(data);
-
-        res.status(200).json(response(200, `Lấy danh sách bạn bè của ${data.myEmail}`, payload));
+        res.status(200).json(response(200, `Lấy danh sách bạn bè của ${email}`, payload));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
