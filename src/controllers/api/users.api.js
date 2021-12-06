@@ -3,8 +3,8 @@ const Friends = require('../../models/friends.schema');
 const Tokens = require('../../models/tokens.schema');
 const { response, insertUser, updateUser, checkPassword } = require("../../utils/utils");
 const info = require('../../config/info');
-const jwt = require('jsonwebtoken');
 const randomString = require('randomstring');
+const jwt = require('jsonwebtoken');
 
 let pathUrl = "https://poly-dating.herokuapp.com/public/data_images/";
 

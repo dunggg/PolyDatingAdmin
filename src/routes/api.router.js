@@ -41,5 +41,6 @@ router.post("/reports/insert", uploadFile, reports.insert);
 
 // 5. Notifications
 router.get("/notifications/list/:email", notifications.list);
+router.post("/notifications/delete", notifications.delete);
 
 module.exports = router;

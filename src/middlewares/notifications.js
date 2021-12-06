@@ -1,6 +1,7 @@
 const Nofitications = require('../models/notifications.schema');
 const Tokens = require('../models/tokens.schema');
 const { response } = require("../utils/utils");
+const randomString = require('randomstring');
 const info = require('../config/info');
 const fetch = require('node-fetch');
 
@@ -19,11 +20,15 @@ const pushNotificationUser = async (req, res) => {
 
         const optionNotifi = {
             emailSender: notifiData.emailSender,
-            emailReceiver: notifiData.emailReceiver,
+            emailReceiver: {
+                email: notifiData.emailReceiver,
+                status: true
+            },
             title: "Yêu cầu kết bạn",
             content: notifiData.content,
             link: null,
             other: null,
+            randomKey: randomString.generate(10),
             createdAt: req.getTime
         }
 
