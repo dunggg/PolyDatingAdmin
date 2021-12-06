@@ -20,13 +20,13 @@ const pushNotificationUser = async (req, res) => {
         const optionPush = {
             ...optionConfig,
             'body': {
-                'data': notifiData,
+                'data': notifiData.content,
                 'registration_ids': dataToken.token
             }
         }
 
         fetch('https://fcm.googleapis.com/fcm/send', optionPush)
-            .then(() => res.status(200).json(response(200, notifiData.content)));
+            .then(() => res.status(200).json(response(200, notifiData.message)));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
