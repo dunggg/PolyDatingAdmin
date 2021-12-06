@@ -89,8 +89,6 @@ exports.insert = async (req, res) => {
             updatedAt: req.getTime
         };
 
-
-
         await Friends.create(optionMyEmail);
         await Friends.create(optionEmailFriend);
 
