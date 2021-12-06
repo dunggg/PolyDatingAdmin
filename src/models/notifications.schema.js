@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const Notification = new mongoose.Schema(
+const Notifications = new mongoose.Schema(
   {
     emailReceiver: [String],
     title: String,
@@ -13,4 +13,4 @@ const Notification = new mongoose.Schema(
   { timestamps: false }
 );
 
-module.exports = mongoose.model("notifications", Notification);
+module.exports = mongoose.model("notifications", Notifications);

@@ -1,4 +1,4 @@
-const User = require('../../models/user.schema');
+const User = require('../../models/users.schema');
 const _ = require('lodash');
 const moment = require('moment');
 const { course, specialized, facilities } = require('../api/edu-poly.api');

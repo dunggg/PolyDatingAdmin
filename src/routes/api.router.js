@@ -3,18 +3,17 @@ const router = express.Router();
 const uploadFile = require("../middlewares/uploadFile");
 const getTimeZone = require('../middlewares/getTime');
 const { sendMailNewUser, sendMailForgotPassword } = require('../middlewares/sendMail');
-const master = require("../controllers/api/master.api");
-const user = require("../controllers/api/users.api");
-const favorite = require("../controllers/api/favorites.api");
+const masters = require("../controllers/api/masters.api");
+const users = require("../controllers/api/users.api");
 const friends = require("../controllers/api/friends.api");
-const report = require("../controllers/api/reports.api");
+const reports = require("../controllers/api/reports.api");
 
 const fetch = require('node-fetch');
 
 /* API */
 
 // 1. Master
-router.get("/master/list", master.list);
+router.get("/master/list", masters.list);
 router.use(getTimeZone);
 
 router.post('/send', async (req, res) => {
@@ -42,29 +41,26 @@ router.post('/send', async (req, res) => {
 });
 
 // 2. Users
-router.get("/users/list", user.list);
-router.post("/users/sign_in", user.signIn);
-router.post("/users/sign_up", uploadFile, user.signUp, sendMailNewUser);
-router.post("/users/update/images", uploadFile, user.updateImages);
-router.post("/users/update/information", user.updateInformation);
-router.post("/users/update/is_show", user.updateIsShow);
-router.post("/users/update/status_hobby", user.updateStatusHobby);
-router.post("/users/change_password", user.changePassword);
-router.post("/users/forgot_password", user.forgotPassword, sendMailForgotPassword);
-router.post("/users/delete", user.delete);
+router.get("/users/list", users.list);
+router.post("/users/sign_in", users.signIn);
+router.post("/users/sign_up", uploadFile, users.signUp, sendMailNewUser);
+router.post("/users/update/images", uploadFile, users.updateImages);
+router.post("/users/update/information", users.updateInformation);
+router.post("/users/update/is_show", users.updateIsShow);
+router.post("/users/update/status_hobby", users.updateStatusHobby);
+router.post("/users/change_password", users.changePassword);
+router.post("/users/forgot_password", users.forgotPassword, sendMailForgotPassword);
+router.post("/users/delete", users.delete);
 
-// 3. Favorites
-router.get("/favorites/list/be_liked/:emailBeLiked", favorite.listBeLiked);
-router.get("/favorites/list/liked/:emailLiked", favorite.listLiked);
-router.post("/favorites/insert", favorite.insert);
-router.post("/favorites/delete", favorite.delete);
-
-// 4. Friends
-router.get("/friends/list/:email", friends.list);
+// 3. Friends
+router.get("/friends/listFriendsRequests/:email", friends.listFriendsRequests);
+router.get("/friends/listOfRequestsSent/:email", friends.listOfRequestsSent);
+router.get("/friends/listFriends/:email", friends.listFriends);
 router.post("/friends/insert", friends.insert);
+router.post("/friends/update", friends.update);
 router.post("/friends/delete", friends.delete);
 
-// 5. Reports
-router.post("/reports/insert", uploadFile, report.insert);
+// 4. Reports
+router.post("/reports/insert", uploadFile, reports.insert);
 
 module.exports = router;
