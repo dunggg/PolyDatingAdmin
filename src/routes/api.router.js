@@ -3,6 +3,7 @@ const router = express.Router();
 const uploadFile = require("../middlewares/uploadFile");
 const getTimeZone = require('../middlewares/getTime');
 const { sendMailNewUser, sendMailForgotPassword } = require('../middlewares/sendMail');
+const { pushNotificationUser } = require('../middlewares/notifications');
 const masters = require("../controllers/api/masters.api");
 const users = require("../controllers/api/users.api");
 const friends = require("../controllers/api/friends.api");
@@ -31,7 +32,7 @@ router.post("/users/delete", users.delete);
 router.get("/friends/list_friends_requests/:email", friends.listFriendsRequests);
 router.get("/friends/list_of_requests_sent/:email", friends.listOfRequestsSent);
 router.get("/friends/list_friends/:email", friends.listFriends);
-router.post("/friends/friend_request", friends.friendRequest);
+router.post("/friends/friend_request", friends.friendRequest, pushNotificationUser);
 router.post("/friends/delete", friends.delete);
 
 // 4. Reports

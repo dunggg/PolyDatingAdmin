@@ -143,7 +143,7 @@ exports.signUp = async (req, res, next) => {
       updatedAt: req.getTime
     }
 
-    await Tokens.create(option); // Create Token
+    await Tokens.create(optionToken); // Create Token
 
     const decode = {
       email: payload.email,

@@ -46,4 +46,4 @@ const sendMailForgotPassword = async (req, res) => {
     }
 };
 
-module.exports = { sendMailNewUser, sendMailForgotPassword }
+module.exports = { sendMailNewUser, sendMailForgotPassword };

@@ -75,7 +75,7 @@ exports.listFriends = async (req, res) => {
 };
 
 // Yêu cầu kết bạn, chấp nhận kết bạn
-exports.friendRequest = async (req, res) => {
+exports.friendRequest = async (req, res, next) => {
     try {
         const { myEmail, emailFriend } = req.body;
 
@@ -107,6 +107,8 @@ exports.friendRequest = async (req, res) => {
             updatedAt: req.getTime
         };
 
+        let message;
+
         // Nếu A kết bạn B, chỉ được gửi 1 lần. Nếu đã là bạn bè thì không được gửi.
         if (dataMyEmail) {
             if (dataMyEmail.status == true) {
@@ -129,7 +131,8 @@ exports.friendRequest = async (req, res) => {
         else {
             await Friends.create(optionMyUser);
 
-            res.status(200).json(response(200, `Gửi lời kết bạn tới ${dataMyFriend.name}`));
+            next()
+            // res.status(200).json(response(200, `Gửi lời kết bạn tới ${dataMyFriend.name}`));
         }
     } catch (error) {
         res.status(500).json(response(500, error.message));
