@@ -53,11 +53,10 @@ router.post("/users/forgot_password", users.forgotPassword, sendMailForgotPasswo
 router.post("/users/delete", users.delete);
 
 // 3. Friends
-router.get("/friends/listFriendsRequests/:email", friends.listFriendsRequests);
-router.get("/friends/listOfRequestsSent/:email", friends.listOfRequestsSent);
-router.get("/friends/listFriends/:email", friends.listFriends);
-router.post("/friends/insert", friends.insert);
-router.post("/friends/update", friends.update);
+router.get("/friends/list_friends_requests/:email", friends.listFriendsRequests);
+router.get("/friends/list_of_requests_sent/:email", friends.listOfRequestsSent);
+router.get("/friends/list_friends/:email", friends.listFriends);
+router.post("/friends/friend_request", friends.friendRequest);
 router.post("/friends/delete", friends.delete);
 
 // 4. Reports

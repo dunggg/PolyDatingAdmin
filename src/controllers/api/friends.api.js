@@ -74,8 +74,8 @@ exports.listFriends = async (req, res) => {
     }
 };
 
-// Yêu cầu kết bạn
-exports.insert = async (req, res) => {
+// Yêu cầu kết bạn, chấp nhận kết bạn
+exports.friendRequest = async (req, res) => {
     try {
         const { myEmail, emailFriend } = req.body;
 
@@ -107,73 +107,29 @@ exports.insert = async (req, res) => {
             updatedAt: req.getTime
         };
 
+        // Nếu A kết bạn B, chỉ được gửi 1 lần. Nếu đã là bạn bè thì không được gửi.
         if (dataMyEmail) {
             if (dataMyEmail.status == true) {
-                return res.status(400).json(response(400, `Bạn và ${dataMyUser.name} đã là bạn bè`));
+                return res.status(400).json(response(400, `Bạn và ${dataMyFriend.name} đã là bạn bè`));
             }
 
-            res.status(400).json(response(400, `Đã gửi lời kết bạn tới ${dataMyUser.name}, vui lòng chờ đợi`));
+            res.status(400).json(response(400, `Đã gửi lời kết bạn tới ${dataMyFriend.name}, vui lòng chờ đợi`));
         }
 
+        // Nếu B chấp nhận lời kết bạn thì A và B là bạn bè
         else if (dataMyEmailFriend) {
             await Friends.create(optionMyUser);
             await Friends.updateOne(optionFindOneMyUser, optionUpdate);
             await Friends.updateOne(optionFindOneMyFriend, optionUpdate);
 
-            res.status(200).json(response(200, `Chấp nhận lời kết bạn của ${dataMyUser.name}`));
+            res.status(200).json(response(200, `Chấp nhận lời kết bạn của ${dataMyFriend.name}`));
         }
 
+        // A gửi lời kết bạn tới B
         else {
             await Friends.create(optionMyUser);
 
-            res.status(200).json(response(200, `Gửi lời kết bạn tới ${dataMyUser.name}`));
-        }
-    } catch (error) {
-        res.status(500).json(response(500, error.message));
-    }
-};
-
-// Chấp nhận kết bạn
-exports.update = async (req, res) => {
-    try {
-        const { myEmail, emailFriend } = req.body;
-
-        const optionFindOneMyUser = {
-            "myUser.email": myEmail,
-            "friend.email": emailFriend
-        }
-
-        const optionFindOneMyFriend = {
-            "myUser.email": emailFriend,
-            "friend.email": myEmail
-        }
-
-        const dataMyUser = await Users.findOne({ email: myEmail });
-        const dataMyFriend = await Users.findOne({ email: emailFriend });
-        const dataMyEmailFriend = await Friends.findOne(optionFindOneMyFriend);
-
-        const optionMyFriend = {
-            myUser: dataMyFriend,
-            friend: dataMyUser,
-            status: true,
-            createdAt: req.getTime,
-            updatedAt: req.getTime
-        };
-
-        const optionUpdate = {
-            status: true,
-            updatedAt: req.getTime
-        };
-
-        if (dataMyEmailFriend.status == true) {
-            res.status(400).json(response(400, `Bạn và ${dataMyFriend.name} đã là bạn bè`));
-        }
-
-        else {
-            await Friends.create(optionMyFriend);
-            await Friends.updateOne(optionFindOneMyUser, optionUpdate);
-
-            res.status(200).json(response(200, `Chấp nhận lời kết bạn với ${dataMyFriend.name}`));
+            res.status(200).json(response(200, `Gửi lời kết bạn tới ${dataMyFriend.name}`));
         }
     } catch (error) {
         res.status(500).json(response(500, error.message));
