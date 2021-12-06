@@ -66,6 +66,7 @@ exports.insert = async (req, res) => {
 
         const dataMyEmail = await Users.findOne({ email: myEmail });
         const dataEmailFriend = await Users.findOne({ email: emailFriend });
+        const a = await Friends.findOne({ myEmail, "friend.email": emailFriend });
 
         const optionMyEmail = {
             myEmail: myEmail,
@@ -82,6 +83,13 @@ exports.insert = async (req, res) => {
             createdAt: req.getTime,
             updatedAt: req.getTime
         };
+
+        const optionUpdate = {
+            status: true,
+            updatedAt: req.getTime
+        };
+
+        
 
         await Friends.create(optionMyEmail);
         await Friends.create(optionEmailFriend);
@@ -106,7 +114,7 @@ exports.update = async (req, res) => {
         await Friends.findOneAndUpdate({ myEmail, "friend.email": emailFriend }, optionUpdate);
         const dataFriend = await Friends.findOneAndUpdate({ myEmail: emailFriend, "friend.email": myEmail }, optionUpdate);
 
-        res.status(200).json(response(200, `Chấp nhận lời kết bạn với ${dataFriend.friend.name}`));
+        res.status(200).json(response(200, `Chấp nhận lời kết bạn với `));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
