@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const Notifications = new mongoose.Schema(
   {
+    emailSender: String,
     emailReceiver: [String],
     title: String,
     content: String,

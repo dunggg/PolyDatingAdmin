@@ -123,9 +123,10 @@ exports.friendRequest = async (req, res, next) => {
             await Friends.updateOne(optionFindOneMyFriend, optionUpdate);
 
             req.notifiData = {
-                email: dataMyFriend.email,
+                emailSender: dataMyUser.email,
+                emailReceiver: dataMyFriend.email,
+                content: `${dataMyUser.name} đã chấp nhận lời mời kết bạn của bạn`,
                 message: `Chấp nhận lời mời kết bạn của ${dataMyFriend.name}`,
-                content: `${dataMyUser.name} đã chấp nhận lời mời kết bạn của bạn`
             }
             next();
         }
@@ -135,9 +136,10 @@ exports.friendRequest = async (req, res, next) => {
             await Friends.create(optionMyUser);
 
             req.notifiData = {
-                email: dataMyFriend.email,
+                emailSender: dataMyUser.email,
+                emailReceiver: dataMyFriend.email,
+                content: `${dataMyUser.name} đã gửi lời mời kết bạn tới bạn`,
                 message: `Gửi lời mời kết bạn tới ${dataMyFriend.name}`,
-                content: `${dataMyUser.name} đã gửi lời mời kết bạn tới bạn`
             }
             next();
         }

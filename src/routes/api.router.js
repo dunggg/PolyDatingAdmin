@@ -8,6 +8,7 @@ const masters = require("../controllers/api/masters.api");
 const users = require("../controllers/api/users.api");
 const friends = require("../controllers/api/friends.api");
 const reports = require("../controllers/api/reports.api");
+const notifications = require("../controllers/api/notifications.api");
 
 /* API */
 
@@ -37,5 +38,8 @@ router.post("/friends/delete", friends.delete);
 
 // 4. Reports
 router.post("/reports/insert", uploadFile, reports.insert);
+
+// 5. Notifications
+router.get("/notifications/list/:email", notifications.list);
 
 module.exports = router;

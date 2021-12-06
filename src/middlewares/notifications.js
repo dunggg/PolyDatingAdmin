@@ -15,11 +15,23 @@ const optionConfig = {
 const pushNotificationUser = async (req, res) => {
     try {
         const notifiData = req.notifiData;
-        const dataToken = await Tokens.findOne({ email: notifiData.email });
+        const dataToken = await Tokens.findOne({ email: notifiData.emailReceiver });
+
+        const optionNotifi = {
+            emailSender: notifiData.emailSender,
+            emailReceiver: notifiData.emailReceiver,
+            title: "Yêu cầu kết bạn",
+            content: notifiData.content,
+            link: null,
+            other: null,
+            createdAt: req.getTime
+        }
+
+        await Nofitications.create(optionNotifi);
 
         const dataBody = {
             'data': {
-                title: "Poly Dating",
+                title: `Poly Dating - ${optionNotifi.title}`,
                 content: notifiData.content
             },
             'to': dataToken.token
