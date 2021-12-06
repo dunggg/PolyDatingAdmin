@@ -163,9 +163,9 @@ exports.delete = async (req, res) => {
         }
 
         await Friends.deleteOne(optionFindOneMyUser);
-        const dataFriend = await Friends.findOneAndDelete(optionFindOneMyFriend);
+        await Friends.deleteOne(optionFindOneMyFriend);
 
-        res.status(200).json(response(200, `Xóa ${dataFriend.myUser.name} khỏi danh sách`));
+        res.status(200).json(response(200, `Yêu cầu xóa thành công`));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
