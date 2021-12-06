@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Friends = new mongoose.Schema(
     {
-        myEmail: String,
+        myUser: Object,
         friend: Object,
         status: Boolean,
         createdAt: String,

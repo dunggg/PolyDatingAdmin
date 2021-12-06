@@ -293,7 +293,7 @@ exports.delete = async (req, res) => {
       res.status(400).json(response(400, "Sai mật khẩu"));
     }
     else {
-      await Friends.deleteMany({ myEmail: data.email });
+      await Friends.deleteMany({ 'myUser.email': data.email });
       await Friends.deleteMany({ 'friends.email': data.email });
       await Users.deleteOne({ _id: data._id });
 
