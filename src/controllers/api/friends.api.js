@@ -7,7 +7,7 @@ exports.listFriendsRequests = async (req, res) => {
     try {
         const { email } = req.params;
 
-        const dataFriend = await Friends.find({ "friend.email": email, status: false });
+        const dataFriend = await Friends.find({ myEmail: email, status: false });
 
         const payload = {
             total: dataFriend.length,
@@ -26,7 +26,7 @@ exports.listOfRequestsSent = async (req, res) => {
     try {
         const { email } = req.params;
 
-        const dataFriend = await Friends.find({ myEmail: email, status: false });
+        const dataFriend = await Friends.find({ "friend.email": email, status: false });
 
         const payload = {
             total: dataFriend.length,
@@ -70,7 +70,7 @@ exports.insert = async (req, res) => {
 
         const optionMyEmail = {
             myEmail: myEmail,
-            friends: dataMyEmail,
+            friend: dataMyEmail,
             status: false,
             createdAt: req.getTime,
             updatedAt: req.getTime
@@ -78,7 +78,7 @@ exports.insert = async (req, res) => {
 
         const optionEmailFriend = {
             myEmail: emailFriend,
-            friends: dataEmailFriend,
+            friend: dataEmailFriend,
             status: false,
             createdAt: req.getTime,
             updatedAt: req.getTime
@@ -89,7 +89,7 @@ exports.insert = async (req, res) => {
             updatedAt: req.getTime
         };
 
-        
+
 
         await Friends.create(optionMyEmail);
         await Friends.create(optionEmailFriend);
