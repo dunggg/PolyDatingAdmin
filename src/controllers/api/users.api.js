@@ -59,15 +59,14 @@ exports.signIn = async (req, res) => {
     else {
       const dataToken = await Tokens.findOne({ email });
 
-      if (dataToken) {
-        if (dataToken.token != token) {
-          const option = {
-            token,
-            updatedAt: req.getTime
-          }
-
-          await Tokens.updateOne({ email }, option);
+      if (!dataToken) {
+        const optionToken = {
+          email,
+          token,
+          createdAt: req.getTime,
         }
+
+        await Tokens.create(optionToken);
       }
 
       res.status(200).json(response(200, "Đăng nhập thành công", user));
@@ -82,12 +81,7 @@ exports.signOut = async (req, res) => {
   try {
     const { email } = req.body;
 
-    const optionUpdateToken = {
-      token: "",
-      updatedAt: req.getTime
-    }
-
-    await Tokens.updateOne({ email }, optionUpdateToken);
+    await Tokens.deleteOne({ email });
     res.status(200).json(response(200, "Đăng xuất thành công"));
 
   } catch (error) {
@@ -142,7 +136,6 @@ exports.signUp = async (req, res, next) => {
       email: value.email,
       token: value.token,
       createdAt: req.getTime,
-      updatedAt: req.getTime
     }
 
     await Tokens.create(optionToken); // Create Token
