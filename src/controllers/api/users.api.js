@@ -59,13 +59,15 @@ exports.signIn = async (req, res) => {
     else {
       const dataToken = await Tokens.findOne({ email });
 
-      if (dataToken.token != token) {
-        const option = {
-          token,
-          updatedAt: req.getTime
-        }
+      if (dataToken) {
+        if (dataToken.token != token) {
+          const option = {
+            token,
+            updatedAt: req.getTime
+          }
 
-        await Tokens.updateOne({ email }, option);
+          await Tokens.updateOne({ email }, option);
+        }
       }
 
       res.status(200).json(response(200, "Đăng nhập thành công", user));
