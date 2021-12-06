@@ -20,7 +20,10 @@ const pushNotificationUser = async (req, res) => {
         const optionPush = {
             ...optionConfig,
             'body': {
-                'data': notifiData.content,
+                'data': {
+                    title: "Poly Dating",
+                    content: notifiData.content
+                },
                 'registration_ids': dataToken.token
             }
         }
