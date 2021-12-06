@@ -4,7 +4,7 @@ const { response } = require("../utils/utils");
 const info = require('../config/info');
 const fetch = require('node-fetch');
 
-const optionPush = {
+const optionConfig = {
     'method': 'POST',
     'headers': {
         'Authorization': info.authorizationKey,
@@ -14,30 +14,19 @@ const optionPush = {
 
 const pushNotificationUser = async (req, res) => {
     try {
-        // const nofiti = {
-        //     'title': "Hello 123",
-        //     'content': "Đầu buồi thắng rách"
-        // }
+        const notifiData = req.notifiData;
+        const dataToken = await Tokens.findOne({ email: notifiData.email });
 
-        // const headerNoti = 
-
-        // const bodyNoti = {
-        //     'data': nofiti,
-        //     "registration_ids": token
-        // }
-
-        const option = {
-            ...optionPush,
+        const optionPush = {
+            ...optionConfig,
             'body': {
-                'data': "Test",
-                'registration_ids': "token"
+                'data': notifiData,
+                'registration_ids': dataToken.token
             }
         }
 
-        console.log(option);
-
-        // fetch('https://fcm.googleapis.com/fcm/send', optionPush)
-        //     .then(() => res.json("ok"))
+        fetch('https://fcm.googleapis.com/fcm/send', optionPush)
+            .then(() => res.status(200).json(response(200, notifiData.content)));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));

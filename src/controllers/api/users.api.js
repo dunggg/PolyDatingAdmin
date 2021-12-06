@@ -145,12 +145,10 @@ exports.signUp = async (req, res, next) => {
 
     await Tokens.create(optionToken); // Create Token
 
-    const decode = {
+    req.decoded = {
       email: payload.email,
       passRandom
-    }
-
-    req.decoded = decode;
+    };
     next();
     // send email
 
@@ -305,12 +303,10 @@ exports.forgotPassword = async (req, res, next) => {
 
     await Users.updateOne({ _id: data._id }, payload);
 
-    const decode = {
+    req.decoded = {
       email,
       passRandom
-    }
-
-    req.decoded = decode;
+    };
     next()
     // send email
 
