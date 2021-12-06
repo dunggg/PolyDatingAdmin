@@ -56,7 +56,7 @@ exports.listFriends = async (req, res) => {
         const { email } = req.params;
 
         const optionFind = {
-            "myUser.email": email,
+            "friend.email": email,
             status: true
         }
 
