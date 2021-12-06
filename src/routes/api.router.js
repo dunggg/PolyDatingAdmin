@@ -8,41 +8,16 @@ const users = require("../controllers/api/users.api");
 const friends = require("../controllers/api/friends.api");
 const reports = require("../controllers/api/reports.api");
 
-const fetch = require('node-fetch');
-
 /* API */
 
 // 1. Master
 router.get("/master/list", masters.list);
 router.use(getTimeZone);
 
-router.post('/send', async (req, res) => {
-    const nofiti = {
-        'title': "Hello 123",
-        'content': "Xin chao"
-    }
-
-    const token = [`cjaBMOb6Tg6ajy4PsxFl4p:APA91bHfXBfpmU0LHiX1rhk5MIUtLwIHczVnlRqKrwSmaSYUogvserOD2FM5UBI3hezVu5z6ulaj1lVbQS8dW6L8PdXY4FdRzreEQxDKQznVqh8D2KJtwZ7Al3cldEHZVOkZ7Zq5aoaV`];
-
-    const nofibody = {
-        'data': nofiti,
-        "registration_ids": token
-    }
-
-    fetch('https://fcm.googleapis.com/fcm/send', {
-        'method': 'POST',
-        'headers': {
-            'Authorization': `key=AAAAMd_48v0:APA91bErb8B8aqTLeOTKyHVYuPtMagfrxYVhAkHB1gfMDPDI8ARHEBI4mjwqlheasCTlSgpZbHRaXPPMeUTzTNEPI1Mp_qzZNartaLkwfkk6ax1S-8jp5CgH5Y910T34gPwF2wZsQdbO`,
-            'Content-Type': 'application/json'
-        },
-        'body': JSON.stringify(nofibody)
-    }).then(() => res.json(nofibody)).catch((err) => console.log(err))
-
-});
-
 // 2. Users
 router.get("/users/list", users.list);
 router.post("/users/sign_in", users.signIn);
+router.post("/users/sign_out", users.signOut);
 router.post("/users/sign_up", uploadFile, users.signUp, sendMailNewUser);
 router.post("/users/update/images", uploadFile, users.updateImages);
 router.post("/users/update/information", users.updateInformation);

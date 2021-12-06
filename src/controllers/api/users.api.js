@@ -1,5 +1,6 @@
 const Users = require("../../models/users.schema");
 const Friends = require('../../models/friends.schema');
+const Tokens = require('../../models/tokens.schema');
 const { response, insertUser, updateUser, checkPassword } = require("../../utils/utils");
 const info = require('../../config/info');
 const jwt = require('jsonwebtoken');
@@ -43,24 +44,54 @@ exports.list = async (req, res) => {
 
 exports.signIn = async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, token } = req.body;
 
     const user = await Users.findOne({ email });
 
     if (!user) {
       res.status(404).json(response(404, `Người dùng không tồn tại`, null));
     }
+
     else if (user.isActive == false) {
       res.status(400).json(response(400, `Tài khoản của bạn đã bị khóa`, user));
     }
+
     else {
+      const dataToken = await Tokens.findOne({ email });
+
+      if (dataToken.token != token) {
+        const option = {
+          token,
+          updatedAt: req.getTime
+        }
+
+        await Tokens.updateOne({ email }, option);
+      }
+
       res.status(200).json(response(200, "Đăng nhập thành công", user));
     }
 
   } catch (error) {
     res.status(500).json(response(500, error.message));
   }
-}
+};
+
+exports.signOut = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const optionUpdateToken = {
+      token: "",
+      updatedAt: req.getTime
+    }
+
+    await Tokens.updateOne({ email }, optionUpdateToken);
+    res.status(200).json(response(200, "Đăng xuất thành công"));
+
+  } catch (error) {
+    res.status(500).json(response(500, error.message));
+  }
+};
 
 exports.signUp = async (req, res, next) => {
   try {
@@ -103,7 +134,16 @@ exports.signUp = async (req, res, next) => {
       updatedAt: req.getTime
     }
 
-    await Users.create(payload);
+    await Users.create(payload); // Create User
+
+    const optionToken = {
+      email: value.email,
+      token: value.token,
+      createdAt: req.getTime,
+      updatedAt: req.getTime
+    }
+
+    await Tokens.create(option); // Create Token
 
     const decode = {
       email: payload.email,
