@@ -17,15 +17,17 @@ const pushNotificationUser = async (req, res) => {
         const notifiData = req.notifiData;
         const dataToken = await Tokens.findOne({ email: notifiData.email });
 
+        const dataBody = {
+            'data': {
+                title: "Poly Dating",
+                content: notifiData.content
+            },
+            'to': dataToken.token
+        };
+
         const optionPush = {
             ...optionConfig,
-            'body': {
-                'data': {
-                    title: "Poly Dating",
-                    content: notifiData.content
-                },
-                'registration_ids': dataToken.token
-            }
+            'body': JSON.stringify(dataBody)
         };
 
         fetch('https://fcm.googleapis.com/fcm/send', optionPush)
