@@ -1,9 +1,9 @@
-const Master = require('../../models/master.schema');
+const Masters = require('../../models/masters.schema');
 const { response } = require('../../utils/utils');
 
 exports.list = async (req, res) => {
     try {
-        const data = await Master.findOne();
+        const data = await Masters.findOne();
 
         const payload = {
             facilities: data.facilities,

@@ -1,9 +1,10 @@
-const User = require("../../models/user.schema");
-const Favorite = require('../../models/favorite.schema');
+const Users = require("../../models/users.schema");
+const Friends = require('../../models/friends.schema');
+const Tokens = require('../../models/tokens.schema');
 const { response, insertUser, updateUser, checkPassword } = require("../../utils/utils");
 const info = require('../../config/info');
-const jwt = require('jsonwebtoken');
 const randomString = require('randomstring');
+const jwt = require('jsonwebtoken');
 
 let pathUrl = "https://poly-dating.herokuapp.com/public/data_images/";
 
@@ -13,7 +14,6 @@ exports.list = async (req, res) => {
 
     let shows = isShow.slice(1, -1).split(', ');
     let hobby = hobbies.slice(1, -1).split(', ');
-
     let data;
 
     // Nếu tìm kiếm sở thích giống mình
@@ -23,11 +23,11 @@ exports.list = async (req, res) => {
         hobbies: { $all: hobby }
       }
 
-      data = await User.find(option);
+      data = await Users.find(option);
     }
     // Không tìm cùng
     else {
-      data = await User.find({ isShow: shows });
+      data = await Users.find({ isShow: shows });
     }
 
     const payload = {
@@ -44,24 +44,50 @@ exports.list = async (req, res) => {
 
 exports.signIn = async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, token } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await Users.findOne({ email });
 
     if (!user) {
       res.status(404).json(response(404, `Người dùng không tồn tại`, null));
     }
+
     else if (user.isActive == false) {
       res.status(400).json(response(400, `Tài khoản của bạn đã bị khóa`, user));
     }
+
     else {
+      const dataToken = await Tokens.findOne({ email });
+
+      if (!dataToken) {
+        const optionToken = {
+          email,
+          token,
+          createdAt: req.getTime,
+        }
+
+        await Tokens.create(optionToken);
+      }
+
       res.status(200).json(response(200, "Đăng nhập thành công", user));
     }
 
   } catch (error) {
     res.status(500).json(response(500, error.message));
   }
-}
+};
+
+exports.signOut = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    await Tokens.deleteOne({ email });
+    res.status(200).json(response(200, "Đăng xuất thành công"));
+
+  } catch (error) {
+    res.status(500).json(response(500, error.message));
+  }
+};
 
 exports.signUp = async (req, res, next) => {
   try {
@@ -104,14 +130,20 @@ exports.signUp = async (req, res, next) => {
       updatedAt: req.getTime
     }
 
-    await User.create(payload);
+    await Users.create(payload); // Create User
 
-    const decode = {
-      email: payload.email,
-      passRandom
+    const optionToken = {
+      email: value.email,
+      token: value.token,
+      createdAt: req.getTime,
     }
 
-    req.decoded = decode;
+    await Tokens.create(optionToken); // Create Token
+
+    req.decoded = {
+      email: payload.email,
+      passRandom
+    };
     next();
     // send email
 
@@ -124,7 +156,7 @@ exports.updateImages = async (req, res) => {
   try {
     const { _id, imageUrl, checkRemove } = req.body;
 
-    const data = await User.findOne({ _id });
+    const data = await Users.findOne({ _id });
 
     let images = data.images;
 
@@ -148,7 +180,7 @@ exports.updateImages = async (req, res) => {
       updatedAt: req.getTime
     }
 
-    await User.updateOne({ _id: data._id }, payload)
+    await Users.updateOne({ _id: data._id }, payload)
     res.status(200).json(response(200, "Cập nhật ảnh thành công", images));
 
   } catch (error) {
@@ -172,7 +204,7 @@ exports.updateInformation = async (req, res) => {
       updatedAt: req.getTime
     }
 
-    await User.findOneAndUpdate({ _id: value._id }, payload);
+    await Users.findOneAndUpdate({ _id: value._id }, payload);
     res.status(200).json(response(200, "Cập nhật thông tin thành công"));
 
   } catch (error) {
@@ -191,7 +223,7 @@ exports.updateIsShow = async (req, res) => {
       updatedAt: req.getTime
     }
 
-    await User.findOneAndUpdate({ _id }, payload);
+    await Users.findOneAndUpdate({ _id }, payload);
     res.status(200).json(response(200, "Cập nhật hiển thị thành công"));
 
   } catch (error) {
@@ -208,7 +240,7 @@ exports.updateStatusHobby = async (req, res) => {
       updatedAt: req.getTime
     }
 
-    await User.findOneAndUpdate({ _id }, payload);
+    await Users.findOneAndUpdate({ _id }, payload);
     res.status(200).json(response(200, "Cập nhật tìm kiếm sở thích thành công"));
 
   } catch (error) {
@@ -222,7 +254,7 @@ exports.changePassword = async (req, res) => {
 
     if (error) return res.status(400).json(response(400, error.message));
 
-    const data = await User.findOne({ _id: value._id });
+    const data = await Users.findOne({ _id: value._id });
     const verifyPass = jwt.verify(data.password, info.hassPassKey);
 
     if (value.passOld !== verifyPass) {
@@ -239,7 +271,7 @@ exports.changePassword = async (req, res) => {
         updatedAt: req.getTime
       }
 
-      await User.updateOne({ _id: data._id }, payload);
+      await Users.updateOne({ _id: data._id }, payload);
       res.status(200).json(response(200, "Thay đổi mật khẩu thành công"));
     }
 
@@ -252,7 +284,7 @@ exports.forgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
 
-    const data = await User.findOne({ email });
+    const data = await Users.findOne({ email });
 
     if (!data) return res.status(404).json(response(404, "Email không tồn tại"));
 
@@ -264,14 +296,12 @@ exports.forgotPassword = async (req, res, next) => {
       updatedAt: req.getTime
     }
 
-    await User.updateOne({ _id: data._id }, payload);
+    await Users.updateOne({ _id: data._id }, payload);
 
-    const decode = {
+    req.decoded = {
       email,
       passRandom
-    }
-
-    req.decoded = decode;
+    };
     next()
     // send email
 
@@ -284,7 +314,7 @@ exports.delete = async (req, res) => {
   try {
     const { _id, password } = req.body;
 
-    const data = await User.findOne({ _id });
+    const data = await Users.findOne({ _id });
     const verifyPass = jwt.verify(data.password, info.hassPassKey);
 
     if (!password) {
@@ -294,9 +324,9 @@ exports.delete = async (req, res) => {
       res.status(400).json(response(400, "Sai mật khẩu"));
     }
     else {
-      await Favorite.deleteMany({ 'userBeLiked.email': data.email })
-      await Favorite.deleteMany({ 'userLiked.email': data.email })
-      await User.deleteOne({ _id: data._id });
+      await Friends.deleteMany({ 'myUser.email': data.email });
+      await Friends.deleteMany({ 'friends.email': data.email });
+      await Users.deleteOne({ _id: data._id });
 
       res.status(200).json(response(200, "Xóa tài khoản thành công"));
     }

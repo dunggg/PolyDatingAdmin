@@ -1,4 +1,4 @@
-const Report = require('../../models/report.schema');
+const Reports = require('../../models/reports.schema');
 const { response, insertReport } = require("../../utils/utils");
 
 let pathUrl = "https://poly-dating.herokuapp.com/public/data_images/";
@@ -23,7 +23,7 @@ exports.insert = async (req, res) => {
             createdAt: req.getTime
         }
 
-        await Report.create(payload)
+        await Reports.create(payload)
         res.status(200).json(response(200, `Gửi báo cáo thành công`))
 
     } catch (error) {

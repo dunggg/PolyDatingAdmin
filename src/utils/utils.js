@@ -15,6 +15,7 @@ const insertUser = joi.object({
   facilities: joi.string().required(),
   specialized: joi.string().required(),
   course: joi.string().required(),
+  token: joi.string().required()
 });
 
 const updateUser = joi.object({

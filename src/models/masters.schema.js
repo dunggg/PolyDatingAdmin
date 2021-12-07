@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const Master = new mongoose.Schema(
+const Masters = new mongoose.Schema(
     {
         facilities: [String],
         specialized: [String],
@@ -11,4 +11,4 @@ const Master = new mongoose.Schema(
     { timestamps: false }
 );
 
-module.exports = mongoose.model("masters", Master);
+module.exports = mongoose.model("masters", Masters);

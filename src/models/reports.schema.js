@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const Report = new mongoose.Schema(
+const Reports = new mongoose.Schema(
   {
     emailReport: String,
     emailReported: String,
@@ -13,4 +13,4 @@ const Report = new mongoose.Schema(
   { timestamps: false }
 );
 
-module.exports = mongoose.model("reports", Report);
+module.exports = mongoose.model("reports", Reports);
