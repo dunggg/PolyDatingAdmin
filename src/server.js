@@ -5,8 +5,6 @@ const connectDB = require('./config/connectDB');
 const indexRouter = require('./routes/web/index');
 const usersRouter = require('./routes/web/users.web');
 const apiRouter = require('./routes/api.router');
-const exportExecl = require('./utils/exportExcel');
-exportExecl();
 
 connectDB();
 hbs;

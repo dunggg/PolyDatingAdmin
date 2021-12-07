@@ -1,2 +1,15 @@
-<p>Vui lòng đợi giây lát</p>
-<a href="/public/file/excel.xlsx" download>Download</a>
+<div style="display:flex;align-items:center;flex-direction:column;margin-top:100px">
+    <p class="hide">Vui lòng đợi giây lát</p>
+    <div class="loader hide"></div>
+    <a style="display:none" class="show" href="/public/file/{{fileName}}.xlsx" download>Download</a>
+</div>
+
+<script>
+    const elementHide = $('.hide');
+    const show = $('.show');
+    setTimeout(() => {
+        elementHide[0].style.display = "none";
+        elementHide[1].style.display = "none";
+        show[0].style.display = "block";
+    }, 2000)
+</script>

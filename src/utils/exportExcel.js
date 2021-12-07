@@ -1,5 +1,6 @@
 // Require library
 var xl = require('excel4node');
+const { v4 } = require('uuid');
 
 const exportExcel = () => {
   // Create a new instance of a Workbook class
@@ -246,7 +247,9 @@ const exportExcel = () => {
     .number(5)
     .style({ font: { size: 13 } });
 
-  wb.write('src/public/file/Excel.xlsx');
+  const fileName = v4();
+  wb.write(`src/public/file/${fileName}.xlsx`);
+  return fileName + '.xlsx';
 };
 
 module.exports = exportExcel;
