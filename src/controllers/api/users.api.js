@@ -1,10 +1,8 @@
 const Users = require("../../models/users.schema");
 const Friends = require('../../models/friends.schema');
 const Tokens = require('../../models/tokens.schema');
-const { response, insertUser, updateUser, checkPassword } = require("../../utils/utils");
-const info = require('../../config/info');
+const { response, insertUser, updateUser } = require("../../utils/utils");
 const randomString = require('randomstring');
-const jwt = require('jsonwebtoken');
 
 let pathUrl = "https://poly-dating.herokuapp.com/public/data_images/";
 
@@ -106,12 +104,8 @@ exports.signUp = async (req, res, next) => {
 
     let isShow = ["Mọi người", "Tất cả cơ sở", "Tất cả chuyên ngành", "Tất cả khóa học"];
 
-    let passRandom = randomString.generate(10);
-    let hassPass = jwt.sign(passRandom, info.hassPassKey);
-
     const payload = {
       email: value.email,
-      password: hassPass,
       name: value.name,
       images,
       hobbies,
@@ -123,9 +117,9 @@ exports.signUp = async (req, res, next) => {
       course: value.course,
       isShow,
       isActive: true,
-      status: true,
       statusHobby: false,
-      roleAdmin: false,
+      reportNumber: 0,
+      code: null,
       createdAt: req.getTime,
       updatedAt: req.getTime
     }
@@ -140,12 +134,7 @@ exports.signUp = async (req, res, next) => {
 
     await Tokens.create(optionToken); // Create Token
 
-    req.decoded = {
-      email: payload.email,
-      passRandom
-    };
-    next();
-    // send email
+    res.status(200).json(response(200, "Tạo tài khoản thành công"))
 
   } catch (error) {
     res.status(500).json(response(500, error.message));
@@ -248,39 +237,7 @@ exports.updateStatusHobby = async (req, res) => {
   }
 };
 
-exports.changePassword = async (req, res) => {
-  try {
-    const { error, value } = checkPassword.validate(req.body);
-
-    if (error) return res.status(400).json(response(400, error.message));
-
-    const data = await Users.findOne({ _id: value._id });
-    const verifyPass = jwt.verify(data.password, info.hassPassKey);
-
-    if (value.passOld !== verifyPass) {
-      res.status(400).json(response(400, "Sai mật khẩu cũ"));
-    }
-    else if (value.passNew !== value.passConfirm) {
-      res.status(400).json(response(400, "Vui lòng nhập đúng mật khẩu"));
-    }
-    else {
-      const password = jwt.sign(value.passNew, info.hassPassKey);
-
-      const payload = {
-        password,
-        updatedAt: req.getTime
-      }
-
-      await Users.updateOne({ _id: data._id }, payload);
-      res.status(200).json(response(200, "Thay đổi mật khẩu thành công"));
-    }
-
-  } catch (error) {
-    res.status(500).json(response(500, error.message));
-  }
-};
-
-exports.forgotPassword = async (req, res, next) => {
+exports.requestCode = async (req, res, next) => {
   try {
     const { email } = req.body;
 
@@ -288,19 +245,30 @@ exports.forgotPassword = async (req, res, next) => {
 
     if (!data) return res.status(404).json(response(404, "Email không tồn tại"));
 
-    let passRandom = randomString.generate(10);
-    let hassPass = jwt.sign(passRandom, info.hassPassKey);
+    let codeRandom = randomString.generate(6);
 
     const payload = {
-      password: hassPass,
+      code: codeRandom,
       updatedAt: req.getTime
     }
 
     await Users.updateOne({ _id: data._id }, payload);
 
+    // Nếu sau 5 phút (300000 ms) code không được nhập thì xóa code
+    setTimeout(async () => {
+      let time = new Date().toLocaleString("VN", { timeZone: "Asia/Ho_Chi_Minh" });
+
+      const payload2 = {
+        code: null,
+        updatedAt: time
+      }
+
+      await Users.updateOne({ _id: data._id }, payload2);
+    }, 300000);
+
     req.decoded = {
       email,
-      passRandom
+      codeRandom
     };
     next()
     // send email
@@ -312,16 +280,15 @@ exports.forgotPassword = async (req, res, next) => {
 
 exports.delete = async (req, res) => {
   try {
-    const { _id, password } = req.body;
+    const { _id, code } = req.body;
 
     const data = await Users.findOne({ _id });
-    const verifyPass = jwt.verify(data.password, info.hassPassKey);
 
-    if (!password) {
-      res.status(400).json(response(400, "Vui lòng nhập mật khẩu"));
+    if (!code) {
+      res.status(400).json(response(400, "Vui lòng nhập mã xác nhận"));
     }
-    else if (password != verifyPass) {
-      res.status(400).json(response(400, "Sai mật khẩu"));
+    else if (code != data.code) {
+      res.status(400).json(response(400, "Sai mã xác nhận"));
     }
     else {
       await Friends.deleteMany({ 'myUser.email': data.email });

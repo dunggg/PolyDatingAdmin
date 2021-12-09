@@ -20,7 +20,8 @@ exports.insert = async (req, res) => {
             title: value.title,
             content: value.content,
             images,
-            createdAt: req.getTime
+            createdAt: req.getTime,
+            updatedAt: req.getTime
         }
 
         await Reports.create(payload)

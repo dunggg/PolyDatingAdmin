@@ -7,7 +7,6 @@ const Notifications = new mongoose.Schema(
     title: String,
     content: String,
     link: String,
-    other: Object,
     randomKey: String,
     createdAt: String
   },

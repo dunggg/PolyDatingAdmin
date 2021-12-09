@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const Users = new mongoose.Schema(
   {
     email: { type: String, unique: true },
-    password: String,
     name: String,
     images: [String],
     hobbies: [String],
@@ -15,9 +14,9 @@ const Users = new mongoose.Schema(
     course: String,
     isShow: [String],
     isActive: Boolean,
-    status: Boolean,
     statusHobby: Boolean,
-    roleAdmin: Boolean,
+    reportNumber: Number,
+    code: String,
     createdAt: String,
     updatedAt: String
   },

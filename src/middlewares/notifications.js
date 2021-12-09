@@ -11,7 +11,7 @@ const optionConfig = {
         'Authorization': info.authorizationKey,
         'Content-Type': 'application/json'
     }
-}
+};
 
 const pushNotificationUser = async (req, res) => {
     try {
@@ -27,7 +27,6 @@ const pushNotificationUser = async (req, res) => {
             title: "Yêu cầu kết bạn",
             content: notifiData.content,
             link: null,
-            other: null,
             randomKey: randomString.generate(10),
             createdAt: req.getTime
         }
