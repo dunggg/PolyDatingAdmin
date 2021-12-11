@@ -190,8 +190,6 @@ exports.findOne = async (req, res) => {
 
     if (!user) return res.sendStatus(404);
 
-    console.log(reports);
-
     const payload = {
       user,
       reports

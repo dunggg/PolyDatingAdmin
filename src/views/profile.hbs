@@ -173,26 +173,14 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                {{#each reports}}
                                                 <tr>
-                                                    <td>1</td>
-                                                    <td>Báo cáo</td>
-                                                    <td>Ăn a ăn e Ăn a ăn e Ăn a ăn e Ăn a ăn e</td>
-                                                    <td><img class="rounded-circle me-2" width="30" height="30"
-                                                            src="https://f43-zpg.zdn.vn/2575592389455815324/e11f1916619f97c1ce8e.jpg">
-                                                    </td>
-                                                    <td>Thắng Rách</td>
-                                                    <td>20/09/2021</td>
-                                                    <td>
-                                                        <button class="btn btn-success"><i
-                                                                class="fas fa-check"></i></button>
-                                                        <button class="btn btn-danger"><i
-                                                                class="fas fa-times"></i></i></button>
-                                                    </td>
-                                                </tr>
+                                                    <td>{{@index}}</td>
+                                                    <td>{{this.title}}</td>
+                                                    <td>{{this.content}}</td>
+                                                    <td><a href="{{this.images}}">{{this.images}}</a></td>
 
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>Báo cáo</td>
+                                                    {{!-- <td>Báo cáo</td>
                                                     <td>Ăn a ăn e Ăn a ăn e Ăn a ăn e Ăn a ăn e</td>
                                                     <td><img class="rounded-circle me-2" width="30" height="30"
                                                             src="https://f43-zpg.zdn.vn/2575592389455815324/e11f1916619f97c1ce8e.jpg">
@@ -204,8 +192,9 @@
                                                                 class="fas fa-check"></i></button>
                                                         <button class="btn btn-danger"><i
                                                                 class="fas fa-times"></i></i></button>
-                                                    </td>
+                                                    </td> --}}
                                                 </tr>
+                                                {{/each}}
                                             </tbody>
                                         </table>
                                     </div>
@@ -233,6 +222,8 @@
                                             </nav>
                                         </div>
                                     </div>
+
+                                    <!-- ----------------------------------- -->
                                 </div>
                             </div>
                         </div>

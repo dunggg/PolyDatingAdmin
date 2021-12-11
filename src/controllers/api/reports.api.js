@@ -10,14 +10,14 @@ exports.insert = async (req, res) => {
             res.status(400).json(response(400, error.message));
         }
         else {
-            let images = [];
+            let images;
             if (req.files.length > 0) {
                 images = pathUrl + req.files[0].filename;
             }
 
             const payload = {
-                emailReceiver: value.emailReport,
-                emailSender: value.emailReported,
+                emailReceiver: value.emailReceiver,
+                emailSender: value.emailSender,
                 title: value.title,
                 content: value.content,
                 images,
