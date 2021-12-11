@@ -94,17 +94,16 @@ exports.signUp = async (req, res) => {
     if (error) {
       res.status(400).json(response(400, error.message));
     }
-    // else if (req.files.length < 2) {
-    //   res.status(400).json(response(400, "Cần chọn ít nhất 2 ảnh"))
-    // }
+    else if (req.files.length < 2) {
+      res.status(400).json(response(400, "Cần chọn ít nhất 2 ảnh"))
+    }
     else {
       let images = [];
-      // for (let index = 0; index < req.files.length; index++) {
-      //   images.push(pathUrl + req.files[index].filename);
-      // }
+      for (let index = 0; index < req.files.length; index++) {
+        images.push(pathUrl + req.files[index].filename);
+      }
 
       let hobbies = value.hobbies.slice(1, -1).split(', ');
-
       let isShow = ["Mọi người", "Tất cả cơ sở", "Tất cả chuyên ngành", "Tất cả khóa học"];
 
       const payload = {

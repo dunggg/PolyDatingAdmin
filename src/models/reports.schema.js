@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const Reports = new mongoose.Schema(
   {
-    emailReport: String,
-    emailReported: String,
+    emailReceiver: String,
+    emailSender: String,
     title: String,
     content: String,
     images: String,

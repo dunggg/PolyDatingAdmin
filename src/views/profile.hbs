@@ -48,8 +48,7 @@
 
                                 <div class="card-body">
                                     <div class="col text-center">
-                                        <img class="rounded-circle mb-3 mt-2"
-                                            src="{{user.images.[0]}}" width="180"
+                                        <img class="rounded-circle mb-3 mt-2" src="{{user.images.[0]}}" width="180"
                                             height="180">
                                         <p class="text-black fw-bold h4">{{user.name}}</p>
                                     </div>
@@ -59,8 +58,7 @@
 
                                     <div class="text-center">
                                         {{#each user.images}}
-                                        <img class="rounded m-2" src="{{this}}"
-                                            width="140" height="140">
+                                        <img class="rounded m-2" src="{{this}}" width="130" height="130">
                                         {{/each}}
                                     </div>
 
@@ -87,15 +85,29 @@
                                                 <p><span class="text-black">Chuyên ngành: </span>{{user.specialized}}
                                                 </p>
                                                 <p><span class="text-black">Khóa học: </span>{{user.course}}</p>
-                                                <p><span class="text-black">Báo cáo: </span>0 lượt</p>
                                                 <p><span class="text-black">Hiển thị với: </span>{{user.isShow}}</p>
-                                                <p><span class="text-black">Trạng thái (Online): </span> {{user.status}}
+
+                                                <p>
+                                                    <span class="text-black">Báo cáo: </span>
+                                                    {{#if (lt user.reportNumber 3)}}
+                                                    <span class="text-success">{{user.reportNumber}} lượt</span>
+                                                    {{else}}
+                                                    <span class="text-danger">{{user.reportNumber}} lượt</span>
+                                                    {{/if}}
                                                 </p>
-                                                <p><span class="text-black">Hoạt động (Active): </span>{{user.isActive}}
+
+                                                <p>
+                                                    <span class="text-black">Hoạt động (Active): </span>
+                                                    {{#if (eq user.isActive true)}}
+                                                    <span class="text-success">Kích hoạt</span>
+                                                    {{else}}
+                                                    <span class="text-danger">Chặn</span>
+                                                    {{/if}}
                                                 </p>
-                                                <p><span class="text-black">Vai trò: </span>{{user.role}}</p>
+
                                                 <p><span class="text-black">Ngày tạo: </span>{{user.createdAt}}</p>
-                                                <p><span class="text-black">Ngày cập nhật: </span>{{user.updatedAt}}</p>
+                                                <p><span class="text-black">Ngày cập nhật: </span>{{user.updatedAt}}
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -103,23 +115,28 @@
                             </div>
                         </div>
 
+                        {{!-- Báo cáo --}}
                         <div class="col-lg-12">
                             <div class="card shadow">
                                 <div class="card-header py-3">
                                     <div class="row">
                                         <p class="text-primary m-0 fw-bold col-md-6">Báo cáo</p>
 
-                                        {{#if (eq user.isActive "Kích hoạt")}}
-                                        <form action="/users/block/{{user._id}}" method="post" id="form-block"
+                                        {{#if (eq user.isActive true)}}
+                                        <form action="/users/block" method="post" id="form-block"
                                             class="text-end col-md-6 ">
+
+                                            <input type="hidden" value="{{user._id}}" name="_id">
 
                                             <a href="#" class="text-danger m-0 fw-bold" style="text-decoration: none;"
                                                 onclick="document.getElementById('form-block').submit()">Chặn</a>
                                         </form>
 
                                         {{else}}
-                                        <form action="/users/unblock/{{user._id}}" method="post" id="form-block"
+                                        <form action="/users/unblock" method="post" id="form-block"
                                             class="text-end col-md-6 ">
+
+                                            <input type="hidden" value="{{user._id}}" name="_id">
 
                                             <a href="#" class="text-success m-0 fw-bold" style="text-decoration: none;"
                                                 onclick="document.getElementById('form-block').submit()">Kích hoạt</a>

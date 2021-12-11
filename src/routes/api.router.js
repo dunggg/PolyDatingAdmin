@@ -21,6 +21,7 @@ router.get("/users/list", users.list);
 router.post("/users/sign-in", users.signIn);
 router.post("/users/sign-out", users.signOut);
 router.post("/users/sign-up", uploadFile, users.signUp);
+// router.post("/users/sign-up", users.signUp);
 router.post("/users/update/images", uploadFile, users.updateImages);
 router.post("/users/update/information", users.updateInformation);
 router.post("/users/update/is-show", users.updateIsShow);

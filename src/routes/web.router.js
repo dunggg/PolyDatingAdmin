@@ -4,8 +4,8 @@ const uploadFile = require("../middlewares/uploadFile");
 const getTimeZone = require('../middlewares/getTime');
 const { sendMailForgotPassword } = require('../middlewares/sendMail');
 const { pushNotificationUser } = require('../middlewares/notifications');
-const masters = require("../controllers/api/masters.api");
 const employees = require("../controllers/web/employees");
+const users = require("../controllers/web/users.web");
 
 
 /* Website */
@@ -16,5 +16,11 @@ router.get('/', employees.index);
 router.post('/sign-in', employees.signIn);
 router.post('/sign-up', uploadFile, employees.signUp);
 router.post('/forgot-password', employees.forgotPassword, sendMailForgotPassword);
+
+//2. Users
+router.get('/users', users.list);
+router.get('/users/:email', users.findOne);
+router.post('/users/block', users.block);
+router.post('/users/unblock', users.unblock);
 
 module.exports = router;

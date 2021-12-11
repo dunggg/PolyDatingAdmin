@@ -28,8 +28,8 @@ const updateUser = joi.object({
 });
 
 const insertReport = joi.object({
-  emailReport: joi.string().email().required(),
-  emailReported: joi.string().email().required(),
+  emailReceiver: joi.string().email().required(),
+  emailSender: joi.string().email().required(),
   title: joi.string().required(),
   content: joi.string().min(10).max(200).required()
 });
