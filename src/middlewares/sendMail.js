@@ -1,8 +1,8 @@
-const nodemailer = require("nodemailer");
-const info = require('../config/info');
-const { response } = require("../utils/utils");
+let nodemailer = require("nodemailer");
+let info = require('../config/info');
+let { response } = require("../utils/utils");
 
-const transporter = nodemailer.createTransport({
+let transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
         user: info.user,
@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-const sendMailRequestCode = async (req, res) => {
+let sendMailRequestCode = async (req, res) => {
     try {
         await transporter.sendMail({
             from: '"Poly Dating" <quannhph11150@fpt.edu.vn>', // sender address
@@ -27,7 +27,7 @@ const sendMailRequestCode = async (req, res) => {
     }
 };
 
-const sendMailForgotPassword = async (req, res) => {
+let sendMailForgotPassword = async (req, res) => {
     try {
         await transporter.sendMail({
             from: '"Poly Dating" <quannhph11150@fpt.edu.vn>', // sender address

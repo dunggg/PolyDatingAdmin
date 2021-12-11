@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+let mongoose = require("mongoose");
 
-const Friends = new mongoose.Schema(
+let Friends = new mongoose.Schema(
     {
         myUser: Object,
         friend: Object,

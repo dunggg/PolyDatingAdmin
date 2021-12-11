@@ -1,11 +1,11 @@
-const Reports = require('../../models/reports.schema');
-const { response, insertReport } = require("../../utils/utils");
+let Reports = require('../../models/reports.schema');
+let { response, insertReport } = require("../../utils/utils");
 
 let pathUrl = "https://poly-dating.herokuapp.com/public/data_images/";
 
 exports.insert = async (req, res) => {
     try {
-        const { error, value } = insertReport.validate(req.body);
+        let { error, value } = insertReport.validate(req.body);
         if (error) {
             res.status(400).json(response(400, error.message));
         }
@@ -15,7 +15,7 @@ exports.insert = async (req, res) => {
                 images = pathUrl + req.files[0].filename;
             }
 
-            const payload = {
+            let payload = {
                 emailSender: value.emailSender,
                 emailReceiver: value.emailReceiver,
                 title: value.title,

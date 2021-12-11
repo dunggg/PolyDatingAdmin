@@ -1,11 +1,11 @@
-const Nofitications = require('../models/notifications.schema');
-const Tokens = require('../models/tokens.schema');
-const { response } = require("../utils/utils");
-const randomString = require('randomstring');
-const info = require('../config/info');
-const fetch = require('node-fetch');
+let Nofitications = require('../models/notifications.schema');
+let Tokens = require('../models/tokens.schema');
+let { response } = require("../utils/utils");
+let randomString = require('randomstring');
+let info = require('../config/info');
+let fetch = require('node-fetch');
 
-const optionConfig = {
+let optionConfig = {
     'method': 'POST',
     'headers': {
         'Authorization': info.authorizationKey,
@@ -13,12 +13,12 @@ const optionConfig = {
     }
 };
 
-const pushNotificationUser = async (req, res) => {
+let pushNotificationUser = async (req, res) => {
     try {
-        const notifiData = req.notifiData;
-        const dataToken = await Tokens.findOne({ email: notifiData.emailReceiver });
+        let notifiData = req.notifiData;
+        let dataToken = await Tokens.findOne({ email: notifiData.emailReceiver });
 
-        const optionNotifi = {
+        let optionNotifi = {
             emailSender: notifiData.emailSender,
             emailReceiver: notifiData.emailReceiver,
             title: "Yêu cầu kết bạn",
@@ -30,7 +30,7 @@ const pushNotificationUser = async (req, res) => {
 
         await Nofitications.create(optionNotifi);
 
-        const dataBody = {
+        let dataBody = {
             'data': {
                 title: `Poly Dating - ${optionNotifi.title}`,
                 content: notifiData.content
@@ -38,7 +38,7 @@ const pushNotificationUser = async (req, res) => {
             'to': dataToken.token
         };
 
-        const optionPush = {
+        let optionPush = {
             ...optionConfig,
             'body': JSON.stringify(dataBody)
         };

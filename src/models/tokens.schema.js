@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+let mongoose = require("mongoose");
 
-const Tokens = new mongoose.Schema(
+let Tokens = new mongoose.Schema(
     {
         email: String,
         token: String,

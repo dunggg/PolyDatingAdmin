@@ -1,16 +1,16 @@
-const Users = require("../../models/users.schema");
-const Friends = require('../../models/friends.schema');
-const Reporst = require('../../models/reports.schema');
-const Notifications = require('../../models/notifications.schema');
-const Tokens = require('../../models/tokens.schema');
-const { response, insertUser, updateUser } = require("../../utils/utils");
-const randomString = require('randomstring');
+let Users = require("../../models/users.schema");
+let Friends = require('../../models/friends.schema');
+let Reporst = require('../../models/reports.schema');
+let Notifications = require('../../models/notifications.schema');
+let Tokens = require('../../models/tokens.schema');
+let { response, insertUser, updateUser } = require("../../utils/utils");
+let randomString = require('randomstring');
 
 let pathUrl = "https://poly-dating.herokuapp.com/public/data_images/";
 
 exports.list = async (req, res) => {
   try {
-    const { isShow, hobbies, statusHobby } = req.query;
+    let { isShow, hobbies, statusHobby } = req.query;
 
     let shows = isShow.slice(1, -1).split(', ');
     let hobby = hobbies.slice(1, -1).split(', ');
@@ -18,7 +18,7 @@ exports.list = async (req, res) => {
 
     // Nếu tìm kiếm sở thích giống mình
     if (statusHobby === "true") {
-      const option = {
+      let option = {
         isShow: shows,
         hobbies: { $all: hobby }
       }
@@ -30,7 +30,7 @@ exports.list = async (req, res) => {
       data = await Users.find({ isShow: shows });
     }
 
-    const payload = {
+    let payload = {
       total: data.length,
       users: data
     }
@@ -44,9 +44,9 @@ exports.list = async (req, res) => {
 
 exports.signIn = async (req, res) => {
   try {
-    const { email, token } = req.body;
+    let { email, token } = req.body;
 
-    const user = await Users.findOne({ email });
+    let user = await Users.findOne({ email });
 
     if (!user) {
       res.status(404).json(response(404, `Người dùng không tồn tại`, null));
@@ -57,10 +57,10 @@ exports.signIn = async (req, res) => {
     }
 
     else {
-      const dataToken = await Tokens.findOne({ email });
+      let dataToken = await Tokens.findOne({ email });
 
       if (!dataToken) {
-        const optionToken = {
+        let optionToken = {
           email,
           token,
           createdAt: req.getTime,
@@ -79,7 +79,7 @@ exports.signIn = async (req, res) => {
 
 exports.signOut = async (req, res) => {
   try {
-    const { email } = req.body;
+    let { email } = req.body;
 
     await Tokens.deleteOne({ email });
     res.status(200).json(response(200, "Đăng xuất thành công"));
@@ -91,7 +91,7 @@ exports.signOut = async (req, res) => {
 
 exports.signUp = async (req, res) => {
   try {
-    const { error, value } = insertUser.validate(req.body);
+    let { error, value } = insertUser.validate(req.body);
 
     if (error) {
       res.status(400).json(response(400, error.message));
@@ -108,7 +108,7 @@ exports.signUp = async (req, res) => {
       let hobbies = value.hobbies.slice(1, -1).split(', ');
       let isShow = ["Mọi người", "Tất cả cơ sở", "Tất cả chuyên ngành", "Tất cả khóa học"];
 
-      const payload = {
+      let payload = {
         email: value.email,
         name: value.name,
         images,
@@ -130,7 +130,7 @@ exports.signUp = async (req, res) => {
 
       await Users.create(payload); // Create User
 
-      const optionToken = {
+      let optionToken = {
         email: value.email,
         token: value.token,
         createdAt: req.getTime,
@@ -147,9 +147,9 @@ exports.signUp = async (req, res) => {
 
 exports.updateImages = async (req, res) => {
   try {
-    const { _id, imageUrl, checkRemove } = req.body;
+    let { _id, imageUrl, checkRemove } = req.body;
 
-    const data = await Users.findOne({ _id });
+    let data = await Users.findOne({ _id });
 
     let images = data.images;
 
@@ -168,7 +168,7 @@ exports.updateImages = async (req, res) => {
       images.push(pathUrl + req.files[0].filename);
     }
 
-    const payload = {
+    let payload = {
       images,
       updatedAt: req.getTime
     }
@@ -183,13 +183,13 @@ exports.updateImages = async (req, res) => {
 
 exports.updateInformation = async (req, res) => {
   try {
-    const { error, value } = updateUser.validate(req.body);
+    let { error, value } = updateUser.validate(req.body);
 
     if (error) return res.status(400).json(response(400, error.message));
 
     let hobbies = value.hobbies.slice(1, -1).split(', ');
 
-    const payload = {
+    let payload = {
       description: value.description,
       hobbies,
       facilities: value.facilities,
@@ -207,11 +207,11 @@ exports.updateInformation = async (req, res) => {
 
 exports.updateIsShow = async (req, res) => {
   try {
-    const { _id, isShow } = req.body;
+    let { _id, isShow } = req.body;
 
     let shows = isShow.slice(1, -1).split(', ');
 
-    const payload = {
+    let payload = {
       isShow: shows,
       updatedAt: req.getTime
     }
@@ -226,9 +226,9 @@ exports.updateIsShow = async (req, res) => {
 
 exports.updateStatusHobby = async (req, res) => {
   try {
-    const { _id, statusHobby } = req.body;
+    let { _id, statusHobby } = req.body;
 
-    const payload = {
+    let payload = {
       statusHobby,
       updatedAt: req.getTime
     }
@@ -243,15 +243,15 @@ exports.updateStatusHobby = async (req, res) => {
 
 exports.requestCode = async (req, res, next) => {
   try {
-    const { email } = req.body;
+    let { email } = req.body;
 
-    const data = await Users.findOne({ email });
+    let data = await Users.findOne({ email });
 
     if (!data) return res.status(404).json(response(404, "Email không tồn tại"));
 
     let codeRandom = randomString.generate(6);
 
-    const payload = {
+    let payload = {
       code: codeRandom,
       updatedAt: req.getTime
     }
@@ -262,7 +262,7 @@ exports.requestCode = async (req, res, next) => {
     setTimeout(async () => {
       let time = new Date().toLocaleString("VN", { timeZone: "Asia/Ho_Chi_Minh" });
 
-      const payload2 = {
+      let payload2 = {
         code: null,
         updatedAt: time
       }
@@ -284,9 +284,9 @@ exports.requestCode = async (req, res, next) => {
 
 exports.delete = async (req, res) => {
   try {
-    const { _id, code } = req.body;
+    let { _id, code } = req.body;
 
-    const data = await Users.findOne({ _id });
+    let data = await Users.findOne({ _id });
 
     if (!code) {
       res.status(400).json(response(400, "Vui lòng nhập mã xác nhận"));

@@ -1,20 +1,20 @@
-const Friends = require('../../models/friends.schema');
-const Users = require('../../models/users.schema');
-const { response } = require("../../utils/utils");
+let Friends = require('../../models/friends.schema');
+let Users = require('../../models/users.schema');
+let { response } = require("../../utils/utils");
 
 // Danh sách yêu cầu kết bạn
 exports.listFriendsRequests = async (req, res) => {
     try {
-        const { email } = req.params;
+        let { email } = req.params;
 
-        const optionFind = {
+        let optionFind = {
             "friend.email": email,
             status: false
         }
 
-        const dataFriend = await Friends.find(optionFind);
+        let dataFriend = await Friends.find(optionFind);
 
-        const payload = {
+        let payload = {
             total: dataFriend.length,
             friends: dataFriend
         }
@@ -29,16 +29,16 @@ exports.listFriendsRequests = async (req, res) => {
 // Danh sách lời mời kết bạn đã gửi
 exports.listOfRequestsSent = async (req, res) => {
     try {
-        const { email } = req.params;
+        let { email } = req.params;
 
-        const optionFind = {
+        let optionFind = {
             "myUser.email": email,
             status: false
         }
 
-        const dataFriend = await Friends.find(optionFind);
+        let dataFriend = await Friends.find(optionFind);
 
-        const payload = {
+        let payload = {
             total: dataFriend.length,
             friends: dataFriend
         }
@@ -53,16 +53,16 @@ exports.listOfRequestsSent = async (req, res) => {
 // Danh sách bạn bè
 exports.listFriends = async (req, res) => {
     try {
-        const { email } = req.params;
+        let { email } = req.params;
 
-        const optionFind = {
+        let optionFind = {
             "friend.email": email,
             status: true
         }
 
-        const dataFriend = await Friends.find(optionFind);
+        let dataFriend = await Friends.find(optionFind);
 
-        const payload = {
+        let payload = {
             total: dataFriend.length,
             friends: dataFriend
         }
@@ -77,29 +77,29 @@ exports.listFriends = async (req, res) => {
 // Yêu cầu kết bạn, chấp nhận kết bạn
 exports.friendRequest = async (req, res, next) => {
     try {
-        const { myEmail, emailFriend } = req.body;
+        let { myEmail, emailFriend } = req.body;
 
-        const optionFindOneMyUser = {
+        let optionFindOneMyUser = {
             "myUser.email": myEmail,
             "friend.email": emailFriend
         }
 
-        const optionFindOneMyFriend = {
+        let optionFindOneMyFriend = {
             "myUser.email": emailFriend,
             "friend.email": myEmail
         }
 
-        const optionUpdate = {
+        let optionUpdate = {
             status: true,
             updatedAt: req.getTime
         };
 
-        const dataMyUser = await Users.findOne({ email: myEmail });
-        const dataMyFriend = await Users.findOne({ email: emailFriend });
-        const dataMyEmail = await Friends.findOne(optionFindOneMyUser);
-        const dataMyEmailFriend = await Friends.findOne(optionFindOneMyFriend);
+        let dataMyUser = await Users.findOne({ email: myEmail });
+        let dataMyFriend = await Users.findOne({ email: emailFriend });
+        let dataMyEmail = await Friends.findOne(optionFindOneMyUser);
+        let dataMyEmailFriend = await Friends.findOne(optionFindOneMyFriend);
 
-        const optionMyUser = {
+        let optionMyUser = {
             myUser: dataMyUser,
             friend: dataMyFriend,
             status: false,
@@ -152,14 +152,14 @@ exports.friendRequest = async (req, res, next) => {
 // Xóa kết bạn, yêu cầu kết bạn, lời mời kết bạn
 exports.delete = async (req, res) => {
     try {
-        const { myEmail, emailFriend } = req.body;
+        let { myEmail, emailFriend } = req.body;
 
-        const optionFindOneMyUser = {
+        let optionFindOneMyUser = {
             "myUser.email": myEmail,
             "friend.email": emailFriend
         }
 
-        const optionFindOneMyFriend = {
+        let optionFindOneMyFriend = {
             "myUser.email": emailFriend,
             "friend.email": myEmail
         }

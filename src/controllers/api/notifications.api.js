@@ -1,13 +1,13 @@
-const Nofitications = require('../../models/notifications.schema');
-const { response } = require("../../utils/utils");
+let Nofitications = require('../../models/notifications.schema');
+let { response } = require("../../utils/utils");
 
 exports.list = async (req, res) => {
     try {
-        const { email } = req.params;
+        let { email } = req.params;
 
-        const data = await Nofitications.find({ 'emailReceiver.email': email });
+        let data = await Nofitications.find({ 'emailReceiver.email': email });
 
-        const payload = {
+        let payload = {
             total: data.length,
             nofitications: data
         };
@@ -21,9 +21,9 @@ exports.list = async (req, res) => {
 
 exports.delete = async (req, res) => {
     try {
-        const { email, randomKey } = req.body;
+        let { email, randomKey } = req.body;
 
-        const optionFindOne = {
+        let optionFindOne = {
             'emailReceiver.email': email,
             randomKey
         }

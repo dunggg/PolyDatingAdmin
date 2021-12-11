@@ -1,8 +1,8 @@
-const Users = require('../../models/users.schema');
-const Reports = require('../../models/reports.schema');
-const Masters = require('../../models/masters.schema');
-const _ = require('lodash');
-const moment = require('moment');
+let Users = require('../../models/users.schema');
+let Reports = require('../../models/reports.schema');
+let Masters = require('../../models/masters.schema');
+let _ = require('lodash');
+let moment = require('moment');
 
 // exports.list = async (req, res) => {
 //   let isSearch = false;
@@ -17,7 +17,7 @@ const moment = require('moment');
 //       facilities: facilitiesParams,
 //       email: searchParams,
 //     } = req.query;
-//     for (const key in req.query) {
+//     for (let key in req.query) {
 //       if (key != null) {
 //         search[`${key}`] = req.query[`${key}`];
 //       }
@@ -27,12 +27,12 @@ const moment = require('moment');
 //   try {
 //     let perPage = 2;
 //     let page = Number(req.params.page) || 1;
-//     const listUser = await User.find(search)
+//     let listUser = await User.find(search)
 //       .skip(perPage * page - perPage)
 //       .limit(perPage);
-//     const countDoc = await User.countDocuments(search);
-//     const countPage = Math.ceil(countDoc / perPage);
-//     const arrPage = [];
+//     let countDoc = await User.countDocuments(search);
+//     let countPage = Math.ceil(countDoc / perPage);
+//     let arrPage = [];
 //     // nếu tổng countPage - page >= 5
 //     if (countPage - page >= 5) {
 //       // nếu page - 1 khác 0 render từ page -1
@@ -49,7 +49,7 @@ const moment = require('moment');
 //     } else {
 //       // render 5 page cuối
 //       if (countPage >= 5) {
-//         const pageRest = countPage - page;
+//         let pageRest = countPage - page;
 //         for (let i = page - (5 - pageRest); i <= page + pageRest; i++) {
 //           arrPage.push(i);
 //         }
@@ -96,12 +96,12 @@ const moment = require('moment');
 
 // exports.login = async (req, res) => {
 //   try {
-//     const { email, password } = req.body;
+//     let { email, password } = req.body;
 
 //     if (email == 'admin' && password == 'admin')
 //       return res.redirect('/statistical?format=0&timeStamp=' + moment().unix());
 
-//     const data = await User.findOne({ email, password });
+//     let data = await User.findOne({ email, password });
 
 //     if (!data)
 //       return res.render('index', { msgError: 'Sai email hoặc mật khẩu' });
@@ -120,10 +120,10 @@ const moment = require('moment');
 
 exports.list = async (req, res) => {
   try {
-    const users = await Users.find();
-    const masters = await Masters.findOne();
+    let users = await Users.find();
+    let masters = await Masters.findOne();
 
-    const payload = {
+    let payload = {
       users,
       facilities: masters.facilities,
       specialized: masters.specialized,
@@ -138,20 +138,25 @@ exports.list = async (req, res) => {
 
 exports.findOne = async (req, res) => {
   try {
-    const { email } = req.params;
+    let { email, page } = req.params;
 
-    const user = await Users.findOne({ email });
-    const reports = await Reports.find({ emailReceiver: email })
+    let pageSize = 10;
+    let pageNumber = 1 || Number(page);
+    
 
+    let user = await Users.findOne({ email });
     if (!user) return res.sendStatus(404);
 
-    const payload = {
+    let reports = await Reports.find({ emailReceiver: email })
+
+    let payload = {
       user,
       reports,
       totalReports: reports.length,
     };
 
     res.render('profile', payload);
+
   } catch (error) {
     res.status(500).send(error.message)
   }
@@ -159,9 +164,9 @@ exports.findOne = async (req, res) => {
 
 exports.block = async (req, res) => {
   try {
-    const { _id } = req.body;
+    let { _id } = req.body;
 
-    const user = await Users.findByIdAndUpdate({ _id }, { isActive: false });
+    let user = await Users.findByIdAndUpdate({ _id }, { isActive: false });
     if (!user) return res.sendStatus(404);
 
     res.redirect(`/users/${user.email}`);
@@ -172,12 +177,12 @@ exports.block = async (req, res) => {
 
 exports.unblock = async (req, res) => {
   try {
-    const { _id } = req.body;
+    let { _id } = req.body;
 
-    const user = await Users.findOne({ _id });
+    let user = await Users.findOne({ _id });
     if (!user) return res.sendStatus(404);
 
-    const option = {
+    let option = {
       reportNumber: 0,
       isActive: true
     }
@@ -192,9 +197,9 @@ exports.unblock = async (req, res) => {
 
 exports.verifyReportRequest = async (req, res) => {
   try {
-    const { _idUser, _idReport, action } = req.body;
+    let { _idUser, _idReport, action } = req.body;
 
-    const user = await Users.findOne({ _id: _idUser });
+    let user = await Users.findOne({ _id: _idUser });
     if (!user) return res.sendStatus(404);
 
     let status;

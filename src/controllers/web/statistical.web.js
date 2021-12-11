@@ -1,9 +1,9 @@
-const User = require('../../models/users.schema');
-const Masters = require('../../models/masters.schema');
-const _ = require('lodash');
-const moment = require('moment');
+let User = require('../../models/users.schema');
+let Masters = require('../../models/masters.schema');
+let _ = require('lodash');
+let moment = require('moment');
 
-const randomNumber = (length) => {
+let randomNumber = (length) => {
   var arr = [];
   while (arr.length < length) {
     var r = Math.floor(Math.random() * 100) + 1;
@@ -13,16 +13,16 @@ const randomNumber = (length) => {
 };
 
 exports.statistical = async (req, res) => {
-  const masters = await Masters.findOne();
+  let masters = await Masters.findOne();
 
-  // const payload = {
+  // let payload = {
   //   users,
   //   facilities: masters.facilities,
   //   specialized: masters.specialized,
   //   course: masters.course
   // }
 
-  const {
+  let {
     timeStamp,
     format,
     course: courseParams,
@@ -39,9 +39,9 @@ exports.statistical = async (req, res) => {
     data = [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
   }
   try {
-    const totalUser = await User.countDocuments();
-    const totalUserMale = await User.countDocuments({ gender: 'Nam' });
-    const totalUserFemale = await User.countDocuments({ gender: 'Nữ' });
+    let totalUser = await User.countDocuments();
+    let totalUserMale = await User.countDocuments({ gender: 'Nam' });
+    let totalUserFemale = await User.countDocuments({ gender: 'Nữ' });
 
     res.render('statistical', {
       totalUser,

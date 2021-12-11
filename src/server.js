@@ -1,14 +1,14 @@
-const express = require('express');
-const path = require('path');
-const hbs = require('../src/config/hbsHelper');
-const connectDB = require('./config/connectDB');
-const webRouter = require('./routes/web.router');
-const apiRouter = require('./routes/api.router');
+let express = require('express');
+let path = require('path');
+let hbs = require('../src/config/hbsHelper');
+let connectDB = require('./config/connectDB');
+let webRouter = require('./routes/web.router');
+let apiRouter = require('./routes/api.router');
 
 connectDB();
 hbs;
 
-const app = express();
+let app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,7 +28,7 @@ app.use((req, res, next) => {
   res.sendStatus(404);
 });
 
-const port = process.env.PORT || 3000;
+let port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Listening on PORT ${port}`);
 });

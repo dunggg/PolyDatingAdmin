@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+let mongoose = require("mongoose");
 
-const Users = new mongoose.Schema(
+let Users = new mongoose.Schema(
   {
     email: { type: String, unique: true },
     name: String,
