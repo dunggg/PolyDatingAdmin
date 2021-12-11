@@ -6,6 +6,7 @@ const response = (statusCode, message, data = undefined) => {
 };
 
 /** Validate */
+//API
 const insertUser = joi.object({
   email: joi.string().email().min(10).max(50).required(),
   name: joi.string().min(5).max(20).required(),
@@ -26,13 +27,6 @@ const updateUser = joi.object({
   specialized: joi.string().required(),
 });
 
-const checkPassword = joi.object({
-  _id: joi.any(),
-  passOld: joi.string().required(),
-  passNew: joi.string().min(6).max(20).required(),
-  passConfirm: joi.string().min(6).max(20).required()
-})
-
 const insertReport = joi.object({
   emailReport: joi.string().email().required(),
   emailReported: joi.string().email().required(),
@@ -40,4 +34,23 @@ const insertReport = joi.object({
   content: joi.string().min(10).max(200).required()
 });
 
-module.exports = { response, insertUser, updateUser, checkPassword, insertReport };
+//Website
+const signIn = joi.object({
+  email: joi.string().email().required(),
+  password: joi.string().required()
+});
+
+const signUp = joi.object({
+  email: joi.string().email().min(10).max(50).required(),
+  password: joi.string().min(6).required(),
+  name: joi.string().min(5).max(20).required()
+});
+
+module.exports = {
+  response,
+  insertUser,
+  updateUser,
+  insertReport,
+  signIn,
+  signUp
+};

@@ -16,7 +16,7 @@ const sendMailRequestCode = async (req, res) => {
             from: '"Poly Dating" <quannhph11150@fpt.edu.vn>', // sender address
             to: `${req.decoded.email}`, // list of receivers
             subject: "Yêu cầu gửi mã xác nhận", // Subject line
-            html: `<p>Mã xác nhận: ${req.decoded.codeRandom}</p>
+            html: `<h3>Mã xác nhận: ${req.decoded.codeRandom}</h3>
                   <img src="https://f18-zpg.zdn.vn/6378515596215431194/7160a5fe91ec5ab203fd.jpg"> `, // html body
         });
 
@@ -27,4 +27,22 @@ const sendMailRequestCode = async (req, res) => {
     }
 };
 
-module.exports = { sendMailRequestCode };
+const sendMailForgotPassword = async (req, res) => {
+    try {
+        await transporter.sendMail({
+            from: '"Poly Dating" <quannhph11150@fpt.edu.vn>', // sender address
+            to: `${req.decoded.email}`, // list of receivers
+            subject: "Yêu cầu quên mật khẩu", // Subject line
+            html: `<h3>Mật khẩu: ${req.decoded.passRandom}</h3>
+                  <img src="https://f42-zpg.zdn.vn/6960682428680983532/966d3fa482ad49f310bc.jpg"> `, // html body
+        });
+
+        // res.render('index', { msgError: "Yêu cầu quên mật khẩu thành công" });
+        res.json("Yêu cầu quên mật khẩu thành công")
+
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+module.exports = { sendMailRequestCode, sendMailForgotPassword };

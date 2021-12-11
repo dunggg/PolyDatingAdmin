@@ -1,12 +1,7 @@
 const User = require('../../models/users.schema');
+const Masters = require('../../models/masters.schema');
 const _ = require('lodash');
 const moment = require('moment');
-const {
-  course,
-  hobbies,
-  specialized,
-  facilities,
-} = require('../api/edu-poly.api');
 
 exports.list = async (req, res) => {
   let isSearch = false;
@@ -118,7 +113,7 @@ exports.login = async (req, res) => {
 
     if (email == 'admin' && password == 'admin')
       return res.redirect('/statistical?format=0&timeStamp=' + moment().unix());
-  
+
     const data = await User.findOne({ email, password });
 
     if (!data)
@@ -162,3 +157,7 @@ exports.unblock = async (req, res) => {
     res.status(500).send(error.message);
   }
 };
+
+exports.forgotPassword = async (req, res) => {
+  res.render('forgot-password')
+}

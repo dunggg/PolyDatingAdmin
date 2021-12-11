@@ -9,6 +9,8 @@ const Employee = new mongoose.Schema(
         password: String,
         name: String,
         images: String,
+        accessToken: String,
+        isActive: Boolean,
         createdAt: String,
         updatedAt: String
     },

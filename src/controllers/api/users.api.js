@@ -87,55 +87,58 @@ exports.signOut = async (req, res) => {
   }
 };
 
-exports.signUp = async (req, res, next) => {
+exports.signUp = async (req, res) => {
   try {
     const { error, value } = insertUser.validate(req.body);
 
-    if (error) return res.status(400).json(response(400, error.message));
-
-    if (req.files.length < 2) return res.status(400).json(response(400, "Cần chọn ít nhất 2 ảnh"));
-
-    let images = [];
-    for (let index = 0; index < req.files.length; index++) {
-      images.push(pathUrl + req.files[index].filename);
+    if (error) {
+      res.status(400).json(response(400, error.message));
     }
+    // else if (req.files.length < 2) {
+    //   res.status(400).json(response(400, "Cần chọn ít nhất 2 ảnh"))
+    // }
+    else {
+      let images = [];
+      // for (let index = 0; index < req.files.length; index++) {
+      //   images.push(pathUrl + req.files[index].filename);
+      // }
 
-    let hobbies = value.hobbies.slice(1, -1).split(', ');
+      let hobbies = value.hobbies.slice(1, -1).split(', ');
 
-    let isShow = ["Mọi người", "Tất cả cơ sở", "Tất cả chuyên ngành", "Tất cả khóa học"];
+      let isShow = ["Mọi người", "Tất cả cơ sở", "Tất cả chuyên ngành", "Tất cả khóa học"];
 
-    const payload = {
-      email: value.email,
-      name: value.name,
-      images,
-      hobbies,
-      birthDay: value.birthDay,
-      gender: value.gender,
-      description: "Không có gì để hiển thị",
-      facilities: value.facilities,
-      specialized: value.specialized,
-      course: value.course,
-      isShow,
-      isActive: true,
-      statusHobby: false,
-      reportNumber: 0,
-      code: null,
-      createdAt: req.getTime,
-      updatedAt: req.getTime
+      const payload = {
+        email: value.email,
+        name: value.name,
+        images,
+        hobbies,
+        birthDay: value.birthDay,
+        gender: value.gender,
+        description: "Không có gì để hiển thị",
+        facilities: value.facilities,
+        specialized: value.specialized,
+        course: value.course,
+        isShow,
+        isActive: true,
+        statusHobby: false,
+        reportNumber: 0,
+        code: null,
+        createdAt: req.getTime,
+        updatedAt: req.getTime
+      }
+
+      await Users.create(payload); // Create User
+
+      const optionToken = {
+        email: value.email,
+        token: value.token,
+        createdAt: req.getTime,
+      }
+
+      await Tokens.create(optionToken); // Create Token
+
+      res.status(200).json(response(200, "Tạo tài khoản thành công"))
     }
-
-    await Users.create(payload); // Create User
-
-    const optionToken = {
-      email: value.email,
-      token: value.token,
-      createdAt: req.getTime,
-    }
-
-    await Tokens.create(optionToken); // Create Token
-
-    res.status(200).json(response(200, "Tạo tài khoản thành công"))
-
   } catch (error) {
     res.status(500).json(response(500, error.message));
   }

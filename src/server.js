@@ -2,8 +2,7 @@ const express = require('express');
 const path = require('path');
 const hbs = require('../src/config/hbsHelper');
 const connectDB = require('./config/connectDB');
-const indexRouter = require('./routes/web/index');
-const usersRouter = require('./routes/web/users.web');
+const webRouter = require('./routes/web.router');
 const apiRouter = require('./routes/api.router');
 
 connectDB();
@@ -20,8 +19,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/public', express.static(path.join(__dirname, 'public'))); // use bootstrap
 
 // Website
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/', webRouter);
 
 // Api
 app.use('/api', apiRouter);

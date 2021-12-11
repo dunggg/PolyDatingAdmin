@@ -9,6 +9,10 @@ router.get('/', (req, res) => {
   res.render('index');
 });
 
+router.get('/forgot-password', (req, res) => {
+  res.render('forgot-password');
+});
+
 router.use('/statistical', statistical);
 
 router.use('/utils', utils);
