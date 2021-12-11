@@ -16,13 +16,13 @@ exports.insert = async (req, res) => {
             }
 
             const payload = {
-                emailReceiver: value.emailReceiver,
                 emailSender: value.emailSender,
+                emailReceiver: value.emailReceiver,
                 title: value.title,
                 content: value.content,
                 images,
+                status: "Chờ duyệt",
                 createdAt: req.getTime,
-                updatedAt: req.getTime
             }
 
             await Reports.create(payload)

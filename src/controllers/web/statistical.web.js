@@ -1,7 +1,7 @@
 const User = require('../../models/users.schema');
+const Masters = require('../../models/masters.schema');
 const _ = require('lodash');
 const moment = require('moment');
-const { course, specialized, facilities } = require('../api/edu-poly.api');
 
 const randomNumber = (length) => {
   var arr = [];
@@ -13,6 +13,15 @@ const randomNumber = (length) => {
 };
 
 exports.statistical = async (req, res) => {
+  const masters = await Masters.findOne();
+
+  // const payload = {
+  //   users,
+  //   facilities: masters.facilities,
+  //   specialized: masters.specialized,
+  //   course: masters.course
+  // }
+
   const {
     timeStamp,
     format,
@@ -45,9 +54,9 @@ exports.statistical = async (req, res) => {
       totalMessage: randomNumber(data.length),
       totalBlock: randomNumber(data.length),
       data,
-      course,
-      specialized,
-      facilities,
+      course: masters.course,
+      specialized: masters.specialized,
+      facilities: masters.facilities,
       courseParams,
       specializedParams,
       facilitiesParams,
@@ -57,8 +66,8 @@ exports.statistical = async (req, res) => {
         data.length === 12
           ? `năm ${moment(timeStamp * 1000).format('YYYY')}`
           : data.length === 11
-          ? `từ năm ${data[0]} đến năm ${data[data.length - 1]}`
-          : `tháng ${moment(timeStamp * 1000).format('MM')} năm ${moment(
+            ? `từ năm ${data[0]} đến năm ${data[data.length - 1]}`
+            : `tháng ${moment(timeStamp * 1000).format('MM')} năm ${moment(
               timeStamp * 1000,
             ).format('YYYY')}`,
     });

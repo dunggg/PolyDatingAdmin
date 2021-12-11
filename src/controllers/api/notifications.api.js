@@ -5,30 +5,11 @@ exports.list = async (req, res) => {
     try {
         const { email } = req.params;
 
-        const option = {
-            'emailReceiver.email': email,
-            'emailReceiver.status': true
-        };
-
-        const data = await Nofitications.find(option);
-
-        const dataCheckSatus = [];
-
-        for (let index = 0; index < data.length; index++) {
-            const pos = data[index].emailReceiver;
-
-            for (let j = 0; j < pos.length; j++) {
-
-                if (pos[j].email == email && pos[j].status == true) {
-                    dataCheckSatus.push(data[index]);
-                    break;
-                }
-            }
-        }
+        const data = await Nofitications.find({ 'emailReceiver.email': email });
 
         const payload = {
-            total: dataCheckSatus.length,
-            nofitications: dataCheckSatus
+            total: data.length,
+            nofitications: data
         };
 
         res.status(200).json(response(200, `Lấy danh sách thông báo thành công`, payload));
@@ -47,17 +28,7 @@ exports.delete = async (req, res) => {
             randomKey
         }
 
-        const data = await Nofitications.findOne(optionFindOne);
-
-        let emailReceiver = data.emailReceiver;
-
-        let index = emailReceiver.map((v) => {
-            return v.email;
-        }).indexOf(email);
-
-        emailReceiver[index].status = false;
-
-        await Nofitications.updateMany(optionFindOne, { emailReceiver });
+        await Nofitications.deleteOne(optionFindOne);
         res.status(200).json(response(200, `Xóa thông báo thành công`));
 
     } catch (error) {

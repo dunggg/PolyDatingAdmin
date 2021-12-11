@@ -1,5 +1,7 @@
 const Users = require("../../models/users.schema");
 const Friends = require('../../models/friends.schema');
+const Reporst = require('../../models/reports.schema');
+const Notifications = require('../../models/notifications.schema');
 const Tokens = require('../../models/tokens.schema');
 const { response, insertUser, updateUser } = require("../../utils/utils");
 const randomString = require('randomstring');
@@ -295,11 +297,14 @@ exports.delete = async (req, res) => {
     else {
       await Friends.deleteMany({ 'myUser.email': data.email });
       await Friends.deleteMany({ 'friends.email': data.email });
+      await Notifications.deleteMany({ emailSender: data.email });
+      await Notifications.deleteMany({ emailReceiver: data.email });
+      await Reporst.deleteMany({ emailReceiver: data.email });
+      await Tokens.deleteOne({ email });
       await Users.deleteOne({ _id: data._id });
 
       res.status(200).json(response(200, "Xóa tài khoản thành công"));
     }
-
   } catch (error) {
     res.status(500).json(response(500, error.message));
   }

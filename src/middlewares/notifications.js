@@ -20,10 +20,7 @@ const pushNotificationUser = async (req, res) => {
 
         const optionNotifi = {
             emailSender: notifiData.emailSender,
-            emailReceiver: {
-                email: notifiData.emailReceiver,
-                status: true
-            },
+            emailReceiver: notifiData.emailReceiver,
             title: "Yêu cầu kết bạn",
             content: notifiData.content,
             link: null,

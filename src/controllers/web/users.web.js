@@ -1,4 +1,4 @@
-const User = require('../../models/users.schema');
+const Users = require('../../models/users.schema');
 const Reports = require('../../models/reports.schema');
 const Masters = require('../../models/masters.schema');
 const _ = require('lodash');
@@ -94,20 +94,6 @@ const moment = require('moment');
 //   }
 // };
 
-// exports.find = async (req, res, next) => {
-//   try {
-//     const { email } = req.params;
-
-//     const data = await User.findOne({ email });
-
-//     if (!data) return next();
-
-//     res.render('profile', { user: data });
-//   } catch (error) {
-//     res.status(500).send(error.message);
-//   }
-// };
-
 // exports.login = async (req, res) => {
 //   try {
 //     const { email, password } = req.body;
@@ -132,40 +118,9 @@ const moment = require('moment');
 //   }
 // };
 
-// exports.block = async (req, res) => {
-//   try {
-//     const { _id } = req.params;
-
-//     const data = await User.findByIdAndUpdate({ _id }, { isActive: 'Chặn' });
-
-//     res.redirect(`/users/${data.email}`);
-//   } catch (error) {
-//     res.status(500).send(error.message);
-//   }
-// };
-
-// exports.unblock = async (req, res) => {
-//   try {
-//     const { _id } = req.params;
-
-//     const data = await User.findByIdAndUpdate(
-//       { _id },
-//       { isActive: 'Kích hoạt' },
-//     );
-
-//     res.redirect(`/users/${data.email}`);
-//   } catch (error) {
-//     res.status(500).send(error.message);
-//   }
-// };
-
-// exports.forgotPassword = async (req, res) => {
-//   res.render('forgot-password')
-// }
-
 exports.list = async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await Users.find();
     const masters = await Masters.findOne();
 
     const payload = {
@@ -185,14 +140,15 @@ exports.findOne = async (req, res) => {
   try {
     const { email } = req.params;
 
-    const user = await User.findOne({ email });
-    const reports = await Reports.findOne({ emailReceiver: email })
+    const user = await Users.findOne({ email });
+    const reports = await Reports.find({ emailReceiver: email })
 
     if (!user) return res.sendStatus(404);
 
     const payload = {
       user,
-      reports
+      reports,
+      totalReports: reports.length,
     };
 
     res.render('profile', payload);
@@ -205,11 +161,10 @@ exports.block = async (req, res) => {
   try {
     const { _id } = req.body;
 
-    const data = await User.findByIdAndUpdate({ _id }, { isActive: false });
+    const user = await Users.findByIdAndUpdate({ _id }, { isActive: false });
+    if (!user) return res.sendStatus(404);
 
-    if (!data) return res.sendStatus(404);
-
-    res.redirect(`/users/${data.email}`);
+    res.redirect(`/users/${user.email}`);
   } catch (error) {
     res.status(500).send(error.message);
   }
@@ -219,12 +174,52 @@ exports.unblock = async (req, res) => {
   try {
     const { _id } = req.body;
 
-    const data = await User.findByIdAndUpdate({ _id }, { isActive: true });
+    const user = await Users.findOne({ _id });
+    if (!user) return res.sendStatus(404);
 
-    if (!data) return res.sendStatus(404);
+    const option = {
+      reportNumber: 0,
+      isActive: true
+    }
 
-    res.redirect(`/users/${data.email}`);
+    await Users.updateOne({ _id }, option);
+
+    res.redirect(`/users/${user.email}`);
   } catch (error) {
     res.status(500).send(error.message);
+  }
+};
+
+exports.verifyReportRequest = async (req, res) => {
+  try {
+    const { _idUser, _idReport, action } = req.body;
+
+    const user = await Users.findOne({ _id: _idUser });
+    if (!user) return res.sendStatus(404);
+
+    let status;
+    let reportNumber;
+
+    if (action == "true") {
+      status = "Chấp thuận";
+      reportNumber = user.reportNumber + 1;
+    }
+    else {
+      status = "Từ chối"
+      reportNumber = user.reportNumber;
+    }
+
+    if (user.reportNumber > 4) {
+      await Users.updateOne({ _id: _idUser }, { isActive: false });
+    }
+    else {
+      await Users.updateOne({ _id: _idUser }, { reportNumber });
+    }
+
+    await Reports.updateOne({ _id: _idReport }, { status });
+
+    res.redirect(`/users/${user.email}`);
+  } catch (error) {
+    res.status(500).send(error.message)
   }
 };

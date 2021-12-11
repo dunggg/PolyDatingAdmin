@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Notifications = new mongoose.Schema(
   {
     emailSender: String,
-    emailReceiver: [Object],
+    emailReceiver: String,
     title: String,
     content: String,
     link: String,
