@@ -300,7 +300,7 @@ exports.delete = async (req, res) => {
       await Notifications.deleteMany({ emailSender: data.email });
       await Notifications.deleteMany({ emailReceiver: data.email });
       await Reports.deleteMany({ emailReceiver: data.email });
-      await Tokens.deleteOne({ email });
+      await Tokens.deleteOne({ email: data.email });
       await Users.deleteOne({ _id: data._id });
 
       res.status(200).json(response(200, "Xóa tài khoản thành công"));
