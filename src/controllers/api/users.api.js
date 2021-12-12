@@ -66,7 +66,7 @@ exports.signIn = async (req, res) => {
 
         await Tokens.create(optionToken);
       }
-      res.status(200).json(response(200, "Đăng nhập thành công", currentUser));
+      res.status(200).json(response(200, "Đăng nhập thành công", user));
     };
   } catch (error) {
     res.status(500).json(response(500, error.message));
