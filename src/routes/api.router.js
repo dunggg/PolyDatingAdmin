@@ -17,12 +17,12 @@ const notifications = require("../controllers/api/notifications.api");
 router.get("/master/list", masters.list);
 
 router.post("/users/sign-up", uploadFile, users.signUp);
+router.post("/users/sign-in", users.signIn);
 router.use(checkToken);
 router.use(getTimeZone);
 
 // 2. Users
 router.get("/users/list", users.list);
-router.post("/users/sign-in", users.signIn);
 router.post("/users/sign-out", users.signOut);
 router.post("/users/update/images", uploadFile, users.updateImages);
 router.post("/users/update/information", users.updateInformation);

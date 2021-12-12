@@ -13,7 +13,7 @@ let pathUrl = "https://poly-dating.herokuapp.com/public/data_images/";
 exports.list = async (req, res) => {
   try {
     let { isShow, hobbies, statusHobby } = req.query;
-
+    
     let shows = isShow.slice(1, -1).split(', ');
     let hobby = hobbies.slice(1, -1).split(', ');
     let data;
@@ -24,7 +24,6 @@ exports.list = async (req, res) => {
         isShow: shows,
         hobbies: { $all: hobby }
       }
-
       data = await Users.find(option);
     }
     // Không tìm cùng
@@ -46,24 +45,29 @@ exports.list = async (req, res) => {
 
 exports.signIn = async (req, res) => {
   try {
-    let { token } = req.body;
+    let { email, token } = req.body;
+    let user = await Users.findOne({ email });
 
-    let currentUser = req.currentUser;
-
-    let dataToken = await Tokens.findOne({ email: currentUser.email });
-
-    if (!dataToken) {
-      let optionToken = {
-        email: currentUser.email,
-        token: "null" || token,
-        createdAt: req.getTime,
-      }
-
-      await Tokens.create(optionToken);
+    if (!user) {
+      res.status(404).json(response(404, `Tài khoản không tồn tại`, null));
     }
+    else if (user.isActive == false) {
+      res.status(400).json(response(400, `Tài khoản của bạn đã bị khóa`, user));
+    }
+    else {
+      let dataToken = await Tokens.findOne({ email });
 
-    res.status(200).json(response(200, "Đăng nhập thành công", currentUser));
+      if (!dataToken) {
+        let optionToken = {
+          email,
+          token: "null" || token,
+          createdAt: req.getTime,
+        }
 
+        await Tokens.create(optionToken);
+      }
+      res.status(200).json(response(200, "Đăng nhập thành công", currentUser));
+    };
   } catch (error) {
     res.status(500).json(response(500, error.message));
   }
