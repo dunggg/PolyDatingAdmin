@@ -14,10 +14,10 @@ let checkToken = async (req, res, next) => {
         let user = await Users.findOne({ email: dataToken });
 
         if (!user) {
-            res.status(404).json(response(404, `Tài khoản không tồn tại`, null));
+            res.status(404).json(response(404, "Not Found", `Tài khoản không tồn tại`, null));
         }
         else if (user.isActive == false) {
-            res.status(400).json(response(400, `Tài khoản của bạn đã bị khóa`, user));
+            res.status(400).json(response(400, "Account Blocked", `Tài khoản của bạn đã bị khóa`, user));
         }
         else {
             req.currentUser = user;
@@ -27,7 +27,7 @@ let checkToken = async (req, res, next) => {
         if (error.message == "jwt malformed") {
             return res.sendStatus(401);
         }
-        res.status(500).json(response(500, error.message));
+        res.status(500).json(response(500, "Error", error.message));
     }
 };
 

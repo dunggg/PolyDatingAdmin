@@ -9,7 +9,7 @@ exports.list = async (req, res) => {
         let { page } = req.params;
         let { search, status, title } = req.query;
 
-        let pageSize = 20;
+        let pageSize = 10;
         let pageNumber = Number(page) || 1;
         let skipPage = (pageSize * pageNumber) - pageSize;
 

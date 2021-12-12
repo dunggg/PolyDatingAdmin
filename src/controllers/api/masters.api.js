@@ -13,9 +13,9 @@ exports.list = async (req, res) => {
             hobbies: data.hobbies
         }
 
-        res.status(200).json(response(200, "Lấy dữ liệu Master thành công", payload));
+        res.status(200).json(response(200, "Pass", "Lấy dữ liệu Master thành công", payload));
 
     } catch (error) {
-        res.status(500).json(response(500, error.message));
+        res.status(500).json(response(500, "Error", error.message));
     }
 };

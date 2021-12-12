@@ -19,10 +19,10 @@ exports.listFriendsRequests = async (req, res) => {
             friends: dataFriend
         }
 
-        res.status(200).json(response(200, `Lấy danh sách yêu cầu kết bạn của ${currentUser.name}`, payload));
+        res.status(200).json(response(200, "Pass", `Lấy danh sách yêu cầu kết bạn của ${currentUser.name}`, payload));
 
     } catch (error) {
-        res.status(500).json(response(500, error.message));
+        res.status(500).json(response(500, "Error", error.message));
     }
 };
 
@@ -43,10 +43,10 @@ exports.listOfRequestsSent = async (req, res) => {
             friends: dataFriend
         }
 
-        res.status(200).json(response(200, `Lấy danh sách lời mời kết bạn đã gửi của ${currentUser.name}`, payload));
+        res.status(200).json(response(200, "Pass", `Lấy danh sách lời mời kết bạn đã gửi của ${currentUser.name}`, payload));
 
     } catch (error) {
-        res.status(500).json(response(500, error.message));
+        res.status(500).json(response(500, "Error", error.message));
     }
 };
 
@@ -67,10 +67,10 @@ exports.listFriends = async (req, res) => {
             friends: dataFriend
         }
 
-        res.status(200).json(response(200, `Lấy danh sách bạn bè của ${currentUser.name}`, payload));
+        res.status(200).json(response(200, "Pass", `Lấy danh sách bạn bè của ${currentUser.name}`, payload));
 
     } catch (error) {
-        res.status(500).json(response(500, error.message));
+        res.status(500).json(response(500, "Error", error.message));
     }
 };
 
@@ -111,10 +111,10 @@ exports.friendRequest = async (req, res, next) => {
         // Nếu A kết bạn B, chỉ được gửi 1 lần. Nếu đã là bạn bè thì không được gửi.
         if (dataMyEmail) {
             if (dataMyEmail.status == true) {
-                return res.status(400).json(response(400, `Bạn và ${dataMyFriend.name} đã là bạn bè`));
+                return res.status(400).json(response(400, 'Field Required', `Bạn và ${dataMyFriend.name} đã là bạn bè`));
             }
 
-            res.status(400).json(response(400, `Đã gửi lời kết bạn tới ${dataMyFriend.name}, vui lòng chờ đợi`));
+            res.status(400).json(response(400, 'Field Required', `Đã gửi lời kết bạn tới ${dataMyFriend.name}, vui lòng chờ đợi`));
         }
 
         // Nếu B chấp nhận lời kết bạn thì A và B là bạn bè
@@ -146,7 +146,7 @@ exports.friendRequest = async (req, res, next) => {
         }
 
     } catch (error) {
-        res.status(500).json(response(500, error.message));
+        res.status(500).json(response(500, "Error", error.message));
     }
 };
 
@@ -169,9 +169,9 @@ exports.delete = async (req, res) => {
         await Friends.deleteOne(optionFindOneMyUser);
         await Friends.deleteOne(optionFindOneMyFriend);
 
-        res.status(200).json(response(200, `Yêu cầu xóa thành công`));
+        res.status(200).json(response(200, "Pass", `Yêu cầu xóa thành công`));
 
     } catch (error) {
-        res.status(500).json(response(500, error.message));
+        res.status(500).json(response(500, "Error", error.message));
     }
 };
