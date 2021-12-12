@@ -20,10 +20,10 @@ let sendMailRequestCode = async (req, res) => {
                   <img src="https://f18-zpg.zdn.vn/6378515596215431194/7160a5fe91ec5ab203fd.jpg"> `, // html body
         });
 
-        res.status(200).json(response(200, "Pass", "Yêu cầu gửi mã xác nhận thành công"));
+        res.status(200).json(response(200, "Yêu cầu gửi mã xác nhận thành công"));
 
     } catch (error) {
-        res.status(500).json(response(500, "Error", error.message));
+        res.status(500).json(response(500, error.message));
     }
 };
 

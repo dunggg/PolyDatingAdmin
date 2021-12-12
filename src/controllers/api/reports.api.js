@@ -26,9 +26,9 @@ exports.insert = async (req, res) => {
             }
 
             await Reports.create(payload)
-            res.status(200).json(response(200, "Pass", `Gửi báo cáo thành công, chúng tôi sẽ kiểm duyệt trong vòng 7 ngày.`))
+            res.status(200).json(response(200, `Gửi báo cáo thành công, chúng tôi sẽ kiểm duyệt trong vòng 7 ngày.`))
         }
     } catch (error) {
-        res.status(500).json(response(500, "Error", error.message));
+        res.status(500).json(response(500, error.message));
     }
 };

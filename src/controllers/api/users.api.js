@@ -36,10 +36,10 @@ exports.list = async (req, res) => {
       users: data
     }
 
-    res.status(200).json(response(200, "Pass", "Lấy danh sách người dùng thành công", payload));
+    res.status(200).json(response(200, "Lấy danh sách người dùng thành công", payload));
 
   } catch (error) {
-    res.status(500).json(response(500, "Error", error.message));
+    res.status(500).json(response(500, error.message));
   }
 };
 
@@ -49,10 +49,10 @@ exports.signIn = async (req, res) => {
     let user = await Users.findOne({ email });
 
     if (!user) {
-      res.status(404).json(response(404, "Not Found", `Tài khoản không tồn tại`, null));
+      res.status(404).json(response(404, `Tài khoản không tồn tại`, null));
     }
     else if (user.isActive == false) {
-      res.status(400).json(response(400, "Account Blocked", `Tài khoản của bạn đã bị khóa`, user));
+      res.status(403).json(response(403, `Tài khoản của bạn đã bị khóa`, user));
     }
     else {
       let dataToken = await Tokens.findOne({ email });
@@ -66,20 +66,20 @@ exports.signIn = async (req, res) => {
 
         await Tokens.create(optionToken);
       }
-      res.status(200).json(response(200, "Pass", "Đăng nhập thành công", user));
+      res.status(200).json(response(200, "Đăng nhập thành công", user));
     };
   } catch (error) {
-    res.status(500).json(response(500, "Error", error.message));
+    res.status(500).json(response(500, error.message));
   }
 };
 
 exports.signOut = async (req, res) => {
   try {
     await Tokens.deleteOne({ email: req.currentUser.email });
-    res.status(200).json(response(200, "Pass", "Đăng xuất thành công"));
+    res.status(200).json(response(200, "Đăng xuất thành công"));
 
   } catch (error) {
-    res.status(500).json(response(500, "Error", error.message));
+    res.status(500).json(response(500, error.message));
   }
 };
 
@@ -88,10 +88,10 @@ exports.signUp = async (req, res) => {
     let { error, value } = insertUser.validate(req.body);
 
     if (error) {
-      res.status(400).json(response(400, "Field Required", error.message));
+      res.status(400).json(response(400, error.message));
     }
     else if (req.files.length < 2) {
-      res.status(400).json(response(400, "Field Required", "Cần chọn ít nhất 2 ảnh"))
+      res.status(400).json(response(400, "Cần chọn ít nhất 2 ảnh"))
     }
     else {
       let images = [];
@@ -134,10 +134,10 @@ exports.signUp = async (req, res) => {
 
       await Tokens.create(optionToken); // Create Token
 
-      res.status(200).json(response(200, "Pass", "Tạo tài khoản thành công"))
+      res.status(200).json(response(200, "Tạo tài khoản thành công"))
     }
   } catch (error) {
-    res.status(500).json(response(500, "Error", error.message));
+    res.status(500).json(response(500, error.message));
   }
 };
 
@@ -151,7 +151,7 @@ exports.updateImages = async (req, res) => {
     // Xóa ảnh
     if (checkRemove === "true") {
       if (images.length <= 2) {
-        res.status(400).json(response(400, "Min Images", "Không thể xóa khi còn 2 ảnh"));
+        res.status(400).json(response(400, "Không thể xóa khi còn 2 ảnh"));
       }
       else {
         let index = images.indexOf(imageUrl);
@@ -172,10 +172,10 @@ exports.updateImages = async (req, res) => {
     }
 
     await Users.updateOne({ _id: currentUser._id }, payload)
-    res.status(200).json(response(200, "Pass", "Cập nhật ảnh thành công", images));
+    res.status(200).json(response(200, "Cập nhật ảnh thành công", images));
 
   } catch (error) {
-    res.status(500).json(response(500, "Error", error.message));
+    res.status(500).json(response(500, error.message));
   }
 };
 
@@ -183,7 +183,7 @@ exports.updateInformation = async (req, res) => {
   try {
     let { error, value } = updateUser.validate(req.body);
 
-    if (error) return res.status(400).json(response(400, "Field Required", error.message));
+    if (error) return res.status(400).json(response(400, error.message));
 
     let hobbies = value.hobbies.slice(1, -1).split(', ');
 
@@ -196,10 +196,10 @@ exports.updateInformation = async (req, res) => {
     }
 
     await Users.updateOne({ _id: req.currentUser._id }, payload);
-    res.status(200).json(response(200, "Pass", "Cập nhật thông tin thành công"));
+    res.status(200).json(response(200, "Cập nhật thông tin thành công"));
 
   } catch (error) {
-    res.status(500).json(response(500, "Error", error.message));
+    res.status(500).json(response(500, error.message));
   }
 };
 
@@ -215,10 +215,10 @@ exports.updateIsShow = async (req, res) => {
     }
 
     await Users.updateOne({ _id: req.currentUser._id }, payload);
-    res.status(200).json(response(200, "Pass", "Cập nhật hiển thị thành công"));
+    res.status(200).json(response(200, "Cập nhật hiển thị thành công"));
 
   } catch (error) {
-    res.status(500).json(response(500, "Error", error.message));
+    res.status(500).json(response(500, error.message));
   }
 };
 
@@ -232,10 +232,10 @@ exports.updateStatusHobby = async (req, res) => {
     }
 
     await Users.updateOne({ _id: req.currentUser._id }, payload);
-    res.status(200).json(response(200, "Pass", "Cập nhật tìm kiếm sở thích thành công"));
+    res.status(200).json(response(200, "Cập nhật tìm kiếm sở thích thành công"));
 
   } catch (error) {
-    res.status(500).json(response(500, "Error", error.message));
+    res.status(500).json(response(500, error.message));
   }
 };
 
@@ -270,7 +270,7 @@ exports.requestCode = async (req, res, next) => {
     // send email
 
   } catch (error) {
-    res.status(500).json(response(500, "Error", error.message));
+    res.status(500).json(response(500, error.message));
   }
 };
 
@@ -280,10 +280,10 @@ exports.delete = async (req, res) => {
     let currentUser = req.currentUser;
 
     if (!code) {
-      res.status(400).json(response(400, "Field Required", "Vui lòng nhập mã xác nhận"));
+      res.status(400).json(response(400, "Vui lòng nhập mã xác nhận"));
     }
     else if (code != currentUser.code) {
-      res.status(400).json(response(400, "Field Required", "Sai mã xác nhận"));
+      res.status(400).json(response(400, "Sai mã xác nhận"));
     }
     else {
       await Friends.deleteMany({ 'myUser.email': currentUser.email });
@@ -294,9 +294,9 @@ exports.delete = async (req, res) => {
       await Tokens.deleteOne({ email: currentUser.email });
       await Users.deleteOne({ _id: currentUser._id });
 
-      res.status(200).json(response(200, "Pass", "Xóa tài khoản thành công"));
+      res.status(200).json(response(200, "Xóa tài khoản thành công"));
     }
   } catch (error) {
-    res.status(500).json(response(500, "Error", error.message));
+    res.status(500).json(response(500, error.message));
   }
 };

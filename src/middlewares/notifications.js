@@ -42,10 +42,10 @@ let pushNotificationUser = async (req, res) => {
         };
 
         fetch('https://fcm.googleapis.com/fcm/send', optionPush)
-            .then(() => res.status(200).json(response(200, "Pass", notifiData.message)));
+            .then(() => res.status(200).json(response(200, notifiData.message)));
 
     } catch (error) {
-        res.status(500).json(response(500, "Error", error.message));
+        res.status(500).json(response(500, error.message));
     }
 };
 

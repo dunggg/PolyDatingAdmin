@@ -30,17 +30,17 @@ let uploadFile = (req, res, next) => {
     try {
         uploadMulter(req, res, (err) => {
             if (err instanceof multer.MulterError) {
-                res.status(400).json(response(400, "Field Required", err.message));
+                res.status(400).json(response(400, err.message));
             }
             else if (err) {
-                res.status(400).json(response(400, "Field Required", err.message));
+                res.status(400).json(response(400, err.message));
             }
             else {
                 next();
             }
         });
     } catch (error) {
-        res.status(500).json(response(500, "Error", error.message));
+        res.status(500).json(response(500, error.message));
     }
 };
 
