@@ -1,14 +1,8 @@
 const joi = require("joi");
 
 /** Base Response */
-
-//200: Pass
-//500: Error
-//404: Not Found
-//400: Fail, Field Required, Account Blocked, Min Images
-
-const response = (statusCode, status, message, data = undefined) => {
-  return { statusCode, status, message, data };
+const response = (statusCode,  message, data = undefined) => {
+  return { statusCode,  message, data };
 };
 
 /** Validate */
