@@ -17,6 +17,7 @@ let Users = new mongoose.Schema(
     statusHobby: Boolean,
     reportNumber: Number,
     code: String,
+    accessToken: String,
     createdAt: String,
     updatedAt: String
   },

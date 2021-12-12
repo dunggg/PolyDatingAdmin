@@ -30,8 +30,8 @@ router.post('/users/delete', users.delete);
 router.get('/reports/page/:page', reports.list);
 router.post('/reports/verify-report-request', reports.verifyReportRequest);
 
-//4. Reports
-router.get('/notifications', notifications.list);
+//4. Notifications
+router.get('/notifications/page/:page', notifications.list);
 
 //5. Statistical
 router.get('/statistical', statistical.statistical);

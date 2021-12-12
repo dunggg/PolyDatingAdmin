@@ -9,7 +9,7 @@ exports.list = async (req, res) => {
         let { page } = req.params;
         let { search, status, title } = req.query;
 
-        let pageSize = 10;
+        let pageSize = 20;
         let pageNumber = Number(page) || 1;
         let skipPage = (pageSize * pageNumber) - pageSize;
 
@@ -26,10 +26,12 @@ exports.list = async (req, res) => {
                 title: { $regex: `.*${title}.*` },
                 status: { $regex: `.*${status}.*` },
                 $or: [
-                    { emailSender: { $regex: `.*${search}.*` } },
-                    { emailReceiver: { $regex: `.*${search}.*` } },
-                    { content: { $regex: `.*${search}.*` } },
-                    { createdAt: { $regex: `.*${search}.*` } }
+                    { emailSender: { $regex: `.*${search}.*`, $options: "i" } },
+                    { emailReceiver: { $regex: `.*${search}.*`, $options: "i" } },
+                    { title: { $regex: `.*${search}.*`, $options: "i" } },
+                    { content: { $regex: `.*${search}.*`, $options: "i" } },
+                    { status: { $regex: `.*${search}.*`, $options: "i" } },
+                    { createdAt: { $regex: `.*${search}.*`, $options: "i" } }
                 ]
             };
 

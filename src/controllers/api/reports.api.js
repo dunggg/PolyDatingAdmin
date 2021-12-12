@@ -16,7 +16,7 @@ exports.insert = async (req, res) => {
             }
 
             let payload = {
-                emailSender: value.emailSender,
+                emailSender: req.currentUser.email,
                 emailReceiver: value.emailReceiver,
                 title: value.title,
                 content: value.content,
@@ -26,7 +26,7 @@ exports.insert = async (req, res) => {
             }
 
             await Reports.create(payload)
-            res.status(200).json(response(200, `Gửi báo cáo thành công`))
+            res.status(200).json(response(200, `Gửi báo cáo thành công, chúng tôi sẽ kiểm duyệt trong vòng 7 ngày.`))
         }
     } catch (error) {
         res.status(500).json(response(500, error.message));

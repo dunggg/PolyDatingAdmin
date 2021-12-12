@@ -13,11 +13,18 @@
                 <ul class="navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link" href="/statistical?format=0&timeStamp={{timeStamp}}"><i
                                 class="fas fa-tachometer-alt"></i><span>Thống kê</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/users/page/1"><i class="fas fa-user"></i><span>Người
+                    <li class="nav-item"><a class="nav-link" href="/users"><i class="fas fa-user"></i><span>Người
                                 dùng</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/reports"><i class="fas fa-flag"></i><span>Báo
-                                cáo</span></a></li>
-                    <li class="nav-item"><a class="nav-link active" href="/notifications"><i
+                    <li class="nav-item">
+                        <a class="nav-link" href="/reports/page/1">
+                            <i class="fas fa-flag"></i>
+                            <span>Báo cáo</span>
+                            {{#if (gt reportsWait 0)}}
+                            <span class="text-warning"> {{reportsWait}} lượt</span>
+                            {{/if}}
+                        </a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link active" href="/notifications/page/1"><i
                                 class="fas fa-bell"></i><span>Thông báo</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-sign-out-alt"></i><span>Đăng
                                 xuất</span></a></li>
@@ -91,7 +98,7 @@
                                     <div class="text-md-end dataTables_filter" id="dataTable_filter">
                                         <label class="form-label">
 
-                                            <form action="/reports/page/1" method="get" style="display: flex;">
+                                            <form action="/notifications/page/1" method="get" style="display: flex;">
                                                 <input type="search" class="form-control form-control-sm me-4"
                                                     style="width: auto;" aria-controls="dataTable" name="search"
                                                     placeholder="Tìm kiếm...">
@@ -141,20 +148,60 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6 align-self-center">
-                                    <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Hiển
-                                        thị 1 đến 10 của 21</p>
+                                    <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">
+                                        Hiển thị {{countFrom}} đến {{countTo}} trong tổng {{countNotifications}}</p>
                                 </div>
                                 <div class="col-md-6">
                                     <nav
                                         class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
                                         <ul class="pagination">
-                                            <li class="page-item disabled"><a class="page-link" href="#"
-                                                    aria-label="Previous"><span aria-hidden="true">«</span></a></li>
-                                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                            <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span
-                                                        aria-hidden="true">»</span></a></li>
+
+                                            {{!-- Nếu page < 2 thì ẩn nút pre --}} {{#if ( gt countNotifications 0)}}
+                                                {{#if (lt pageNumber 2)}} <li class="page-item disabled"><a
+                                                    class="page-link" href="#" aria-label="Previous"><span
+                                                        aria-hidden="true">«</span></a>
+                                                </li>
+                                                {{else}}
+                                                <li class="page-item"><a class="page-link"
+                                                        href="/notifications/page/{{previousPage}}"
+                                                        aria-label="Previous"><span aria-hidden="true">«</span></a>
+                                                </li>
+                                                {{/if}}
+                                                {{/if}}
+                                                {{!-- ------------------------------- --}}
+
+                                                {{!-- List page --}}
+                                                {{#each countNotificationsPage}}
+
+                                                {{#if (eq this @root.pageNumber)}}
+                                                <li class="page-item active"><a class="page-link"
+                                                        href="/notifications/page/{{this}}">{{this}}</a>
+                                                </li>
+                                                {{else}}
+                                                <li class="page-item"><a class="page-link"
+                                                        href="/notifications/page/{{this}}">{{this}}</a>
+                                                </li>
+                                                {{/if}}
+
+                                                {{/each}}
+                                                {{!-- ------------------------------- --}}
+
+                                                {{!-- Nếu page = tổng số page thì ẩn nút next --}}
+                                                {{#if (eq pageNumber totalNotificationsPage)}}
+                                                <li class="page-item disabled"><a class="page-link" href="#"
+                                                        aria-label="Previous"><span aria-hidden="true">»</span></a>
+                                                </li>
+                                                {{else}}
+                                                {{#if (gt countNotifications 0)}}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="/notifications/page/{{nextPage}}"
+                                                        aria-label="Previous">
+                                                        <span aria-hidden="true">»</span>
+                                                    </a>
+                                                </li>
+                                                {{/if}}
+                                                {{/if}}
+                                                {{!-- ------------------------------- --}}
                                         </ul>
                                     </nav>
                                 </div>

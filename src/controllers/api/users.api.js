@@ -4,7 +4,9 @@ let Reports = require('../../models/reports.schema');
 let Notifications = require('../../models/notifications.schema');
 let Tokens = require('../../models/tokens.schema');
 let { response, insertUser, updateUser } = require("../../utils/utils");
+let info = require('../../config/info');
 let randomString = require('randomstring');
+let jwt = require('jsonwebtoken');
 
 let pathUrl = "https://poly-dating.herokuapp.com/public/data_images/";
 
@@ -44,33 +46,23 @@ exports.list = async (req, res) => {
 
 exports.signIn = async (req, res) => {
   try {
-    let { email, token } = req.body;
+    let { token } = req.body;
 
-    let user = await Users.findOne({ email });
+    let currentUser = req.currentUser;
 
-    if (!user) {
-      res.status(404).json(response(404, `Người dùng không tồn tại`, null));
-    }
+    let dataToken = await Tokens.findOne({ email: currentUser.email });
 
-    else if (user.isActive == false) {
-      res.status(400).json(response(400, `Tài khoản của bạn đã bị khóa`, user));
-    }
-
-    else {
-      let dataToken = await Tokens.findOne({ email });
-
-      if (!dataToken) {
-        let optionToken = {
-          email,
-          token,
-          createdAt: req.getTime,
-        }
-
-        await Tokens.create(optionToken);
+    if (!dataToken) {
+      let optionToken = {
+        email: currentUser.email,
+        token: "null" || token,
+        createdAt: req.getTime,
       }
 
-      res.status(200).json(response(200, "Đăng nhập thành công", user));
+      await Tokens.create(optionToken);
     }
+
+    res.status(200).json(response(200, "Đăng nhập thành công", currentUser));
 
   } catch (error) {
     res.status(500).json(response(500, error.message));
@@ -79,9 +71,7 @@ exports.signIn = async (req, res) => {
 
 exports.signOut = async (req, res) => {
   try {
-    let { email } = req.body;
-
-    await Tokens.deleteOne({ email });
+    await Tokens.deleteOne({ email: req.currentUser.email });
     res.status(200).json(response(200, "Đăng xuất thành công"));
 
   } catch (error) {
@@ -107,6 +97,7 @@ exports.signUp = async (req, res) => {
 
       let hobbies = value.hobbies.slice(1, -1).split(', ');
       let isShow = ["Mọi người", "Tất cả cơ sở", "Tất cả chuyên ngành", "Tất cả khóa học"];
+      let accessToken = jwt.sign(value.email, info.accessKey);
 
       let payload = {
         email: value.email,
@@ -124,6 +115,7 @@ exports.signUp = async (req, res) => {
         statusHobby: false,
         reportNumber: 0,
         code: null,
+        accessToken,
         createdAt: req.getTime,
         updatedAt: req.getTime
       }
@@ -147,20 +139,22 @@ exports.signUp = async (req, res) => {
 
 exports.updateImages = async (req, res) => {
   try {
-    let { _id, imageUrl, checkRemove } = req.body;
+    let { imageUrl, checkRemove } = req.body;
 
-    let data = await Users.findOne({ _id });
-
-    let images = data.images;
+    let currentUser = req.currentUser;
+    let images = currentUser.images;
 
     // Xóa ảnh
     if (checkRemove === "true") {
-      if (images.length <= 2) return res.status(400).json(response(400, "Không thể xóa khi còn 2 ảnh"));
+      if (images.length <= 2) {
+        res.status(400).json(response(400, "Không thể xóa khi còn 2 ảnh"));
+      }
+      else {
+        let index = images.indexOf(imageUrl);
 
-      let index = images.indexOf(imageUrl);
-
-      if (index != -1) {
-        images.splice(index, 1)
+        if (index != -1) {
+          images.splice(index, 1)
+        }
       }
     }
     // Thêm ảnh
@@ -173,7 +167,7 @@ exports.updateImages = async (req, res) => {
       updatedAt: req.getTime
     }
 
-    await Users.updateOne({ _id: data._id }, payload)
+    await Users.updateOne({ _id: currentUser._id }, payload)
     res.status(200).json(response(200, "Cập nhật ảnh thành công", images));
 
   } catch (error) {
@@ -197,7 +191,7 @@ exports.updateInformation = async (req, res) => {
       updatedAt: req.getTime
     }
 
-    await Users.findOneAndUpdate({ _id: value._id }, payload);
+    await Users.updateOne({ _id: req.currentUser._id }, payload);
     res.status(200).json(response(200, "Cập nhật thông tin thành công"));
 
   } catch (error) {
@@ -207,7 +201,7 @@ exports.updateInformation = async (req, res) => {
 
 exports.updateIsShow = async (req, res) => {
   try {
-    let { _id, isShow } = req.body;
+    let { isShow } = req.body;
 
     let shows = isShow.slice(1, -1).split(', ');
 
@@ -216,7 +210,7 @@ exports.updateIsShow = async (req, res) => {
       updatedAt: req.getTime
     }
 
-    await Users.findOneAndUpdate({ _id }, payload);
+    await Users.updateOne({ _id: req.currentUser._id }, payload);
     res.status(200).json(response(200, "Cập nhật hiển thị thành công"));
 
   } catch (error) {
@@ -226,14 +220,14 @@ exports.updateIsShow = async (req, res) => {
 
 exports.updateStatusHobby = async (req, res) => {
   try {
-    let { _id, statusHobby } = req.body;
+    let { statusHobby } = req.body;
 
     let payload = {
       statusHobby,
       updatedAt: req.getTime
     }
 
-    await Users.findOneAndUpdate({ _id }, payload);
+    await Users.updateOne({ _id: req.currentUser._id }, payload);
     res.status(200).json(response(200, "Cập nhật tìm kiếm sở thích thành công"));
 
   } catch (error) {
@@ -243,12 +237,6 @@ exports.updateStatusHobby = async (req, res) => {
 
 exports.requestCode = async (req, res, next) => {
   try {
-    let { email } = req.body;
-
-    let data = await Users.findOne({ email });
-
-    if (!data) return res.status(404).json(response(404, "Email không tồn tại"));
-
     let codeRandom = randomString.generate(6);
 
     let payload = {
@@ -256,7 +244,7 @@ exports.requestCode = async (req, res, next) => {
       updatedAt: req.getTime
     }
 
-    await Users.updateOne({ _id: data._id }, payload);
+    await Users.updateOne({ _id: req.currentUser._id }, payload);
 
     // Nếu sau 5 phút (300000 ms) code không được nhập thì xóa code
     setTimeout(async () => {
@@ -267,11 +255,11 @@ exports.requestCode = async (req, res, next) => {
         updatedAt: time
       }
 
-      await Users.updateOne({ _id: data._id }, payload2);
+      await Users.updateOne({ _id: req.currentUser._id }, payload2);
     }, 300000);
 
     req.decoded = {
-      email,
+      email: req.currentUser.email,
       codeRandom
     };
     next()
@@ -284,24 +272,23 @@ exports.requestCode = async (req, res, next) => {
 
 exports.delete = async (req, res) => {
   try {
-    let { _id, code } = req.body;
-
-    let data = await Users.findOne({ _id });
+    let { code } = req.body;
+    let currentUser = req.currentUser;
 
     if (!code) {
       res.status(400).json(response(400, "Vui lòng nhập mã xác nhận"));
     }
-    else if (code != data.code) {
+    else if (code != currentUser.code) {
       res.status(400).json(response(400, "Sai mã xác nhận"));
     }
     else {
-      await Friends.deleteMany({ 'myUser.email': data.email });
-      await Friends.deleteMany({ 'friends.email': data.email });
-      await Notifications.deleteMany({ emailSender: data.email });
-      await Notifications.deleteMany({ emailReceiver: data.email });
-      await Reports.deleteMany({ emailReceiver: data.email });
-      await Tokens.deleteOne({ email: data.email });
-      await Users.deleteOne({ _id: data._id });
+      await Friends.deleteMany({ 'myUser.email': currentUser.email });
+      await Friends.deleteMany({ 'friends.email': currentUser.email });
+      await Notifications.deleteMany({ emailSender: currentUser.email });
+      await Notifications.deleteMany({ emailReceiver: currentUser.email });
+      await Reports.deleteMany({ emailReceiver: currentUser.email });
+      await Tokens.deleteOne({ email: currentUser.email });
+      await Users.deleteOne({ _id: currentUser._id });
 
       res.status(200).json(response(200, "Xóa tài khoản thành công"));
     }

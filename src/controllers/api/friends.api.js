@@ -5,10 +5,10 @@ let { response } = require("../../utils/utils");
 // Danh sách yêu cầu kết bạn
 exports.listFriendsRequests = async (req, res) => {
     try {
-        let { email } = req.params;
+        let currentUser = req.currentUser;
 
         let optionFind = {
-            "friend.email": email,
+            "friend.email": currentUser.email,
             status: false
         }
 
@@ -19,7 +19,7 @@ exports.listFriendsRequests = async (req, res) => {
             friends: dataFriend
         }
 
-        res.status(200).json(response(200, `Lấy danh sách yêu cầu kết bạn của ${email}`, payload));
+        res.status(200).json(response(200, `Lấy danh sách yêu cầu kết bạn của ${currentUser.name}`, payload));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
@@ -29,10 +29,10 @@ exports.listFriendsRequests = async (req, res) => {
 // Danh sách lời mời kết bạn đã gửi
 exports.listOfRequestsSent = async (req, res) => {
     try {
-        let { email } = req.params;
+        let currentUser = req.currentUser;
 
         let optionFind = {
-            "myUser.email": email,
+            "myUser.email": currentUser.email,
             status: false
         }
 
@@ -43,7 +43,7 @@ exports.listOfRequestsSent = async (req, res) => {
             friends: dataFriend
         }
 
-        res.status(200).json(response(200, `Lấy danh sách lời mời kết bạn đã gửi của ${email}`, payload));
+        res.status(200).json(response(200, `Lấy danh sách lời mời kết bạn đã gửi của ${currentUser.name}`, payload));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
@@ -53,10 +53,10 @@ exports.listOfRequestsSent = async (req, res) => {
 // Danh sách bạn bè
 exports.listFriends = async (req, res) => {
     try {
-        let { email } = req.params;
+        let currentUser = req.currentUser;
 
         let optionFind = {
-            "friend.email": email,
+            "friend.email": currentUser.email,
             status: true
         }
 
@@ -67,7 +67,7 @@ exports.listFriends = async (req, res) => {
             friends: dataFriend
         }
 
-        res.status(200).json(response(200, `Lấy danh sách bạn bè của ${email}`, payload));
+        res.status(200).json(response(200, `Lấy danh sách bạn bè của ${currentUser.name}`, payload));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
@@ -77,16 +77,17 @@ exports.listFriends = async (req, res) => {
 // Yêu cầu kết bạn, chấp nhận kết bạn
 exports.friendRequest = async (req, res, next) => {
     try {
-        let { myEmail, emailFriend } = req.body;
+        let { emailFriend } = req.body;
+        let currentUser = req.currentUser;
 
         let optionFindOneMyUser = {
-            "myUser.email": myEmail,
+            "myUser.email": currentUser.email,
             "friend.email": emailFriend
         }
 
         let optionFindOneMyFriend = {
             "myUser.email": emailFriend,
-            "friend.email": myEmail
+            "friend.email": currentUser.email
         }
 
         let optionUpdate = {
@@ -94,7 +95,7 @@ exports.friendRequest = async (req, res, next) => {
             updatedAt: req.getTime
         };
 
-        let dataMyUser = await Users.findOne({ email: myEmail });
+        let dataMyUser = req.currentUser;
         let dataMyFriend = await Users.findOne({ email: emailFriend });
         let dataMyEmail = await Friends.findOne(optionFindOneMyUser);
         let dataMyEmailFriend = await Friends.findOne(optionFindOneMyFriend);
@@ -152,16 +153,17 @@ exports.friendRequest = async (req, res, next) => {
 // Xóa kết bạn, yêu cầu kết bạn, lời mời kết bạn
 exports.delete = async (req, res) => {
     try {
-        let { myEmail, emailFriend } = req.body;
+        let { emailFriend } = req.body;
+        let currentUser = req.currentUser;
 
         let optionFindOneMyUser = {
-            "myUser.email": myEmail,
+            "myUser.email": currentUser.email,
             "friend.email": emailFriend
         }
 
         let optionFindOneMyFriend = {
             "myUser.email": emailFriend,
-            "friend.email": myEmail
+            "friend.email": currentUser.email
         }
 
         await Friends.deleteOne(optionFindOneMyUser);

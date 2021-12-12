@@ -102,11 +102,14 @@ exports.list = async (req, res) => {
     let users = await Users.find();
     let masters = await Masters.findOne();
 
+    let reportsWait = await Reports.countDocuments({ status: "Chờ duyệt" });
+
     let payload = {
       users,
       facilities: masters.facilities,
       specialized: masters.specialized,
-      course: masters.course
+      course: masters.course,
+      reportsWait
     }
 
     res.render('users', payload);
@@ -128,10 +131,12 @@ exports.findOne = async (req, res) => {
     }
 
     let countFriends = await Friends.countDocuments(optionFind);
+    let reportsWait = await Reports.countDocuments({ status: "Chờ duyệt" });
 
     let payload = {
       user,
-      countFriends
+      countFriends,
+      reportsWait
     };
 
     res.render('profile', payload);

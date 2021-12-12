@@ -3,9 +3,7 @@ let { response } = require("../../utils/utils");
 
 exports.list = async (req, res) => {
     try {
-        let { email } = req.params;
-
-        let data = await Nofitications.find({ 'emailReceiver.email': email });
+        let data = await Nofitications.find({ 'emailReceiver.email': req.currentUser.email });
 
         let payload = {
             total: data.length,
@@ -21,14 +19,7 @@ exports.list = async (req, res) => {
 
 exports.delete = async (req, res) => {
     try {
-        let { email, randomKey } = req.body;
-
-        let optionFindOne = {
-            'emailReceiver.email': email,
-            randomKey
-        }
-
-        await Nofitications.deleteOne(optionFindOne);
+        await Nofitications.deleteOne({ 'emailReceiver.email': req.currentUser.email, });
         res.status(200).json(response(200, `Xóa thông báo thành công`));
 
     } catch (error) {
