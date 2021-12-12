@@ -72,6 +72,6 @@ exports.statistical = async (req, res) => {
             ).format('YYYY')}`,
     });
   } catch (error) {
-    res.status(500).send(500, error.message);
+    res.send(error.message);
   }
 };

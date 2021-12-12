@@ -7,7 +7,6 @@ let Notifications = new mongoose.Schema(
     title: String,
     content: String,
     link: String,
-    randomKey: String,
     createdAt: String
   },
   { timestamps: false }

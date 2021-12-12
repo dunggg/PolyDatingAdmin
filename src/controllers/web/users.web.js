@@ -1,6 +1,9 @@
-let Users = require('../../models/users.schema');
-let Reports = require('../../models/reports.schema');
 let Masters = require('../../models/masters.schema');
+let Users = require("../../models/users.schema");
+let Friends = require('../../models/friends.schema');
+let Reports = require('../../models/reports.schema');
+let Notifications = require('../../models/notifications.schema');
+let Tokens = require('../../models/tokens.schema');
 let _ = require('lodash');
 let moment = require('moment');
 
@@ -90,31 +93,7 @@ let moment = require('moment');
 //     }
 //     res.render('users', payload);
 //   } catch (error) {
-//     res.status(500).send(500, error.message);
-//   }
-// };
-
-// exports.login = async (req, res) => {
-//   try {
-//     let { email, password } = req.body;
-
-//     if (email == 'admin' && password == 'admin')
-//       return res.redirect('/statistical?format=0&timeStamp=' + moment().unix());
-
-//     let data = await User.findOne({ email, password });
-
-//     if (!data)
-//       return res.render('index', { msgError: 'Sai email hoặc mật khẩu' });
-
-//     if (data.role != 'Admin')
-//       return res.render('index', { msgError: 'Tài khoản không có quyền hạn' });
-
-//     if (data.isActive != 'Kích hoạt')
-//       return res.render('index', { msgError: 'Tài khoản đã bị khóa' });
-
-//     res.redirect('/statistical?format=0&timeStamp=' + moment().unix());
-//   } catch (error) {
-//     res.status(500).send(error.message);
+// res.send(error.message);
 //   }
 // };
 
@@ -138,25 +117,24 @@ exports.list = async (req, res) => {
 
 exports.findOne = async (req, res) => {
   try {
-    let { email, page } = req.params;
-
-    let pageSize = 10;
-    let pageNumber = 1 || Number(page);
-    
+    let { email } = req.params;
 
     let user = await Users.findOne({ email });
     if (!user) return res.sendStatus(404);
 
-    let reports = await Reports.find({ emailReceiver: email })
+    let optionFind = {
+      "friend.email": email,
+      status: true
+    }
+
+    let countFriends = await Friends.countDocuments(optionFind);
 
     let payload = {
       user,
-      reports,
-      totalReports: reports.length,
+      countFriends
     };
 
     res.render('profile', payload);
-
   } catch (error) {
     res.status(500).send(error.message)
   }
@@ -166,7 +144,12 @@ exports.block = async (req, res) => {
   try {
     let { _id } = req.body;
 
-    let user = await Users.findByIdAndUpdate({ _id }, { isActive: false });
+    const payload = {
+      isActive: false,
+      updatedAt: req.getTime
+    }
+
+    let user = await Users.findByIdAndUpdate({ _id }, payload);
     if (!user) return res.sendStatus(404);
 
     res.redirect(`/users/${user.email}`);
@@ -184,7 +167,8 @@ exports.unblock = async (req, res) => {
 
     let option = {
       reportNumber: 0,
-      isActive: true
+      isActive: true,
+      updatedAt: req.getTime
     }
 
     await Users.updateOne({ _id }, option);
@@ -195,36 +179,22 @@ exports.unblock = async (req, res) => {
   }
 };
 
-exports.verifyReportRequest = async (req, res) => {
+exports.delete = async (req, res) => {
   try {
-    let { _idUser, _idReport, action } = req.body;
+    let { _id } = req.body;
 
-    let user = await Users.findOne({ _id: _idUser });
-    if (!user) return res.sendStatus(404);
+    let data = await Users.findOne({ _id });
 
-    let status;
-    let reportNumber;
+    await Friends.deleteMany({ 'myUser.email': data.email });
+    await Friends.deleteMany({ 'friends.email': data.email });
+    await Notifications.deleteMany({ emailSender: data.email });
+    await Notifications.deleteMany({ emailReceiver: data.email });
+    await Reports.deleteMany({ emailReceiver: data.email });
+    await Tokens.deleteOne({ email: data.email });
+    await Users.deleteOne({ _id: data._id });
 
-    if (action == "true") {
-      status = "Chấp thuận";
-      reportNumber = user.reportNumber + 1;
-    }
-    else {
-      status = "Từ chối"
-      reportNumber = user.reportNumber;
-    }
-
-    if (user.reportNumber > 4) {
-      await Users.updateOne({ _id: _idUser }, { isActive: false });
-    }
-    else {
-      await Users.updateOne({ _id: _idUser }, { reportNumber });
-    }
-
-    await Reports.updateOne({ _id: _idReport }, { status });
-
-    res.redirect(`/users/${user.email}`);
+    res.redirect(`/users`);
   } catch (error) {
-    res.status(500).send(error.message)
+    res.status(500).send(error.message);
   }
 };

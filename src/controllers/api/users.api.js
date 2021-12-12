@@ -1,6 +1,6 @@
 let Users = require("../../models/users.schema");
 let Friends = require('../../models/friends.schema');
-let Reporst = require('../../models/reports.schema');
+let Reports = require('../../models/reports.schema');
 let Notifications = require('../../models/notifications.schema');
 let Tokens = require('../../models/tokens.schema');
 let { response, insertUser, updateUser } = require("../../utils/utils");
@@ -299,7 +299,7 @@ exports.delete = async (req, res) => {
       await Friends.deleteMany({ 'friends.email': data.email });
       await Notifications.deleteMany({ emailSender: data.email });
       await Notifications.deleteMany({ emailReceiver: data.email });
-      await Reporst.deleteMany({ emailReceiver: data.email });
+      await Reports.deleteMany({ emailReceiver: data.email });
       await Tokens.deleteOne({ email });
       await Users.deleteOne({ _id: data._id });
 

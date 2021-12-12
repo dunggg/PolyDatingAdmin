@@ -43,7 +43,7 @@
                         <div class="card-header py-3">
                             <div class="row">
                                 <p class="text-primary m-0 fw-bold col-md-6">Lịch sử thông báo</p>
-                                <a href="#" class="text-danger m-0 fw-bold col-md-6 text-end" data-bs-toggle="modal"
+                                <a href="#" class="text-success m-0 fw-bold col-md-6 text-end" data-bs-toggle="modal"
                                     data-bs-target="#exampleModal" style="text-decoration: none;">Gửi thông báo</a>
 
                                 <!-- Modal -->
@@ -52,7 +52,7 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title">Gửi thông báo</h5>
+                                                <h5 class="modal-title text-primary">Gửi thông báo</h5>
                                             </div>
                                             <div class="modal-body">
                                                 <!-- form -->
@@ -72,54 +72,6 @@
                                                         rows="4"></textarea>
                                                 </div>
 
-                                                <p class="text-danger text-center fw-bolder fs-5">Gửi đến</p>
-
-                                                <div class="row">
-                                                    <div class="col-md-auto">
-                                                        <label class="form-label">
-                                                            <select class="d-inline-block form-select form-select-sm">
-                                                                <option value="" selected="">Cơ sở</option>
-                                                                <option value="25">25</option>
-                                                                <option value="50">50</option>
-                                                                <option value="100">100</option>
-                                                            </select>
-                                                        </label>
-                                                    </div>
-
-                                                    <div class="col-md-auto">
-                                                        <label class="form-label">
-                                                            <select class="d-inline-block form-select form-select-sm">
-                                                                <option value="" selected="">Ngành</option>
-                                                                <option value="25">25</option>
-                                                                <option value="50">50</option>
-                                                                <option value="100">100</option>
-                                                            </select>
-                                                        </label>
-                                                    </div>
-
-                                                    <div class="col-md-auto">
-                                                        <label class="form-label">
-                                                            <select class="d-inline-block form-select form-select-sm">
-                                                                <option value="" selected="">Khóa</option>
-                                                                <option value="25">25</option>
-                                                                <option value="50">50</option>
-                                                                <option value="100">100</option>
-                                                            </select>
-                                                        </label>
-                                                    </div>
-
-                                                    <div class="col-md-auto">
-                                                        <label class="form-label">
-                                                            <select class="d-inline-block form-select form-select-sm">
-                                                                <option value="" selected="">Giới tính</option>
-                                                                <option value="25">25</option>
-                                                                <option value="50">50</option>
-                                                                <option value="100">100</option>
-                                                            </select>
-                                                        </label>
-                                                    </div>
-                                                </div>
-
                                                 <!-- end form -->
                                             </div>
                                             <div class="modal-footer">
@@ -135,63 +87,20 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-auto text-nowrap">
-                                    <div id="dataTable_length" aria-controls="dataTable">
-                                        <label class="form-label">
-                                            <select class="d-inline-block form-select form-select-sm">
-                                                <option value="" selected="">Cơ sở</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
-                                            </select>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-auto text-nowrap">
-                                    <div id="dataTable_length" aria-controls="dataTable">
-                                        <label class="form-label">
-                                            <select class="d-inline-block form-select form-select-sm">
-                                                <option value="" selected="">Chuyên nghành</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
-                                            </select>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-auto text-nowrap">
-                                    <div id="dataTable_length" aria-controls="dataTable">
-                                        <label class="form-label">
-                                            <select class="d-inline-block form-select form-select-sm">
-                                                <option value="" selected="">Khóa</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
-                                            </select>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-auto text-nowrap">
-                                    <div id="dataTable_length" aria-controls="dataTable">
-                                        <label class="form-label">
-                                            <select class="d-inline-block form-select form-select-sm">
-                                                <option value="" selected="">Giới tính</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
-                                            </select>
-                                        </label>
-                                    </div>
-                                </div>
-
                                 <div class="col-md-auto">
                                     <div class="text-md-end dataTables_filter" id="dataTable_filter">
                                         <label class="form-label">
-                                            <input type="search" class="form-control form-control-sm"
-                                                aria-controls="dataTable" placeholder="Tìm kiếm...">
+
+                                            <form action="/reports/page/1" method="get" style="display: flex;">
+                                                <input type="search" class="form-control form-control-sm me-4"
+                                                    style="width: auto;" aria-controls="dataTable" name="search"
+                                                    placeholder="Tìm kiếm...">
+
+                                                <input type="submit" id="btn-search"
+                                                    class="form-control form-control-sm btn-primary"
+                                                    aria-controls="dataTable" value="Tìm kiếm">
+                                            </form>
+
                                         </label>
                                     </div>
                                 </div>
@@ -203,27 +112,30 @@
                                 <table class="table table-hover my-0" id="dataTable">
                                     <thead>
                                         <tr>
-                                            <th>Id</th>
+                                            <th>STT</th>
                                             <th>Tiêu đề</th>
                                             <th>Nội dung</th>
-                                            <th>Cơ sở</th>
-                                            <th>Ngành</th>
-                                            <th>Khóa</th>
-                                            <th>Giới tính</th>
+                                            <th>Link</th>
+                                            <th>Người gửi</th>
+                                            <th>Người nhận</th>
                                             <th>Ngày gửi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {{#each notifications}}
                                         <tr>
-                                            <td>1</td>
-                                            <td>Xin chào</td>
-                                            <td>Thắng rách Thắng rách Thắng rách Thắng rách Thắng rách Thắng rách </td>
-                                            <td>Hà Nội</td>
-                                            <td>Mobile</td>
-                                            <td>15</td>
-                                            <td>Nam</td>
-                                            <td>20/09/2021</td>
+                                            <td>{{@index}}</td>
+                                            <td>{{this.title}}</td>
+                                            <td>{{this.content}}</td>
+
+                                            <td>{{this.link}}</td>
+                                            <td>{{this.emailSender}}</td>
+                                            <td>{{this.emailReceiver}}</td>
+                                            <td>{{this.createdAt}}</td>
+
                                         </tr>
+                                        {{/each}}
+
                                     </tbody>
                                 </table>
                             </div>
@@ -254,7 +166,7 @@
             </div>
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © Brand 2021</span></div>
+                    <div class="text-center my-auto copyright"><span>Poly Dating 2021</span></div>
                 </div>
             </footer>
         </div>

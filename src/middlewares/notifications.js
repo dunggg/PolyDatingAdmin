@@ -1,7 +1,6 @@
 let Nofitications = require('../models/notifications.schema');
 let Tokens = require('../models/tokens.schema');
 let { response } = require("../utils/utils");
-let randomString = require('randomstring');
 let info = require('../config/info');
 let fetch = require('node-fetch');
 
@@ -24,7 +23,6 @@ let pushNotificationUser = async (req, res) => {
             title: "Yêu cầu kết bạn",
             content: notifiData.content,
             link: null,
-            randomKey: randomString.generate(10),
             createdAt: req.getTime
         }
 

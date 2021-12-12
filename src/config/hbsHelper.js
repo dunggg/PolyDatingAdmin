@@ -16,8 +16,6 @@ hbs.registerHelper({
 });
 
 hbs.registerHelper('compare', function (index, object) {
-  let s1 = Number(object.data.root.page);
-  let s2 = object.data.index + 1;
   let isSearch = object.data.root.isSearch;
   let facilitiesParams = object.data.root.facilitiesParams;
   let specializedParams = object.data.root.specializedParams;

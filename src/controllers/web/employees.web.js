@@ -10,7 +10,7 @@ exports.index = async (req, res) => {
     try {
         res.render('index');
     } catch (error) {
-        res.status(500).send(error.message);
+        res.send(error.message);
     }
 };
 
@@ -49,7 +49,7 @@ exports.signIn = async (req, res) => {
             }
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        res.send(error.message);
     }
 };
 
@@ -85,7 +85,7 @@ exports.signUp = async (req, res) => {
             res.json("Đăng ký");
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        res.send(error.message);
     }
 };
 
@@ -123,6 +123,6 @@ exports.forgotPassword = async (req, res, next) => {
             }
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        res.send(error.message);
     }
 };
