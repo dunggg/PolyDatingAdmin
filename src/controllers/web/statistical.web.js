@@ -121,19 +121,6 @@ const countReport = async (timeStamp, format, objSearch) => {
   return list;
 };
 
-// console.log(moment('2021-12-13T11:09:08.000+00:00').format('DD/MM/YYYY'));
-
-// console.log(moment(1639409570 * 1000).format());
-
-// console.log(new Date().);
-// console.log(moment(moment().toDate()).isBefore(new Date()));
-
-// countMatch(1639409570);
-
-// console.log(moment('2021-12-13T07:18:13.699+00:00').unix());
-
-// countReport(1639379893);
-
 exports.statistical = async (req, res) => {
   try {
     const {

@@ -52,6 +52,4 @@ router.get('/export-xlsx', (req, res, next) => {
   res.render('download_xlsx', { fileName });
 });
 
-router.get('/statistical', statistical);
-
 module.exports = router;
