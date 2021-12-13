@@ -1,0 +1,284 @@
+<body id="page-top">
+    <div id="wrapper">
+        <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
+            <div class="container-fluid d-flex flex-column p-0">
+                <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0"
+                    href="/statistical">
+                    <div class="sidebar-brand-icon rotate-n-15">
+                        <img src="/public/img/bee.png" alt="">
+                    </div>
+                    <div class="sidebar-brand-text mx-3"><span>POLY DATING</span></div>
+                </a>
+                <hr class="sidebar-divider my-0">
+                <ul class="navbar-nav text-light" id="accordionSidebar">
+                    <li class="nav-item"><a class="nav-link" href="/statistical?format=0&timeStamp={{timeStamp}}"><i
+                                class="fas fa-tachometer-alt"></i><span>Thống kê</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/users/page/1"><i
+                                class="fas fa-user"></i><span>Người
+                                dùng</span></a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/reports/page/1">
+                            <i class="fas fa-flag"></i>
+                            <span>Báo cáo</span>
+                            {{#if (gt reportsWait 0)}}
+                            <span class="text-warning"> {{reportsWait}} lượt</span>
+                            {{/if}}
+                        </a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="/notifications/page/1"><i
+                                class="fas fa-bell"></i><span>Thông
+                                báo</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-sign-out-alt"></i><span>Đăng
+                                xuất</span></a></li>
+                </ul>
+                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0"
+                        id="sidebarToggle" type="button"></button></div>
+            </div>
+        </nav>
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
+                    <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3"
+                            id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
+                        <div class="d-sm-inline-block me-auto md-3 my-2 my-md-0 mw-100 navbar-search">
+                            <h4 class="text-dark mb-0">Người dùng</h4>
+                        </div>
+                    </div>
+                </nav>
+
+                <div class="container-fluid">
+                    <div class="card shadow mb-3">
+                        <div class="card-header py-3">
+                            <p class="text-primary m-0 fw-bold">Thông tin người dùng</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <select id="facilities" class="d-inline-block form-select form-select-sm">
+                                                {{#each facilities}}
+                                                {{#optionFacilities "" this}}{{/optionFacilities}}
+                                                {{/each}}
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <select class="d-inline-block form-select form-select-sm" id="specialized">
+                                                {{#each specialized}}
+                                                {{#optionSpecialized "" this}} {{/optionSpecialized}}
+                                                {{/each}}
+                                            </select>
+                                            {{!-- {{#optionSpecialized "" specialized}} {{/optionSpecialized}} --}}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <select id="course" class="d-inline-block form-select form-select-sm">
+                                                {{#each course}}
+                                                {{#optionCourse "" this}} {{/optionCourse}}
+                                                {{/each}}
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <select id="gender" class="d-inline-block form-select form-select-sm">
+                                                {{#optionGender "" "Giới tính"}} {{/optionGender}}
+                                                {{#optionGender "" "Nam"}} {{/optionGender}}
+                                                {{#optionGender "" "Nữ"}} {{/optionGender}}
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <select id="report" class="d-inline-block form-select form-select-sm">
+                                                {{#optionReport "" "Báo cáo"}} {{/optionReport}}
+                                                {{#optionReport "" "25"}} {{/optionReport}}
+                                                {{#optionReport "" "50"}} {{/optionReport}}
+                                                {{#optionReport "" "100"}} {{/optionReport}}
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <select id="status" class="d-inline-block form-select form-select-sm">
+                                                {{#optionStatus '' 'Hoạt động'}}{{/optionStatus}}
+                                                {{#optionStatus '' 'Kích hoạt'}}{{/optionStatus}}
+                                                {{#optionStatus '' 'Chặn'}}{{/optionStatus}}
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-auto">
+                                    <div class="text-md-end dataTables_filter" id="dataTable_filter">
+                                        <label class="form-label">
+                                            <input id="search" type="search" class="form-control form-control-sm"
+                                                value="{{#if searchParams}}{{searchParams}}{{/if}}"
+                                                aria-controls="dataTable" placeholder="Tìm kiếm...">
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-auto">
+                                    <div class="text-md-end dataTables_filter" id="dataTable_filter">
+                                        <label class="form-label">
+                                            <input type="submit" id="btn-search"
+                                                class="form-control form-control-sm btn-primary"
+                                                aria-controls="dataTable" value="Tìm kiếm">
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <form id="form" action="/users/page/1">
+                                <input type="hidden" name="facilities" />
+                                <input type="hidden" name="specialized" value="" />
+                                <input type="hidden" name="course" value="" />
+                                <input type="hidden" name="gender" value="" />
+                                <input type="hidden" name="report" value="" />
+                                <input type="hidden" name="status" value="" />
+                                <input type="hidden" name="email" />
+                            </form>
+
+                            <div class="table-responsive mt-2" id="dataTable" role="grid"
+                                aria-describedby="dataTable_info">
+                                <table class="table table-hover my-0" id="dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Email</th>
+                                            <th>Họ tên</th>
+                                            <th>Giới tính</th>
+                                            <th>Ngày sinh</th>
+                                            <th>Sở thích</th>
+                                            <th>Cơ sở</th>
+                                            <th>Chuyên ngành</th>
+                                            <th>Khóa học</th>
+                                            <th>Báo cáo</th>
+                                            <th>Trạng thái</th>
+                                            <th>Ngày tạo</th>
+                                            <th>Ngày cập nhật</th>
+                                            <th>Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each users}}
+                                        <tr>
+                                            <td>{{@index}}</td>
+                                            <td>
+                                                <a style="text-decoration: none;" class="text-info"
+                                                    href="/users/{{this.email}}">{{this.email}}</a>
+                                            </td>
+                                            <td>
+                                                <img class="rounded-circle me-2" width="30" height="30"
+                                                    src="{{this.images.[0]}}">
+                                                {{this.name}}
+                                            </td>
+                                            <td>{{this.gender}}</td>
+                                            <td>{{this.birthDay}}</td>
+                                            <td>{{this.hobbies}}</td>
+                                            <td>{{this.facilities}}</td>
+                                            <td>{{this.specialized}}</td>
+                                            <td>{{this.course}}</td>
+                                            <td>
+                                                {{#if (eq this.reportNumber 3)}}
+                                                <span class="text-warning">{{this.reportNumber}} lượt</span>
+
+                                                {{else}}
+                                                {{#if (lt this.reportNumber 3)}}
+                                                <span class="text-success">{{this.reportNumber}} lượt</span>
+
+                                                {{else}}
+                                                <span class="text-danger">{{this.reportNumber}} lượt</span>
+
+                                                {{/if}}
+                                                {{/if}}
+                                            </td>
+                                            <td>
+                                                {{#if (eq this.isActive true)}}
+                                                <span class="text-success">Kích hoạt</span>
+                                                {{else}}
+                                                <span class="text-danger">Khóa</span>
+                                                {{/if}}
+                                            </td>
+                                            <td>{{#newDate this.createdAt}}{{/newDate}}</td>
+                                            <td>{{#newDate this.updatedAt}}{{/newDate}}</td>
+                                            
+                                        </tr>
+                                        {{/each }}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 align-self-center">
+                                    <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Hiển
+                                        thị {{countFrom}} đến {{countTo}} của {{countPage}}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <nav
+                                        class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                                        <ul class="pagination">
+                                            {{#if buttonFirt}}
+                                            {{#if isSearch}}
+                                            <li class="page-item"><a class="page-link"
+                                                    href="/users/page/1{{#if facilitiesParams}}?facilities={{facilitiesParams}}{{else}}?{{/if}}{{#if specializedParams}}&specialized={{specializedParams}}{{/if}}{{#if courseParams}}&course={{courseParams}}{{/if}}{{#if genderParams}}&gender={{genderParams}}{{/if}}{{#if reportParams}}&report={{reportParams}}{{/if}}{{#if statusParams}}&status={{statusParams}}{{/if}}{{#if searchParams}}&email={{searchParams}}{{/if}}"
+                                                    aria-label="Next"><span aria-hidden="true">«</span></a></li>
+                                            {{else}}
+                                            <li class="page-item"><a class="page-link" href="/users/page/1"
+                                                    aria-label="Next"><span aria-hidden="true">«</span></a></li>
+                                            {{/if}}
+                                            {{/if}}
+                                            {{#each arrPage}}
+                                            {{#compare this}} {{/compare}}
+                                            {{/each}}
+                                            {{#if buttonLast}}
+                                            {{#if isSearch}}
+                                            <li class="page-item"><a class="page-link"
+                                                    href="/users/page/{{countPage}}{{#if facilitiesParams}}?facilities={{facilitiesParams}}{{else}}?{{/if}}{{#if specializedParams}}&specialized={{specializedParams}}{{/if}}{{#if courseParams}}&course={{courseParams}}{{/if}}{{#if genderParams}}&gender={{genderParams}}{{/if}}{{#if reportParams}}&report={{reportParams}}{{/if}}{{#if statusParams}}&status={{statusParams}}{{/if}}{{#if searchParams}}&email={{searchParams}}{{/if}}"
+                                                    aria-label="Next"><span aria-hidden="true">»</span></a></li>
+
+                                            {{else}}
+                                            <li class="page-item"><a class="page-link" href="/users/page/{{countPage}}"
+                                                    aria-label="Next"><span aria-hidden="true">»</span></a></li>
+                                            {{/if}}
+                                            {{/if}}
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © Brand 2021</span></div>
+                </div>
+            </footer>
+        </div>
+        <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    </div>
+
+    <script src="/public/js/theme.js"></script>
+    <script src="/public/js/form-users.js"></script>
+</body>

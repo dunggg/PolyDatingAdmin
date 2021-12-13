@@ -13,7 +13,7 @@
                 <ul class="navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link" href="/statistical?format=0&timeStamp={{timeStamp}}"><i
                                 class="fas fa-tachometer-alt"></i><span>Thống kê</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/users"><i class="fas fa-user"></i><span>Người
+                    <li class="nav-item"><a class="nav-link" href="/users/page/1"><i class="fas fa-user"></i><span>Người
                                 dùng</span></a></li>
                     <li class="nav-item">
                         <a class="nav-link active" href="/reports/page/1">
@@ -53,69 +53,85 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-auto">
-                                    <div class="text-md-end dataTables_filter" id="dataTable_filter">
+                                    <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
+                                            <select class="d-inline-block form-select form-select-sm me-4"
+                                                id="statusOp">
+                                                {{#each statusReports}}
 
-                                            <form action="/reports/page/1" method="get" style="display: flex;">
+                                                {{#if (eq this "Trạng thái")}}
+                                                <option value="">{{this}}</option>
 
-                                                <select class="d-inline-block form-select form-select-sm me-4"
-                                                    name="status" style="width: auto;">
-                                                    {{#each statusReports}}
+                                                {{else}}
+                                                {{#if (eq this @root.status)}}
+                                                <option value="{{@root.status}}" selected="">{{@root.status}}
+                                                </option>
 
-                                                    {{#if (eq this "Trạng thái")}}
-                                                    <option value="">{{this}}</option>
+                                                {{else}}
+                                                <option value="{{this}}">{{this}}</option>
 
-                                                    {{else}}
-                                                    {{#if (eq this @root.status)}}
-                                                    <option value="{{@root.status}}" selected="">{{@root.status}}
-                                                    </option>
+                                                {{/if}}
+                                                {{/if}}
 
-                                                    {{else}}
-                                                    <option value="{{this}}">{{this}}</option>
+                                                {{/each}}
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
 
-                                                    {{/if}}
-                                                    {{/if}}
+                                <div class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <select class="d-inline-block form-select form-select-sm me-4" id="titleOp">
+                                                {{#each dataTitleReports}}
 
-                                                    {{/each}}
-                                                </select>
+                                                {{#if (eq this "Tiêu đề")}}
+                                                <option value="">{{this}}</option>
 
-                                                <select class="d-inline-block form-select form-select-sm me-4"
-                                                    name="title" style="width: auto;">
-                                                    {{#each dataTitleReports}}
+                                                {{else}}
+                                                {{#if (eq this @root.title)}}
+                                                <option value="{{@root.title}}" selected="">{{@root.title}}
+                                                </option>
 
-                                                    {{#if (eq this "Tiêu đề")}}
-                                                    <option value="">{{this}}</option>
+                                                {{else}}
+                                                <option value="{{this}}">{{this}}</option>
 
-                                                    {{else}}
-                                                    {{#if (eq this @root.title)}}
-                                                    <option value="{{@root.title}}" selected="">{{@root.title}}
-                                                    </option>
+                                                {{/if}}
+                                                {{/if}}
 
-                                                    {{else}}
-                                                    <option value="{{this}}">{{this}}</option>
+                                                {{/each}}
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
 
-                                                    {{/if}}
-                                                    {{/if}}
+                                <div class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <input type="search" class="form-control form-control-sm" id="btnSearch"
+                                                aria-controls="dataTable" placeholder="Tìm kiếm..." value="{{search}}">
+                                        </label>
+                                    </div>
+                                </div>
 
-                                                    {{/each}}
-                                                </select>
+                                <div class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <form action="/reports/page/1" method="get" id="id-form6">
+                                                <input type="hidden" id="statusIp" name="status">
+                                                <input type="hidden" id="titleIp" name="title">
+                                                <input type="hidden" id="searchIp" name="search">
 
-                                                <input type="search" class="form-control form-control-sm me-4"
-                                                    style="width: auto;" aria-controls="dataTable" name="search"
-                                                    placeholder="Tìm kiếm...">
-
-                                                <input type="submit" id="btn-search"
-                                                    class="form-control form-control-sm btn-primary"
-                                                    aria-controls="dataTable" value="Tìm kiếm">
+                                                <input type="submit" class="form-control form-control-sm btn-primary"
+                                                    onclick="checkSubmit()" aria-controls="dataTable" value="Tìm kiếm">
                                             </form>
-
                                         </label>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- ----------------------------------- -->
-                            <div class="table-responsive table mt-2" role="grid" aria-describedby="dataTable_info">
+                            <div class="table-responsive mt-2" role="grid" aria-describedby="dataTable_info">
                                 <table class="table table-hover my-0">
                                     <thead>
                                         <tr>
@@ -148,7 +164,7 @@
                                                 <a style="text-decoration: none;" class="text-info"
                                                     href="/users/{{this.emailReceiver}}">{{this.emailReceiver}}</a>
                                             </td>
-                                            <td>{{this.createdAt}}</td>
+                                            <td>{{#newDate this.createdAt}}{{/newDate}}</td>
 
                                             <td>
                                                 {{#if (eq this.status "Chấp thuận")}}
@@ -166,25 +182,42 @@
                                             </td>
                                             <td>
                                                 {{#if (eq this.status "Chờ duyệt")}}
-                                                <form action="/reports/verify-report-request" method="post"
-                                                    class="text-end col-md-6" style="display: flex" id="form-block">
+                                                <div style="display: flex">
+                                                    <form action="/reports/verify-report-request" method="post"
+                                                        class="text-end col-md-6" id="form-block2"
+                                                        style="margin-right: 5px;">
 
-                                                    <input type="hidden" value="{{this.emailReceiver}}" name="email">
-                                                    <input type="hidden" value="{{this._id}}" name="_idReport">
+                                                        <input type="hidden" value="{{this.emailReceiver}}"
+                                                            name="email">
+                                                        <input type="hidden" value="{{this._id}}" name="_idReport">
+                                                        <input type="hidden" value="true" name="action">
 
-                                                    <button class="btn btn-success" type="submit" name="action"
-                                                        style="margin-right: 5px;" value="true"><i
-                                                            class="fas fa-check text-white"></i></button>
+                                                        <button class="btn btn-success" type="button"
+                                                            onclick="check(`Chấp thuận báo cáo của {{this.emailSender}}`)">
+                                                            <i class="fas fa-check text-white"></i>
+                                                        </button>
+                                                    </form>
 
-                                                    <button class="btn btn-danger" type="submit" name="action"
-                                                        value="false"><i class="fas fa-times"></i></i></button>
-                                                </form>
+                                                    <form action="/reports/verify-report-request" method="post"
+                                                        class="text-end col-md-6" style="display: flex"
+                                                        id="form-block2">
 
+                                                        <input type="hidden" value="{{this.emailReceiver}}"
+                                                            name="email">
+                                                        <input type="hidden" value="{{this._id}}" name="_idReport">
+                                                        <input type="hidden" value="false" name="action">
+
+                                                        <button class="btn btn-danger" type="button"
+                                                            onclick="check(`Từ chối báo cáo của {{this.emailSender}}`)">
+                                                            <i class="fas fa-times"></i></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
                                                 {{else}}
                                                 <div style="display: flex;">
                                                     <button class="btn btn-success" disabled=""
                                                         style="margin-right: 5px;">
-                                                        <i class="fas fa-check"></i>
+                                                        <i class="fas fa-check text-white"></i>
                                                     </button>
 
                                                     <button class="btn btn-danger" disabled="">
@@ -199,7 +232,7 @@
                                 </table>
                             </div>
 
-                            <div class="row">
+                            <div class="row mt-3">
                                 <div class="col-md-6 align-self-center">
                                     <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">
                                         Hiển thị {{countFrom}} đến {{countTo}} trong tổng {{countReports}}</p>
@@ -279,3 +312,32 @@
 
     <script src="/public/js/theme.js"></script>
 </body>
+
+<script>
+    function check(v) {
+        let form = document.getElementById('form-block2');
+        let check = confirm(v);
+
+        if (check == true) {
+            return form.submit();
+        }
+    }
+
+    function checkSubmit() {
+        let form = document.getElementById('id-form6');
+
+        let statusOp = document.getElementById('statusOp');
+        let titleOp = document.getElementById('titleOp');
+        let btnSearch = document.getElementById('btnSearch');
+
+        let statusIp = document.getElementById('statusIp');
+        let titleIp = document.getElementById('titleIp');
+        let searchIp = document.getElementById('searchIp');
+
+        statusIp.value = statusOp.value;
+        titleIp.value = titleOp.value;
+        searchIp.value = btnSearch.value;
+
+        form.submit();
+    }
+</script>

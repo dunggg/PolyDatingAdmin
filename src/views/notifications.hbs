@@ -13,7 +13,7 @@
                 <ul class="navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link" href="/statistical?format=0&timeStamp={{timeStamp}}"><i
                                 class="fas fa-tachometer-alt"></i><span>Thống kê</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/users"><i class="fas fa-user"></i><span>Người
+                    <li class="nav-item"><a class="nav-link" href="/users/page/1"><i class="fas fa-user"></i><span>Người
                                 dùng</span></a></li>
                     <li class="nav-item">
                         <a class="nav-link" href="/reports/page/1">
@@ -50,42 +50,44 @@
                         <div class="card-header py-3">
                             <div class="row">
                                 <p class="text-primary m-0 fw-bold col-md-6">Lịch sử thông báo</p>
-                                <a href="#" class="text-success m-0 fw-bold col-md-6 text-end" data-bs-toggle="modal"
+                                <a href="#" class="text-danger m-0 fw-bold col-md-6 text-end" data-bs-toggle="modal"
                                     data-bs-target="#exampleModal" style="text-decoration: none;">Gửi thông báo</a>
 
                                 <!-- Modal -->
-                                <div class="modal fade" id="exampleModal" tabindex="-1"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="exampleModal" tabindex="-1" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title text-primary">Gửi thông báo</h5>
+                                                <h5 class="modal-title text-danger">Gửi thông báo tới tất cả người dùng
+                                                </h5>
                                             </div>
-                                            <div class="modal-body">
-                                                <!-- form -->
-                                                <div class="mb-3">
-                                                    <label class="form-label">Tiêu đề</label>
-                                                    <input type="text" class="form-control">
-                                                </div>
+                                            <!-- form -->
+                                            <form action="/notifications/insert" method="post" id="form-block3">
+                                                <div class="modal-body">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Tiêu đề</label>
+                                                        <input type="text" name="title" class="form-control" required>
+                                                    </div>
 
-                                                <div class="mb-3">
-                                                    <label class="form-label">Link</label>
-                                                    <input type="text" class="form-control">
-                                                </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Link</label>
+                                                        <input type="text" name="link" class="form-control" required>
+                                                    </div>
 
-                                                <div class="mb-3">
-                                                    <label class="form-label">Nội dung</label>
-                                                    <textarea class="form-control" style="resize: none;"
-                                                        rows="4"></textarea>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Nội dung</label>
+                                                        <textarea class="form-control" name="content" required
+                                                            style="resize: none;" rows="4"></textarea>
+                                                    </div>
                                                 </div>
-
-                                                <!-- end form -->
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Hủy</button>
-                                                <button type="button" class="btn btn-primary">Lưu</button>
-                                            </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-primary">Gửi</button>
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Hủy</button>
+                                                </div>
+                                            </form>
+                                            <!-- end form -->
                                         </div>
                                     </div>
                                 </div>
@@ -95,26 +97,30 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-auto">
-                                    <div class="text-md-end dataTables_filter" id="dataTable_filter">
+                                    <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
+                                            <input type="search" class="form-control form-control-sm" id="btnSearch"
+                                                aria-controls="dataTable" placeholder="Tìm kiếm..." value="{{search}}">
+                                        </label>
+                                    </div>
+                                </div>
 
-                                            <form action="/notifications/page/1" method="get" style="display: flex;">
-                                                <input type="search" class="form-control form-control-sm me-4"
-                                                    style="width: auto;" aria-controls="dataTable" name="search"
-                                                    placeholder="Tìm kiếm...">
+                                <div class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <form action="/notifications/page/1" method="get" id="id-form7">
+                                                <input type="hidden" id="searchIp" name="search">
 
-                                                <input type="submit" id="btn-search"
-                                                    class="form-control form-control-sm btn-primary"
-                                                    aria-controls="dataTable" value="Tìm kiếm">
+                                                <input type="submit" class="form-control form-control-sm btn-primary"
+                                                    onclick="checkSubmit()" aria-controls="dataTable" value="Tìm kiếm">
                                             </form>
-
                                         </label>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- ----------------------------------- -->
-                            <div class="table-responsive table mt-2" id="dataTable" role="grid"
+                            <div class="table-responsive mt-2" id="dataTable" role="grid"
                                 aria-describedby="dataTable_info">
                                 <table class="table table-hover my-0" id="dataTable">
                                     <thead>
@@ -125,7 +131,8 @@
                                             <th>Link</th>
                                             <th>Người gửi</th>
                                             <th>Người nhận</th>
-                                            <th>Ngày gửi</th>
+                                            <th>Thời gian gửi</th>
+                                            <th>Hành động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -134,21 +141,42 @@
                                             <td>{{@index}}</td>
                                             <td>{{this.title}}</td>
                                             <td>{{this.content}}</td>
+                                            <td>
+                                                {{#if (ne this.link null)}}
+                                                <a style="text-decoration: none;" class="text-primary"
+                                                    href="{{this.link}}">Xem liên kết</a>
+                                                {{/if}}
+                                            </td>
+                                            <td>
+                                                <a style="text-decoration: none;" class="text-info"
+                                                    href="/users/{{this.emailSender}}">{{this.emailSender}}</a>
+                                            </td>
+                                            <td>
+                                                <a style="text-decoration: none;" class="text-info"
+                                                    href="/users/{{this.emailReceiver}}">{{this.emailReceiver}}</a>
+                                            </td>
+                                            <td>{{#newDate this.createdAt}}{{/newDate}}</td>
+                                            <td>
+                                                <form action="/notifications/delete" method="post"
+                                                    class="text-end col-md-6" style="display: flex" id="form-block2">
 
-                                            <td>{{this.link}}</td>
-                                            <td>{{this.emailSender}}</td>
-                                            <td>{{this.emailReceiver}}</td>
-                                            <td>{{this.createdAt}}</td>
+                                                    <input type="hidden" value="{{this._id}}" name="_id">
 
+                                                    <button class="btn btn-danger" type="button"
+                                                        onclick="check(`Xác nhận xóa thông báo {{this.title}} ?`)">
+                                                        <i class="fas fa-times"></i></i>
+                                                    </button>
+                                                </form>
+                                            </td>
                                         </tr>
                                         {{/each}}
-
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6 align-self-center">
-                                    <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">
+
+                            <div class="row mt-3">
+                                <div class="col-md-6 align-self-center mt-2">
+                                    <p id="dataTable_info" class="dataTables_info " role="status" aria-live="polite">
                                         Hiển thị {{countFrom}} đến {{countTo}} trong tổng {{countNotifications}}</p>
                                 </div>
                                 <div class="col-md-6">
@@ -222,3 +250,24 @@
 
     <script src="/public/js/theme.js"></script>
 </body>
+
+<script>
+    function check(v) {
+        let form = document.getElementById('form-block2');
+        let check = confirm(v);
+
+        if (check == true) {
+            return form.submit();
+        }
+    }
+
+    function checkSubmit() {
+        let form = document.getElementById('id-form7');
+
+        let btnSearch = document.getElementById('btnSearch');
+        let searchIp = document.getElementById('searchIp');
+
+        searchIp.value = btnSearch.value;
+        form.submit();
+    }
+</script>

@@ -1,4 +1,4 @@
-let Nofitications = require('../models/notifications.schema');
+let Notifications = require('../models/notifications.schema');
 let Tokens = require('../models/tokens.schema');
 let { response } = require("../utils/utils");
 let info = require('../config/info');
@@ -12,7 +12,7 @@ let optionConfig = {
     }
 };
 
-let pushNotificationUser = async (req, res) => {
+let pushNotificationsFriendsRequest = async (req, res) => {
     try {
         let notifiData = req.notifiData;
         let dataToken = await Tokens.findOne({ email: notifiData.emailReceiver });
@@ -26,7 +26,7 @@ let pushNotificationUser = async (req, res) => {
             createdAt: req.getTime
         }
 
-        await Nofitications.create(optionNotifi);
+        await Notifications.create(optionNotifi);
 
         let dataBody = {
             'data': {
@@ -49,4 +49,32 @@ let pushNotificationUser = async (req, res) => {
     }
 };
 
-module.exports = { pushNotificationUser };
+let pushNotificationsAll = async (req, res) => {
+    try {
+        let notifiData = req.notifiData;
+
+        let dataBody = {
+            'data': {
+                title: `Poly Dating - ${notifiData.title}`,
+                content: notifiData.content
+            },
+            'registration_ids': notifiData.tokens
+        };
+
+        let optionPush = {
+            ...optionConfig,
+            'body': JSON.stringify(dataBody)
+        };
+
+        fetch('https://fcm.googleapis.com/fcm/send', optionPush)
+            .then(() => res.redirect('/notifications/page/1'));
+
+    } catch (error) {
+        res.send(error.message);
+    }
+};
+
+module.exports = {
+    pushNotificationsFriendsRequest,
+    pushNotificationsAll
+};

@@ -51,7 +51,7 @@ exports.signIn = async (req, res) => {
     if (!user) {
       res.status(404).json(response(404, `Tài khoản không tồn tại`, null));
     }
-    else if (user.isActive == false) {
+    else if (user.isActive == "Chặn") {
       res.status(403).json(response(403, `Tài khoản của bạn đã bị khóa`, user));
     }
     else {
@@ -115,7 +115,7 @@ exports.signUp = async (req, res) => {
         specialized: value.specialized,
         course: value.course,
         isShow,
-        isActive: true,
+        isActive: "Kích hoạt",
         statusHobby: false,
         reportNumber: 0,
         code: null,

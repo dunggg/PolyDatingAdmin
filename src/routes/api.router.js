@@ -4,7 +4,7 @@ const uploadFile = require("../middlewares/uploadFile");
 const getTimeZone = require('../middlewares/getTime');
 const checkToken = require('../middlewares/checkToken');
 const { sendMailRequestCode } = require('../middlewares/sendMail');
-const { pushNotificationUser } = require('../middlewares/notifications');
+const { pushNotificationsFriendsRequest } = require('../middlewares/notifications');
 const masters = require("../controllers/api/masters.api");
 const users = require("../controllers/api/users.api");
 const friends = require("../controllers/api/friends.api");
@@ -12,7 +12,6 @@ const reports = require("../controllers/api/reports.api");
 const notifications = require("../controllers/api/notifications.api");
 
 /* API */
-
 // 1. Master
 router.get("/master/list", masters.list);
 
@@ -35,7 +34,7 @@ router.post("/users/delete", users.delete);
 router.get("/friends/list-friends-requests", friends.listFriendsRequests);
 router.get("/friends/list-of-requests-sent", friends.listOfRequestsSent);
 router.get("/friends/list-friends", friends.listFriends);
-router.post("/friends/friend-request", friends.friendRequest, pushNotificationUser);
+router.post("/friends/friend-request", friends.friendRequest, pushNotificationsFriendsRequest);
 router.post("/friends/delete", friends.delete);
 
 // 4. Reports

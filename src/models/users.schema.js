@@ -13,13 +13,13 @@ let Users = new mongoose.Schema(
     specialized: String,
     course: String,
     isShow: [String],
-    isActive: Boolean,
+    isActive: String,
     statusHobby: Boolean,
     reportNumber: Number,
     code: String,
     accessToken: String,
-    createdAt: String,
-    updatedAt: String
+    createdAt: Date,
+    updatedAt: Date
   },
   { timestamps: false }
 );

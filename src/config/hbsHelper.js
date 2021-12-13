@@ -15,6 +15,11 @@ hbs.registerHelper({
   },
 });
 
+hbs.registerHelper('newDate', (value) => {
+  let newDate = value.toString().slice(0, -26);
+  return newDate;
+});
+
 hbs.registerHelper('compare', function (index, object) {
   let isSearch = object.data.root.isSearch;
   let facilitiesParams = object.data.root.facilitiesParams;
@@ -27,27 +32,26 @@ hbs.registerHelper('compare', function (index, object) {
   let page = object.data.root.page;
   return page === index
     ? isSearch
-      ? `<li class="page-item active"><a class="page-link" href="/users/page/${index}${
-          facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
-        }${specializedParams ? `&specialized=${specializedParams}` : ''}${
-          courseParams ? `&course=${courseParams}` : ''
-        }${genderParams ? `&gender=${genderParams}` : ''}${
-          reportParmas ? `&report=${reportParmas}` : ''
-        }${statusParams ? `&status=${statusParams}` : ''}${
-          searchParams ? `&email=${searchParams}` : ''
-        }">${index}</a></li>`
+      ? `<li class="page-item active"><a class="page-link" href="/users/page/${index}${facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
+      }${specializedParams ? `&specialized=${specializedParams}` : ''}${courseParams ? `&course=${courseParams}` : ''
+      }${genderParams ? `&gender=${genderParams}` : ''}${reportParmas ? `&report=${reportParmas}` : ''
+      }${statusParams ? `&status=${statusParams}` : ''}${searchParams ? `&email=${searchParams}` : ''
+      }">${index}</a></li>`
       : `<li class="page-item active"><a class="page-link" href="/users/page/${index}">${index}</a></li>`
     : isSearch
-    ? `<li class="page-item"><a class="page-link" href="/users/page/${index}${
-        facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
-      }${specializedParams ? `&specialized=${specializedParams}` : ''}${
-        courseParams ? `&course=${courseParams}` : ''
-      }${genderParams ? `&gender=${genderParams}` : ''}${
-        reportParmas ? `&report=${reportParmas}` : ''
-      }${statusParams ? `&status=${statusParams}` : ''}${
-        searchParams ? `&email=${searchParams}` : ''
+      ? `<li class="page-item"><a class="page-link" href="/users/page/${index}${facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
+      }${specializedParams ? `&specialized=${specializedParams}` : ''}${courseParams ? `&course=${courseParams}` : ''
+      }${genderParams ? `&gender=${genderParams}` : ''}${reportParmas ? `&report=${reportParmas}` : ''
+      }${statusParams ? `&status=${statusParams}` : ''}${searchParams ? `&email=${searchParams}` : ''
       }">${index}</a></li>`
-    : `<li class="page-item"><a class="page-link" href="/users/page/${index}">${index}</a></li>`;
+      : `<li class="page-item"><a class="page-link" href="/users/page/${index}">${index}</a></li>`;
+});
+
+hbs.registerHelper('optionFacilities', function (value, object) {
+  let facilitiesParams = object.data.root.facilitiesParams;
+  return facilitiesParams === value
+    ? "<option selected value='" + value + "'>" + value + '</option>'
+    : "<option value='" + value + "'>" + value + '</option>';
 });
 
 hbs.registerHelper('optionReport', function (any, value, object) {
@@ -80,12 +84,7 @@ hbs.registerHelper('optionCourse', function (any, value, object) {
     : "<option value='" + value + "'>" + value + '</option>';
 });
 
-hbs.registerHelper('optionFacilities', function (any, value, object) {
-  let facilitiesParams = object.data.root.facilitiesParams;
-  return facilitiesParams === value
-    ? "<option selected value='" + value + "'>" + value + '</option>'
-    : "<option value='" + value + "'>" + value + '</option>';
-});
+
 
 hbs.registerHelper('optionStatus', function (any, value, object) {
   let statusParams = object?.data?.root.statusParams;

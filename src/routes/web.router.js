@@ -3,7 +3,7 @@ const router = express.Router();
 const uploadFile = require("../middlewares/uploadFile");
 const getTimeZone = require('../middlewares/getTime');
 const { sendMailForgotPassword } = require('../middlewares/sendMail');
-const { pushNotificationUser } = require('../middlewares/notifications');
+const { pushNotificationsAll } = require('../middlewares/notifications');
 const employees = require("../controllers/web/employees.web");
 const users = require("../controllers/web/users.web");
 const reports = require("../controllers/web/reports.web");
@@ -20,7 +20,7 @@ router.post('/sign-up', uploadFile, employees.signUp);
 router.post('/forgot-password', employees.forgotPassword, sendMailForgotPassword);
 
 //2. Users
-router.get('/users', users.list);
+router.get('/users/page/:page', users.list);
 router.get('/users/:email/', users.findOne);
 router.post('/users/block', users.block);
 router.post('/users/unblock', users.unblock);
@@ -32,6 +32,8 @@ router.post('/reports/verify-report-request', reports.verifyReportRequest);
 
 //4. Notifications
 router.get('/notifications/page/:page', notifications.list);
+router.post('/notifications/insert', notifications.insert, pushNotificationsAll);
+router.post('/notifications/delete', notifications.delete);
 
 //5. Statistical
 router.get('/statistical', statistical.statistical);

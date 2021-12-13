@@ -9,7 +9,7 @@ exports.list = async (req, res) => {
         let { page } = req.params;
         let { search, status, title } = req.query;
 
-        let pageSize = 10;
+        let pageSize = 20;
         let pageNumber = Number(page) || 1;
         let skipPage = (pageSize * pageNumber) - pageSize;
 
@@ -31,7 +31,6 @@ exports.list = async (req, res) => {
                     { title: { $regex: `.*${search}.*`, $options: "i" } },
                     { content: { $regex: `.*${search}.*`, $options: "i" } },
                     { status: { $regex: `.*${search}.*`, $options: "i" } },
-                    { createdAt: { $regex: `.*${search}.*`, $options: "i" } }
                 ]
             };
 
@@ -84,6 +83,7 @@ exports.list = async (req, res) => {
             dataTitleReports: dataTitleReports.reports,
             title,
             status,
+            search,
             reportsWait,
             ...paging
         };

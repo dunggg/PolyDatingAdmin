@@ -8,7 +8,7 @@ let Reports = new mongoose.Schema(
     content: String,
     images: String,
     status: String,
-    createdAt: String,
+    createdAt: Date,
   },
   { timestamps: false }
 );

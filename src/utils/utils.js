@@ -1,8 +1,8 @@
 const joi = require("joi");
 
 /** Base Response */
-const response = (statusCode,  message, data = undefined) => {
-  return { statusCode,  message, data };
+const response = (statusCode, message, data = undefined) => {
+  return { statusCode, message, data };
 };
 
 /** Validate */

@@ -4,7 +4,7 @@ let Tokens = new mongoose.Schema(
     {
         email: String,
         token: String,
-        createdAt: String,
+        createdAt: Date,
     },
     { timestamps: false }
 );

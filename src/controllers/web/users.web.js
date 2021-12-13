@@ -28,12 +28,12 @@ let moment = require('moment');
 //     isSearch = true;
 //   }
 //   try {
-//     let perPage = 2;
+//     let perPage = 20;
 //     let page = Number(req.params.page) || 1;
-//     let listUser = await User.find(search)
+//     let listUser = await Users.find(search)
 //       .skip(perPage * page - perPage)
-//       .limit(perPage);
-//     let countDoc = await User.countDocuments(search);
+//       .limit(perPage).sort({ createdAt: -1 });
+//     let countDoc = await Users.countDocuments(search);
 //     let countPage = Math.ceil(countDoc / perPage);
 //     let arrPage = [];
 //     // nếu tổng countPage - page >= 5
@@ -62,17 +62,21 @@ let moment = require('moment');
 //         }
 //       }
 //     }
+//     let masters = await Masters.findOne();
+//     let reportsWait = await Reports.countDocuments({ status: "Chờ duyệt" });
+
 //     let payload = {
 //       users: listUser,
+//       reportsWait,
 //       arrPage,
 //       countTo: perPage * page,
 //       countFrom: perPage * (page - 1) + 1,
 //       page: page,
 //       pre: Number(page) - 1 || arrPage.length,
 //       next: Number(page) + 1 > arrPage.length ? 1 : Number(page) + 1,
-//       course,
-//       specialized,
-//       facilities,
+//       facilities: masters.facilities,
+//       specialized: masters.specialized,
+//       course: masters.course,
 //       isSearch,
 //       buttonFirt: page > 1 ? true : false,
 //       buttonLast: page !== countPage ? true : false,
@@ -91,30 +95,128 @@ let moment = require('moment');
 //         searchParams,
 //       };
 //     }
-//     res.render('users', payload);
+//     res.render('users-clone', payload);
 //   } catch (error) {
-// res.send(error.message);
+//     res.send(error.message);
 //   }
 // };
 
+let gender = ['Giới tính', 'Nam', 'Nữ'];
+let isActives = ['Trạng thái', 'Kích hoạt', 'Khóa'];
+
 exports.list = async (req, res) => {
   try {
-    let users = await Users.find();
-    let masters = await Masters.findOne();
+    let { page } = req.params;
+    let { search,
+      facilitiesOp,
+      specializedOp,
+      courseOp,
+      genderOp,
+      isActivesOp,
+    } = req.query;
 
+    let pageSize = 2;
+    let pageNumber = Number(page) || 1;
+    let skipPage = (pageSize * pageNumber) - pageSize;
+
+    let users;
+    let countUsers;
+
+    let masters = await Masters.findOne();
     let reportsWait = await Reports.countDocuments({ status: "Chờ duyệt" });
 
-    let payload = {
-      users,
+    if (search || facilitiesOp || specializedOp || courseOp || genderOp || isActivesOp) {
+      let optionFind = {
+        facilities: { $regex: `.*${facilitiesOp}.*` },
+        specialized: { $regex: `.*${specializedOp}.*` },
+        course: { $regex: `.*${courseOp}.*` },
+        gender: { $regex: `.*${genderOp}.*` },
+        isActive: { $regex: `.*${isActivesOp}.*` },
+        $or: [
+          { email: { $regex: `.*${search}.*`, $options: "i" } },
+          { name: { $regex: `.*${search}.*`, $options: "i" } },
+          { hobbies: { $regex: `.*${search}.*`, $options: "i" } },
+          { birthDay: { $regex: `.*${search}.*`, $options: "i" } },
+          { gender: { $regex: `.*${search}.*`, $options: "i" } },
+          { description: { $regex: `.*${search}.*`, $options: "i" } },
+          { facilities: { $regex: `.*${search}.*`, $options: "i" } },
+          { specialized: { $regex: `.*${search}.*`, $options: "i" } },
+          { course: { $regex: `.*${search}.*`, $options: "i" } },
+          { isActive: { $regex: `.*${search}.*`, $options: "i" } },
+        ]
+      };
+
+      users = await Users.find(optionFind)
+        .limit(pageSize).skip(skipPage).sort({ createdAt: -1 });
+
+      countUsers = await Users.countDocuments(optionFind);
+    }
+    else {
+      users = await Users.find()
+        .limit(pageSize).skip(skipPage).sort({ createdAt: -1 });
+
+      countUsers = await Users.countDocuments();
+    }
+
+    let totalUsersPage = Math.ceil(countUsers / pageSize);
+
+    let countUsersPage = [];
+    for (let index = 1; index <= totalUsersPage; index++) {
+      countUsersPage.push(index);
+    }
+
+    let countFrom = pageSize * (pageNumber - 1) + 1;
+    let countTo = (pageSize * pageNumber);
+    let previousPage = pageNumber - 1;
+    let nextPage = pageNumber + 1;
+
+    if (countUsers < skipPage || countUsers < 1) {
+      countFrom = 0;
+      countTo = 0
+    }
+    else if (countUsers < countTo) {
+      countTo = countUsers;
+    }
+
+    let paging = {
+      pageNumber,
+      countUsers,
+      countUsersPage,
+      totalUsersPage,
+      previousPage,
+      nextPage,
+      countFrom,
+      countTo,
+    };
+
+    let payloadMasters = {
       facilities: masters.facilities,
       specialized: masters.specialized,
       course: masters.course,
-      reportsWait
-    }
+      gender,
+      isActives
+    };
+
+    let payloadParams = {
+      facilitiesOp,
+      specializedOp,
+      courseOp,
+      genderOp,
+      isActivesOp,
+      search
+    };
+
+    let payload = {
+      users,
+      reportsWait,
+      ...payloadMasters,
+      ...payloadParams,
+      ...paging
+    };
 
     res.render('users', payload);
   } catch (error) {
-    res.status(500).send(error.message)
+    res.send(error.message);
   }
 };
 
@@ -141,7 +243,7 @@ exports.findOne = async (req, res) => {
 
     res.render('profile', payload);
   } catch (error) {
-    res.status(500).send(error.message)
+    res.send(error.message);
   }
 };
 
@@ -150,7 +252,7 @@ exports.block = async (req, res) => {
     let { _id } = req.body;
 
     const payload = {
-      isActive: false,
+      isActive: "Khóa",
       updatedAt: req.getTime
     }
 
@@ -159,7 +261,7 @@ exports.block = async (req, res) => {
 
     res.redirect(`/users/${user.email}`);
   } catch (error) {
-    res.status(500).send(error.message);
+    res.send(error.message);
   }
 };
 
@@ -172,7 +274,7 @@ exports.unblock = async (req, res) => {
 
     let option = {
       reportNumber: 0,
-      isActive: true,
+      isActive: "Kích hoạt",
       updatedAt: req.getTime
     }
 
@@ -180,14 +282,13 @@ exports.unblock = async (req, res) => {
 
     res.redirect(`/users/${user.email}`);
   } catch (error) {
-    res.status(500).send(error.message);
+    res.send(error.message);
   }
 };
 
 exports.delete = async (req, res) => {
   try {
     let { _id } = req.body;
-
     let data = await Users.findOne({ _id });
 
     await Friends.deleteMany({ 'myUser.email': data.email });
@@ -198,8 +299,8 @@ exports.delete = async (req, res) => {
     await Tokens.deleteOne({ email: data.email });
     await Users.deleteOne({ _id: data._id });
 
-    res.redirect(`/users`);
+    res.redirect(`/users/page/1`);
   } catch (error) {
-    res.status(500).send(error.message);
+    res.send(error.message);
   }
 };

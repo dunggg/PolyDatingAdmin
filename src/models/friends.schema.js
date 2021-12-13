@@ -5,8 +5,8 @@ let Friends = new mongoose.Schema(
         myUser: Object,
         friend: Object,
         status: Boolean,
-        createdAt: String,
-        updatedAt: String
+        createdAt: Date,
+        updatedAt: Date
     },
     { timestamps: false }
 );

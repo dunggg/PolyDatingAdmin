@@ -1,7 +1,6 @@
-let Masters = require('../../models/masters.schema');
 let Users = require("../../models/users.schema");
-let Friends = require('../../models/friends.schema');
 let Reports = require('../../models/reports.schema');
+let Tokens = require("../../models/tokens.schema");
 let Notifications = require('../../models/notifications.schema');
 
 exports.list = async (req, res) => {
@@ -9,7 +8,7 @@ exports.list = async (req, res) => {
         let { page } = req.params;
         let { search } = req.query;
 
-        let pageSize = 10;
+        let pageSize = 20;
         let pageNumber = Number(page) || 1;
         let skipPage = (pageSize * pageNumber) - pageSize;
 
@@ -25,8 +24,7 @@ exports.list = async (req, res) => {
                     { emailReceiver: { $regex: `.*${search}.*`, $options: "i" } },
                     { title: { $regex: `.*${search}.*`, $options: "i" } },
                     { content: { $regex: `.*${search}.*`, $options: "i" } },
-                    { link: { $regex: `.*${search}.*`, $options: "i" } },
-                    { createdAt: { $regex: `.*${search}.*`, $options: "i" } }
+                    { link: { $regex: `.*${search}.*`, $options: "i" } }
                 ]
             };
 
@@ -76,10 +74,58 @@ exports.list = async (req, res) => {
         let payload = {
             notifications,
             reportsWait,
+            search,
             ...paging
         };
 
         res.render('notifications', payload);
+    } catch (error) {
+        res.send(error.message);
+    }
+};
+
+exports.insert = async (req, res, next) => {
+    try {
+        let { title, link, content } = req.body;
+
+        let dataUsers = await Users.find();
+        let dataTokens = await Tokens.find();
+        let dateUsersTokens = [];
+
+        for (let i = 0; i < dataUsers.length; i++) {
+            let ontion = {
+                emailSender: "polydating@gmail.com.vn",
+                emailReceiver: dataUsers[i].email,
+                title: null || title,
+                content: null || content,
+                link: null || link,
+                createdAt: req.getTime
+            }
+            await Notifications.create(ontion);
+        }
+
+        for (let j = 0; j < dataTokens.length; j++) {
+            dateUsersTokens.push(dataTokens[j].token);
+        }
+
+        req.notifiData = {
+            title,
+            content,
+            tokens: dateUsersTokens
+        }
+        next();
+
+    } catch (error) {
+        res.send(error.message);
+    }
+};
+
+exports.delete = async (req, res) => {
+    try {
+        let { _id } = req.body;
+
+        await Notifications.deleteOne({ _id });
+        res.redirect('/notifications/page/1');
     } catch (error) {
         res.send(error.message);
     }

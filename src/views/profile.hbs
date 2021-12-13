@@ -13,7 +13,8 @@
                 <ul class="navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link" href="/statistical"><i
                                 class="fas fa-tachometer-alt"></i><span>Thống kê</span></a></li>
-                    <li class="nav-item"><a class="nav-link active" href="/users"><i class="fas fa-user"></i><span>Người
+                    <li class="nav-item"><a class="nav-link active" href="/users/page/1"><i
+                                class="fas fa-user"></i><span>Người
                                 dùng</span></a></li>
                     <li class="nav-item">
                         <a class="nav-link" href="/reports/page/1">
@@ -93,8 +94,18 @@
                                                 </p>
                                                 <p><span class="text-black">Khóa học: </span>{{user.course}}</p>
                                                 <p><span class="text-black">Hiển thị với: </span>{{user.isShow}}</p>
+                                                <p>
+                                                    <span class="text-black">Tìm kiếm sở thích: </span>
+                                                    {{#if (eq user.statusHobby false)}}
+                                                    <span>Tắt</span>
+
+                                                    {{else}}
+                                                    <span>Bật</span>
+                                                    {{/if}}
+                                                </p>
 
                                                 <p><span class="text-black">Bạn bè: </span>{{countFriends}} bạn</p>
+
                                                 <p>
                                                     <span class="text-black">Báo cáo: </span>
                                                     {{#if (eq user.reportNumber 3)}}
@@ -112,29 +123,34 @@
                                                 </p>
 
                                                 <p>
-                                                    <span class="text-black">Hoạt động (Active): </span>
-                                                    {{#if (eq user.isActive true)}}
-                                                    <span class="text-success">Kích hoạt</span>
+                                                    <span class="text-black">Trạng thái: </span>
+                                                    {{#if (eq user.isActive "Kích hoạt")}}
+                                                    <span class="text-success">{{user.isActive}}</span>
                                                     {{else}}
-                                                    <span class="text-danger">Khóa</span>
+                                                    <span class="text-danger">{{user.isActive}}</span>
                                                     {{/if}}
                                                 </p>
 
-                                                <p><span class="text-black">Ngày tạo: </span>{{user.createdAt}}</p>
-                                                <p><span class="text-black">Ngày cập nhật: </span>{{user.updatedAt}}
+                                                <p>
+                                                    <span class="text-black">Ngày tạo: </span>{{#newDate
+                                                    user.createdAt}}{{/newDate}}
+                                                </p>
+                                                <p>
+                                                    <span class="text-black">Ngày cập nhật: </span>{{#newDate
+                                                    user.updatedAt}}{{/newDate}}
                                                 </p>
 
-                                                <div style="display: flex; justify-items: center;">
+                                                <hr>
+                                                <div class="d-md-flex">
 
-                                                    {{#if (eq user.isActive true)}}
+                                                    {{#if (eq user.isActive "Kích hoạt")}}
                                                     <form action="/users/block" method="post" id="form-block"
                                                         class="text-end col-md-6">
 
                                                         <input type="hidden" name="_id" value="{{user._id}}">
 
-                                                        <button class="btn btn-danger d-block" type="button"
-                                                            style="width: 97%;"
-                                                            onclick="check(`Khóa tài khoản {{user.email}} ?`)">
+                                                        <button class="btn btn-danger" type="button" style="width: 97%;"
+                                                            onclick="check(`Khóa tài khoản {{user.email}} ? (Xác nhận)`)">
                                                             <span class="text-white">Khóa</span>
                                                         </button>
                                                     </form>
@@ -145,9 +161,9 @@
 
                                                         <input type="hidden" name="_id" value="{{user._id}}">
 
-                                                        <button class="btn btn-success d-block" type="button"
+                                                        <button class="btn btn-success" type="button"
                                                             style="width: 97%;"
-                                                            onclick="check(`Mở khóa tài khoản {{user.email}} ?`)">
+                                                            onclick="check(`Mở khóa tài khoản {{user.email}} ? (Xác nhận)`)">
                                                             <span class="text-white">Kích hoạt</span>
                                                         </button>
                                                     </form>
@@ -160,7 +176,7 @@
 
                                                         <button class="btn btn-warning" type="button"
                                                             style="width: 97%;"
-                                                            onclick="check2(`Xóa tài khoản {{user.email}} ?`)">
+                                                            onclick="check2(`Xóa tài khoản {{user.email}} ? (Xác nhận)`)">
                                                             <span class="text-white">Xóa tài khoản</span>
                                                         </button>
                                                     </form>
@@ -191,11 +207,11 @@
         let form = document.getElementById('form-block');
         let check = prompt(value, "");
 
-        if (check == "ok") {
+        if (check === "Xác nhận") {
             form.submit();
         }
         else if (check.length > 0) {
-            alert("Sai mật khẩu");
+            alert("Sai thông tin");
         }
     };
 
@@ -203,11 +219,11 @@
         let form = document.getElementById('form-block2');
         let check = prompt(value, "");
 
-        if (check == "ok") {
+        if (check === "Xác nhận") {
             form.submit();
         }
         else if (check.length > 0) {
-            alert("Sai mật khẩu");
+            alert("Sai thông tin");
         }
     };
 </script>
