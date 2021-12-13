@@ -222,20 +222,20 @@
                                 <table class="table table-hover my-0">
                                     <thead>
                                         <tr>
-                                            <th>STT</th>
-                                            <th>Email</th>
-                                            <th>Họ tên</th>
-                                            <th>Giới tính</th>
-                                            <th>Ngày sinh</th>
-                                            <th>Sở thích</th>
-                                            <th>Cơ sở</th>
-                                            <th>Chuyên ngành</th>
-                                            <th>Khóa học</th>
-                                            <th>Báo cáo</th>
-                                            <th>Trạng thái</th>
-                                            <th>Ngày tạo</th>
-                                            <th>Ngày cập nhật</th>
-                                            <th>Hành động</th>
+                                            <th nowrap>STT</th>
+                                            <th nowrap>Email</th>
+                                            <th nowrap>Họ tên</th>
+                                            <th nowrap>Giới tính</th>
+                                            <th nowrap>Ngày sinh</th>
+                                            <th nowrap>Sở thích</th>
+                                            <th nowrap>Cơ sở</th>
+                                            <th nowrap>Chuyên ngành</th>
+                                            <th nowrap>Khóa học</th>
+                                            <th nowrap>Báo cáo</th>
+                                            <th nowrap>Trạng thái</th>
+                                            <th nowrap>Ngày tạo</th>
+                                            <th nowrap>Ngày cập nhật</th>
+                                            <th nowrap>Hành động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -246,18 +246,18 @@
                                                 <a style="text-decoration: none;" class="text-info"
                                                     href="/users/{{this.email}}">{{this.email}}</a>
                                             </td>
-                                            <td>
+                                            <td class="text-nowrap">
                                                 <img class="rounded-circle me-2" width="30" height="30"
                                                     src="{{this.images.[0]}}">
                                                 {{this.name}}
                                             </td>
-                                            <td>{{this.gender}}</td>
-                                            <td>{{this.birthDay}}</td>
-                                            <td>{{this.hobbies}}</td>
-                                            <td>{{this.facilities}}</td>
-                                            <td>{{this.specialized}}</td>
-                                            <td>{{this.course}}</td>
-                                            <td>
+                                            <td class="text-nowrap">{{this.gender}}</td>
+                                            <td class="text-nowrap">{{this.birthDay}}</td>
+                                            <td class="text-nowrap">{{this.hobbies}}</td>
+                                            <td class="text-nowrap">{{this.facilities}}</td>
+                                            <td class="text-nowrap">{{this.specialized}}</td>
+                                            <td class="text-nowrap">{{this.course}}</td>
+                                            <td class="text-nowrap">
                                                 {{#if (eq this.reportNumber 3)}}
                                                 <span class="text-warning">{{this.reportNumber}} lượt</span>
 
@@ -271,16 +271,71 @@
                                                 {{/if}}
                                                 {{/if}}
                                             </td>
-                                            <td>
+                                            <td class="text-nowrap">
                                                 {{#if (eq this.isActive "Kích hoạt")}}
                                                 <span class="text-success">Kích hoạt</span>
                                                 {{else}}
                                                 <span class="text-danger">Khóa</span>
                                                 {{/if}}
                                             </td>
-                                            <td>{{#newDate this.createdAt}}{{/newDate}}</td>
-                                            <td>{{#newDate this.updatedAt}}{{/newDate}}</td>
+                                            <td class="text-nowrap">{{#newDate this.createdAt}}{{/newDate}}</td>
+                                            <td class="text-nowrap">{{#newDate this.updatedAt}}{{/newDate}}</td>
 
+                                            <td>
+                                                {{#if (eq this.isActive "Kích hoạt")}}
+                                                <div style="display: flex">
+                                                    <form action="/users/block" method="post" id="form-block"
+                                                        class="text-end col-md-6">
+
+                                                        <input type="hidden" name="_id" value="{{this._id}}">
+                                                        <input type="hidden" name="checkAction" value="1">
+
+                                                        <button class="btn btn-danger" type="button"
+                                                            style="margin-right: 5px;"
+                                                            onclick="check(`Khóa tài khoản {{this.email}} ? (Xác nhận)`)">
+                                                            <i class="fas fa-lock text-white"></i>
+                                                        </button>
+                                                    </form>
+
+                                                    <form action="/users/delete" method="post" id="form-block2"
+                                                        class="text-end col-md-6">
+
+                                                        <input type="hidden" name="_id" value="{{this._id}}">
+
+                                                        <button class="btn btn-warning" type="button"
+                                                            onclick="check2(`Xóa tài khoản {{this.email}} ? (Xác nhận)`)">
+                                                            <i class="fas fa-trash-alt text-white"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                {{else}}
+                                                <div style="display: flex;">
+                                                    <form action="/users/unblock" method="post" id="form-block"
+                                                        class="text-end col-md-6">
+
+                                                        <input type="hidden" name="_id" value="{{this._id}}">
+                                                        <input type="hidden" name="checkAction" value="1">
+
+                                                        <button class="btn btn-success" type="button"
+                                                            style="margin-right: 5px;"
+                                                            onclick="check(`Mở khóa tài khoản {{this.email}} ? (Xác nhận)`)">
+                                                            <i class="fas fa-unlock text-white"></i>
+                                                        </button>
+                                                    </form>
+
+                                                    <form action="/users/delete" method="post" id="form-block2"
+                                                        class="text-end col-md-6">
+
+                                                        <input type="hidden" name="_id" value="{{this._id}}">
+
+                                                        <button class="btn btn-warning" type="button"
+                                                            onclick="check2(`Xóa tài khoản {{this.email}} ? (Xác nhận)`)">
+                                                            <i class="fas fa-trash-alt text-white"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                {{/if}}
+                                            </td>
                                         </tr>
                                         {{/each }}
                                     </tbody>
@@ -395,4 +450,28 @@
 
         form.submit();
     }
+
+    function check(value) {
+        let form = document.getElementById('form-block');
+        let check = prompt(value, "");
+
+        if (check === "Xác nhận") {
+            form.submit();
+        }
+        else if (check.length > 0) {
+            alert("Sai thông tin");
+        }
+    };
+
+    function check2(value) {
+        let form = document.getElementById('form-block2');
+        let check = prompt(value, "");
+
+        if (check === "Xác nhận") {
+            form.submit();
+        }
+        else if (check.length > 0) {
+            alert("Sai thông tin");
+        }
+    };
 </script>

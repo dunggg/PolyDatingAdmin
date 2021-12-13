@@ -147,13 +147,13 @@ exports.list = async (req, res) => {
       };
 
       users = await Users.find(optionFind)
-        .limit(pageSize).skip(skipPage).sort({ createdAt: -1 });
+        .limit(pageSize).skip(skipPage).sort({ createdAt: -1, updatedAt: -1 });
 
       countUsers = await Users.countDocuments(optionFind);
     }
     else {
       users = await Users.find()
-        .limit(pageSize).skip(skipPage).sort({ createdAt: -1 });
+        .limit(pageSize).skip(skipPage).sort({ createdAt: -1, updatedAt: -1 });
 
       countUsers = await Users.countDocuments();
     }
@@ -249,9 +249,9 @@ exports.findOne = async (req, res) => {
 
 exports.block = async (req, res) => {
   try {
-    let { _id } = req.body;
+    let { _id, checkAction } = req.body;
 
-    const payload = {
+    let payload = {
       isActive: "Khóa",
       updatedAt: req.getTime
     }
@@ -259,7 +259,13 @@ exports.block = async (req, res) => {
     let user = await Users.findByIdAndUpdate({ _id }, payload);
     if (!user) return res.sendStatus(404);
 
-    res.redirect(`/users/${user.email}`);
+    if (checkAction == "1") {
+      res.redirect(`/users/page/1`);
+    }
+    else {
+      res.redirect(`/users/${user.email}`);
+    }
+
   } catch (error) {
     res.send(error.message);
   }
@@ -267,20 +273,24 @@ exports.block = async (req, res) => {
 
 exports.unblock = async (req, res) => {
   try {
-    let { _id } = req.body;
+    let { _id, checkAction } = req.body;
 
-    let user = await Users.findOne({ _id });
-    if (!user) return res.sendStatus(404);
-
-    let option = {
+    let payload = {
       reportNumber: 0,
       isActive: "Kích hoạt",
       updatedAt: req.getTime
     }
 
-    await Users.updateOne({ _id }, option);
+    let user = await Users.findOneAndUpdate({ _id }, payload);
+    if (!user) return res.sendStatus(404);
 
-    res.redirect(`/users/${user.email}`);
+    if (checkAction == "1") {
+      res.redirect(`/users/page/1`);
+    }
+    else {
+      res.redirect(`/users/${user.email}`);
+    }
+
   } catch (error) {
     res.send(error.message);
   }

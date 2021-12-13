@@ -135,24 +135,24 @@
                                 <table class="table table-hover my-0">
                                     <thead>
                                         <tr>
-                                            <th>STT</th>
-                                            <th>Tiêu đề</th>
-                                            <th>Nội dung</th>
-                                            <th>Hình ảnh</th>
-                                            <th>Người báo cáo</th>
-                                            <th>Người bị báo cáo</th>
-                                            <th>Thời gian gửi</th>
-                                            <th>Trạng thái</th>
-                                            <th>Hành động</th>
+                                            <th nowrap>STT</th>
+                                            <th nowrap>Tiêu đề</th>
+                                            <th nowrap>Nội dung</th>
+                                            <th nowrap>Hình ảnh</th>
+                                            <th nowrap>Người báo cáo</th>
+                                            <th nowrap>Người bị báo cáo</th>
+                                            <th nowrap>Thời gian gửi</th>
+                                            <th nowrap>Trạng thái</th>
+                                            <th nowrap>Hành động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {{#each reports}}
                                         <tr>
                                             <td>{{@index}}</td>
-                                            <td>{{this.title}}</td>
-                                            <td>{{this.content}}</td>
-                                            <td>
+                                            <td class="text-nowrap">{{this.title}}</td>
+                                            <td style="max-width: 500px;">{{this.content}}</td>
+                                            <td class="text-nowrap">
                                                 <a style="text-decoration: none;" class="text-primary"
                                                     href="{{this.images}}">Xem hình ảnh</a>
                                             </td>
@@ -164,9 +164,9 @@
                                                 <a style="text-decoration: none;" class="text-info"
                                                     href="/users/{{this.emailReceiver}}">{{this.emailReceiver}}</a>
                                             </td>
-                                            <td>{{#newDate this.createdAt}}{{/newDate}}</td>
+                                            <td class="text-nowrap">{{#newDate this.createdAt}}{{/newDate}}</td>
 
-                                            <td>
+                                            <td class="text-nowrap">
                                                 {{#if (eq this.status "Chấp thuận")}}
                                                 <span class="text-success">{{this.status}}</span>
 
