@@ -16,8 +16,7 @@ hbs.registerHelper({
 });
 
 hbs.registerHelper('newDate', (value) => {
-  let newDate = value.toString().slice(0, -26);
-  return newDate;
+  return value.toLocaleString();
 });
 
 hbs.registerHelper('compare', function (index, object) {
