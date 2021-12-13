@@ -290,6 +290,7 @@ exports.delete = async (req, res) => {
       await Friends.deleteMany({ 'friends.email': currentUser.email });
       await Notifications.deleteMany({ emailSender: currentUser.email });
       await Notifications.deleteMany({ emailReceiver: currentUser.email });
+      await Reports.deleteMany({ emailSender: currentUser.email });
       await Reports.deleteMany({ emailReceiver: currentUser.email });
       await Tokens.deleteOne({ email: currentUser.email });
       await Users.deleteOne({ _id: currentUser._id });
