@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+let mongoose = require('mongoose');
 
-const connectDB = async () => {
+let connectDB = async () => {
     try {
         await mongoose.connect(`mongodb+srv://poly_dating:polydating123@cluster0.yvdeq.mongodb.net/poly_dating?retryWrites=true&w=majority`);
         console.log('Connect Database successfully');

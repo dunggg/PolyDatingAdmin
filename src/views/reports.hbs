@@ -15,9 +15,16 @@
                                 class="fas fa-tachometer-alt"></i><span>Thống kê</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/users/page/1"><i class="fas fa-user"></i><span>Người
                                 dùng</span></a></li>
-                    <li class="nav-item"><a class="nav-link active" href="/reports"><i class="fas fa-flag"></i><span>Báo
-                                cáo</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/notifications"><i
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/reports/page/1">
+                            <i class="fas fa-flag"></i>
+                            <span>Báo cáo</span>
+                            {{#if (gt reportsWait 0)}}
+                            <span class="text-warning"> {{reportsWait}} lượt</span>
+                            {{/if}}
+                        </a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="/notifications/page/1"><i
                                 class="fas fa-bell"></i><span>Thông
                                 báo</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-sign-out-alt"></i><span>Đăng
@@ -48,104 +55,289 @@
                                 <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
-                                            <select class="d-inline-block form-select form-select-sm">
-                                                <option value="" selected="">Trạng thái</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
+                                            <select class="d-inline-block form-select form-select-sm me-4"
+                                                id="statusOp">
+                                                {{#each statusReports}}
+
+                                                {{#if (eq this "Trạng thái")}}
+                                                <option value="">{{this}}</option>
+
+                                                {{else}}
+                                                {{#if (eq this @root.status)}}
+                                                <option value="{{@root.status}}" selected="">{{@root.status}}
+                                                </option>
+
+                                                {{else}}
+                                                <option value="{{this}}">{{this}}</option>
+
+                                                {{/if}}
+                                                {{/if}}
+
+                                                {{/each}}
                                             </select>
                                         </label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-auto">
-                                    <div class="text-md-end dataTables_filter" id="dataTable_filter">
+                                    <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
-                                            <input type="search" class="form-control form-control-sm"
-                                                aria-controls="dataTable" placeholder="Tìm kiếm...">
+                                            <select class="d-inline-block form-select form-select-sm me-4" id="titleOp">
+                                                {{#each dataTitleReports}}
+
+                                                {{#if (eq this "Tiêu đề")}}
+                                                <option value="">{{this}}</option>
+
+                                                {{else}}
+                                                {{#if (eq this @root.title)}}
+                                                <option value="{{@root.title}}" selected="">{{@root.title}}
+                                                </option>
+
+                                                {{else}}
+                                                <option value="{{this}}">{{this}}</option>
+
+                                                {{/if}}
+                                                {{/if}}
+
+                                                {{/each}}
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <input type="search" class="form-control form-control-sm" id="btnSearch"
+                                                aria-controls="dataTable" placeholder="Tìm kiếm..." value="{{search}}">
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <form action="/reports/page/1" method="get" id="id-form6">
+                                                <input type="hidden" id="statusIp" name="status">
+                                                <input type="hidden" id="titleIp" name="title">
+                                                <input type="hidden" id="searchIp" name="search">
+
+                                                <input type="submit" class="form-control form-control-sm btn-primary"
+                                                    onclick="checkSubmit()" aria-controls="dataTable" value="Tìm kiếm">
+                                            </form>
                                         </label>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- ----------------------------------- -->
-                            <div class="table-responsive table mt-2" role="grid" aria-describedby="dataTable_info">
+                            <div class="table-responsive mt-2" role="grid" aria-describedby="dataTable_info">
                                 <table class="table table-hover my-0">
                                     <thead>
                                         <tr>
-                                            <th>Id</th>
-                                            <th>Tiêu đề</th>
-                                            <th>Nội dung</th>
-                                            <th>Hình ảnh</th>
-                                            <th>Người nhận</th>
-                                            <th>Người gửi</th>
-                                            <th>Thời gian</th>
-                                            <th>Trạng thái</th>
+                                            <th nowrap>STT</th>
+                                            <th nowrap>Tiêu đề</th>
+                                            <th nowrap>Nội dung</th>
+                                            <th nowrap>Hình ảnh</th>
+                                            <th nowrap>Người báo cáo</th>
+                                            <th nowrap>Người bị báo cáo</th>
+                                            <th nowrap>Thời gian gửi</th>
+                                            <th nowrap>Trạng thái</th>
+                                            <th nowrap>Hành động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {{#each reports}}
                                         <tr>
-                                            <td>1</td>
-                                            <td>Báo cáo</td>
-                                            <td>Ăn a ăn e Ăn a ăn e Ăn a ăn e Ăn a ăn e</td>
-                                            <td><img class="rounded-circle me-2" width="30" height="30"
-                                                    src="https://f43-zpg.zdn.vn/2575592389455815324/e11f1916619f97c1ce8e.jpg">
+                                            <td>{{@index}}</td>
+                                            <td class="text-nowrap">{{this.title}}</td>
+                                            <td style="max-width: 500px;">{{this.content}}</td>
+                                            <td class="text-nowrap">
+                                                <a style="text-decoration: none;" class="text-primary"
+                                                    href="{{this.images}}">Xem hình ảnh</a>
                                             </td>
-                                            <td>Thắng Rách</td>
-                                            <td>Thắng Rách</td>
-                                            <td>20/09/2021</td>
-                                            <td class="text-success">Đã duyệt</td>
-                                        </tr>
+                                            <td>
+                                                <a style="text-decoration: none;" class="text-info"
+                                                    href="/users/{{this.emailSender}}">{{this.emailSender}}</a>
+                                            </td>
+                                            <td>
+                                                <a style="text-decoration: none;" class="text-info"
+                                                    href="/users/{{this.emailReceiver}}">{{this.emailReceiver}}</a>
+                                            </td>
+                                            <td class="text-nowrap">{{#newDate this.createdAt}}{{/newDate}}</td>
 
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Báo cáo</td>
-                                            <td>Ăn a ăn e Ăn a ăn e Ăn a ăn e Ăn a ăn e</td>
-                                            <td><img class="rounded-circle me-2" width="30" height="30"
-                                                    src="https://f43-zpg.zdn.vn/2575592389455815324/e11f1916619f97c1ce8e.jpg">
+                                            <td class="text-nowrap">
+                                                {{#if (eq this.status "Chấp thuận")}}
+                                                <span class="text-success">{{this.status}}</span>
+
+                                                {{else}}
+                                                {{#if (eq this.status "Từ chối")}}
+                                                <span class="text-danger">{{this.status}}</span>
+
+                                                {{else}}
+                                                <span class="text-warning">{{this.status}}</span>
+
+                                                {{/if}}
+                                                {{/if}}
                                             </td>
-                                            <td>Thắng Rách</td>
-                                            <td>Thắng Rách</td>
-                                            <td>20/09/2021</td>
-                                            <td class="text-danger">Chưa duyệt</td>
+                                            <td>
+                                                {{#if (eq this.status "Chờ duyệt")}}
+                                                <div style="display: flex">
+                                                    <form action="/reports/verify-report-request" method="post"
+                                                        class="text-end col-md-6" id="form-block2"
+                                                        style="margin-right: 5px;">
+
+                                                        <input type="hidden" value="{{this.emailReceiver}}"
+                                                            name="email">
+                                                        <input type="hidden" value="{{this._id}}" name="_idReport">
+                                                        <input type="hidden" value="true" name="action">
+
+                                                        <button class="btn btn-success" type="button"
+                                                            onclick="check(`Chấp thuận báo cáo của {{this.emailSender}}`)">
+                                                            <i class="fas fa-check text-white"></i>
+                                                        </button>
+                                                    </form>
+
+                                                    <form action="/reports/verify-report-request" method="post"
+                                                        class="text-end col-md-6" style="display: flex"
+                                                        id="form-block2">
+
+                                                        <input type="hidden" value="{{this.emailReceiver}}"
+                                                            name="email">
+                                                        <input type="hidden" value="{{this._id}}" name="_idReport">
+                                                        <input type="hidden" value="false" name="action">
+
+                                                        <button class="btn btn-danger" type="button"
+                                                            onclick="check(`Từ chối báo cáo của {{this.emailSender}}`)">
+                                                            <i class="fas fa-times"></i></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                {{else}}
+                                                <div style="display: flex;">
+                                                    <button class="btn btn-success" disabled=""
+                                                        style="margin-right: 5px;">
+                                                        <i class="fas fa-check text-white"></i>
+                                                    </button>
+
+                                                    <button class="btn btn-danger" disabled="">
+                                                        <i class="fas fa-times"></i></i>
+                                                    </button>
+                                                </div>
+                                                {{/if}}
+                                            </td>
                                         </tr>
+                                        {{/each}}
                                     </tbody>
                                 </table>
                             </div>
 
-                            <div class="row">
+                            <div class="row mt-3">
                                 <div class="col-md-6 align-self-center">
-                                    <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Hiển
-                                        thị 1 đến 10 của 21</p>
+                                    <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">
+                                        Hiển thị {{countFrom}} đến {{countTo}} trong tổng {{countReports}}</p>
                                 </div>
+
                                 <div class="col-md-6">
                                     <nav
                                         class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
                                         <ul class="pagination">
-                                            <li class="page-item disabled"><a class="page-link" href="#"
-                                                    aria-label="Previous"><span aria-hidden="true">«</span></a></li>
-                                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                            <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span
-                                                        aria-hidden="true">»</span></a></li>
+
+                                            {{!-- Nếu page < 2 thì ẩn nút pre --}} {{#if ( gt countReports 0)}} {{#if
+                                                (lt pageNumber 2)}} <li class="page-item disabled"><a class="page-link"
+                                                    href="#" aria-label="Previous"><span aria-hidden="true">«</span></a>
+                                                </li>
+                                                {{else}}
+                                                <li class="page-item"><a class="page-link"
+                                                        href="/reports/page/{{previousPage}}"
+                                                        aria-label="Previous"><span aria-hidden="true">«</span></a>
+                                                </li>
+                                                {{/if}}
+                                                {{/if}}
+
+                                                {{!-- ------------------------------- --}}
+
+                                                {{!-- List page --}}
+                                                {{#each countReportsPage}}
+
+                                                {{#if (eq this @root.pageNumber)}}
+                                                <li class="page-item active"><a class="page-link"
+                                                        href="/reports/page/{{this}}">{{this}}</a>
+                                                </li>
+                                                {{else}}
+                                                <li class="page-item"><a class="page-link"
+                                                        href="/reports/page/{{this}}">{{this}}</a>
+                                                </li>
+                                                {{/if}}
+
+                                                {{/each}}
+                                                {{!-- ------------------------------- --}}
+
+                                                {{!-- Nếu page = tổng số page thì ẩn nút next --}}
+                                                {{#if (eq pageNumber totalReportsPage)}}
+                                                <li class="page-item disabled"><a class="page-link" href="#"
+                                                        aria-label="Previous"><span aria-hidden="true">»</span></a>
+                                                </li>
+                                                {{else}}
+                                                {{#if (gt countReports 0)}}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="/reports/page/{{nextPage}}"
+                                                        aria-label="Previous">
+                                                        <span aria-hidden="true">»</span>
+                                                    </a>
+                                                </li>
+                                                {{/if}}
+                                                {{/if}}
+                                                {{!-- ------------------------------- --}}
                                         </ul>
                                     </nav>
                                 </div>
+
                             </div>
+                            <!-- ----------------------------------- -->
                         </div>
+
                     </div>
                 </div>
 
             </div>
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © Brand 2021</span></div>
+                    <div class="text-center my-auto copyright"><span>Poly Dating 2021</span></div>
                 </div>
             </footer>
         </div>
         <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
 
-    <script src="public/js/theme.js"></script>
+    <script src="/public/js/theme.js"></script>
 </body>
+
+<script>
+    function check(v) {
+        let form = document.getElementById('form-block2');
+        let check = confirm(v);
+
+        if (check == true) {
+            return form.submit();
+        }
+    }
+
+    function checkSubmit() {
+        let form = document.getElementById('id-form6');
+
+        let statusOp = document.getElementById('statusOp');
+        let titleOp = document.getElementById('titleOp');
+        let btnSearch = document.getElementById('btnSearch');
+
+        let statusIp = document.getElementById('statusIp');
+        let titleIp = document.getElementById('titleIp');
+        let searchIp = document.getElementById('searchIp');
+
+        statusIp.value = statusOp.value;
+        titleIp.value = titleOp.value;
+        searchIp.value = btnSearch.value;
+
+        form.submit();
+    }
+</script>

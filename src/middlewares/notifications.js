@@ -1,11 +1,10 @@
-const Nofitications = require('../models/notifications.schema');
-const Tokens = require('../models/tokens.schema');
-const { response } = require("../utils/utils");
-const randomString = require('randomstring');
-const info = require('../config/info');
-const fetch = require('node-fetch');
+let Notifications = require('../models/notifications.schema');
+let Tokens = require('../models/tokens.schema');
+let { response } = require("../utils/utils");
+let info = require('../config/info');
+let fetch = require('node-fetch');
 
-const optionConfig = {
+let optionConfig = {
     'method': 'POST',
     'headers': {
         'Authorization': info.authorizationKey,
@@ -13,27 +12,23 @@ const optionConfig = {
     }
 };
 
-const pushNotificationUser = async (req, res) => {
+let pushNotificationsFriendsRequest = async (req, res) => {
     try {
-        const notifiData = req.notifiData;
-        const dataToken = await Tokens.findOne({ email: notifiData.emailReceiver });
+        let notifiData = req.notifiData;
+        let dataToken = await Tokens.findOne({ email: notifiData.emailReceiver });
 
-        const optionNotifi = {
+        let optionNotifi = {
             emailSender: notifiData.emailSender,
-            emailReceiver: {
-                email: notifiData.emailReceiver,
-                status: true
-            },
+            emailReceiver: notifiData.emailReceiver,
             title: "Yêu cầu kết bạn",
             content: notifiData.content,
             link: null,
-            randomKey: randomString.generate(10),
             createdAt: req.getTime
         }
 
-        await Nofitications.create(optionNotifi);
+        await Notifications.create(optionNotifi);
 
-        const dataBody = {
+        let dataBody = {
             'data': {
                 title: `Poly Dating - ${optionNotifi.title}`,
                 content: notifiData.content
@@ -41,7 +36,7 @@ const pushNotificationUser = async (req, res) => {
             'to': dataToken.token
         };
 
-        const optionPush = {
+        let optionPush = {
             ...optionConfig,
             'body': JSON.stringify(dataBody)
         };
@@ -54,4 +49,32 @@ const pushNotificationUser = async (req, res) => {
     }
 };
 
-module.exports = { pushNotificationUser };
+let pushNotificationsAll = async (req, res) => {
+    try {
+        let notifiData = req.notifiData;
+
+        let dataBody = {
+            'data': {
+                title: `Poly Dating - ${notifiData.title}`,
+                content: notifiData.content
+            },
+            'registration_ids': notifiData.tokens
+        };
+
+        let optionPush = {
+            ...optionConfig,
+            'body': JSON.stringify(dataBody)
+        };
+
+        fetch('https://fcm.googleapis.com/fcm/send', optionPush)
+            .then(() => res.redirect('/notifications/page/1'));
+
+    } catch (error) {
+        res.send(error.message);
+    }
+};
+
+module.exports = {
+    pushNotificationsFriendsRequest,
+    pushNotificationsAll
+};

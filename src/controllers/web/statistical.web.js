@@ -7,7 +7,7 @@ const json = require('../../config/masters.json');
 
 const { course, specialized, facilities } = json[0];
 
-const randomNumber = (length) => {
+let randomNumber = (length) => {
   var arr = [];
   while (arr.length < length) {
     var r = Math.floor(Math.random() * 100) + 1;
@@ -190,9 +190,9 @@ exports.statistical = async (req, res) => {
       totalMessage: randomNumber(data.length),
       totalBlock: randomNumber(data.length),
       data,
-      course,
-      specialized,
-      facilities,
+      course: masters.course,
+      specialized: masters.specialized,
+      facilities: masters.facilities,
       courseParams,
       specializedParams,
       facilitiesParams,
@@ -208,6 +208,6 @@ exports.statistical = async (req, res) => {
             ).format('YYYY')}`,
     });
   } catch (error) {
-    res.status(500).send(500, error.message);
+    res.send(error.message);
   }
 };

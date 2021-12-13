@@ -1,8 +1,8 @@
-const Emplooyee = require('../../models/employees.schema');
-const { response, signIn, signUp } = require("../../utils/utils");
-const info = require('../../config/info');
-const jwt = require('jsonwebtoken');
-const randomString = require('randomstring');
+let Emplooyee = require('../../models/employees.schema');
+let { response, signIn, signUp } = require("../../utils/utils");
+let info = require('../../config/info');
+let jwt = require('jsonwebtoken');
+let randomString = require('randomstring');
 
 let pathUrl = "https://poly-dating.herokuapp.com/public/data_images/";
 
@@ -10,15 +10,15 @@ exports.index = async (req, res) => {
     try {
         res.render('index');
     } catch (error) {
-        res.status(500).send(error.message);
+        res.send(error.message);
     }
 };
 
 exports.signIn = async (req, res) => {
     try {
-        const { error, value } = signIn.validate(req.body);
+        let { error, value } = signIn.validate(req.body);
 
-        const data = await Emplooyee.findOne({ email: value.email });
+        let data = await Emplooyee.findOne({ email: value.email });
 
         if (value.email == 'admin' && value.password == "admin") {
             // res.redirect('/statistical');
@@ -33,7 +33,7 @@ exports.signIn = async (req, res) => {
             res.json('Sai email hoặc mật khẩu');
         }
         else {
-            const verifyPass = jwt.verify(data.password, info.hassPassKey);
+            let verifyPass = jwt.verify(data.password, info.hassPassKey);
 
             if (verifyPass != value.password) {
                 // res.render('index', { msgError: 'Sai mật khẩu' });
@@ -49,13 +49,13 @@ exports.signIn = async (req, res) => {
             }
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        res.send(error.message);
     }
 };
 
 exports.signUp = async (req, res) => {
     try {
-        const { error, value } = signUp.validate(req.body);
+        let { error, value } = signUp.validate(req.body);
 
         if (error) {
             // res.render('index', { msgError: error.message });
@@ -66,10 +66,10 @@ exports.signUp = async (req, res) => {
             res.json("Cần chọn ảnh");
         }
         else {
-            const hashPass = jwt.sign(value.password, info.hassPassKey);
-            const accessToken = jwt.sign(value.email, info.accessKey);
+            let hashPass = jwt.sign(value.password, info.hassPassKey);
+            let accessToken = jwt.sign(value.email, info.accessKey);
 
-            const payload = {
+            let payload = {
                 email: value.email,
                 password: hashPass,
                 name: value.name,
@@ -85,30 +85,30 @@ exports.signUp = async (req, res) => {
             res.json("Đăng ký");
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        res.send(error.message);
     }
 };
 
 exports.forgotPassword = async (req, res, next) => {
     try {
-        const { email } = req.body;
+        let { email } = req.body;
 
         if (!email) {
             // res.render('index', { msgError: "Cần nhập email" });
             res.json("Cần nhập email");
         }
         else {
-            const data = await Emplooyee.findOne({ email });
+            let data = await Emplooyee.findOne({ email });
 
             if (!data) {
                 // res.render('index', { msgError: "Email không tồn tại" });
                 res.json("Email không tồn tại");
             }
             else {
-                const passRandom = randomString.generate(6);
-                const hassPass = jwt.sign(passRandom, info.hassPassKey);
+                let passRandom = randomString.generate(6);
+                let hassPass = jwt.sign(passRandom, info.hassPassKey);
 
-                const payload = {
+                let payload = {
                     password: hassPass,
                     updatedAt: req.getTime
                 };
@@ -123,6 +123,6 @@ exports.forgotPassword = async (req, res, next) => {
             }
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        res.send(error.message);
     }
 };

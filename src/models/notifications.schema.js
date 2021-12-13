@@ -1,14 +1,13 @@
-const mongoose = require("mongoose");
+let mongoose = require("mongoose");
 
-const Notifications = new mongoose.Schema(
+let Notifications = new mongoose.Schema(
   {
     emailSender: String,
-    emailReceiver: [Object],
+    emailReceiver: String,
     title: String,
     content: String,
     link: String,
-    randomKey: String,
-    createdAt: String
+    createdAt: Date
   },
   { timestamps: false }
 );

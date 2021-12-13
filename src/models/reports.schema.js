@@ -1,15 +1,14 @@
-const mongoose = require("mongoose");
+let mongoose = require("mongoose");
 
-const Reports = new mongoose.Schema(
+let Reports = new mongoose.Schema(
   {
-    emailReceiver: String,
     emailSender: String,
+    emailReceiver: String,
     title: String,
     content: String,
     images: String,
-    status: Boolean,
-    createdAt: String,
-    updatedAt: String
+    status: String,
+    createdAt: Date,
   },
   { timestamps: false }
 );

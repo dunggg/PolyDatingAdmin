@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+let mongoose = require("mongoose");
 
-const Users = new mongoose.Schema(
+let Users = new mongoose.Schema(
   {
     email: { type: String, unique: true },
     name: String,
@@ -13,12 +13,13 @@ const Users = new mongoose.Schema(
     specialized: String,
     course: String,
     isShow: [String],
-    isActive: Boolean,
+    isActive: String,
     statusHobby: Boolean,
     reportNumber: Number,
     code: String,
-    createdAt: String,
-    updatedAt: String
+    accessToken: String,
+    createdAt: Date,
+    updatedAt: Date
   },
   { timestamps: false }
 );

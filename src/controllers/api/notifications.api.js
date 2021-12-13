@@ -1,34 +1,13 @@
-const Nofitications = require('../../models/notifications.schema');
-const { response } = require("../../utils/utils");
+let Nofitications = require('../../models/notifications.schema');
+let { response } = require("../../utils/utils");
 
 exports.list = async (req, res) => {
     try {
-        const { email } = req.params;
+        let data = await Nofitications.find({ 'emailReceiver.email': req.currentUser.email });
 
-        const option = {
-            'emailReceiver.email': email,
-            'emailReceiver.status': true
-        };
-
-        const data = await Nofitications.find(option);
-
-        const dataCheckSatus = [];
-
-        for (let index = 0; index < data.length; index++) {
-            const pos = data[index].emailReceiver;
-
-            for (let j = 0; j < pos.length; j++) {
-
-                if (pos[j].email == email && pos[j].status == true) {
-                    dataCheckSatus.push(data[index]);
-                    break;
-                }
-            }
-        }
-
-        const payload = {
-            total: dataCheckSatus.length,
-            nofitications: dataCheckSatus
+        let payload = {
+            total: data.length,
+            nofitications: data
         };
 
         res.status(200).json(response(200, `Lấy danh sách thông báo thành công`, payload));
@@ -40,25 +19,8 @@ exports.list = async (req, res) => {
 
 exports.delete = async (req, res) => {
     try {
-        const { email, randomKey } = req.body;
-
-        const optionFindOne = {
-            'emailReceiver.email': email,
-            randomKey
-        }
-
-        const data = await Nofitications.findOne(optionFindOne);
-
-        let emailReceiver = data.emailReceiver;
-
-        let index = emailReceiver.map((v) => {
-            return v.email;
-        }).indexOf(email);
-
-        emailReceiver[index].status = false;
-
-        await Nofitications.updateMany(optionFindOne, { emailReceiver });
-        res.status(200).json(response(200, `Xóa thông báo thành công`));
+        await Nofitications.deleteOne({ 'emailReceiver.email': req.currentUser.email, });
+        res.status(200).json(response(200, "Pass", `Xóa thông báo thành công`));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));

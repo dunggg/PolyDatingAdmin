@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+let mongoose = require("mongoose");
 
-const Employee = new mongoose.Schema(
+let Employees = new mongoose.Schema(
     {
         email: {
             type: String,
@@ -9,12 +9,12 @@ const Employee = new mongoose.Schema(
         password: String,
         name: String,
         images: String,
+        isActive: String,
         accessToken: String,
-        isActive: Boolean,
-        createdAt: String,
-        updatedAt: String
+        createdAt: Date,
+        updatedAt: Date
     },
     { timestamps: false }
 );
 
-module.exports = mongoose.model("employees", Employee);
+module.exports = mongoose.model("employees", Employees);

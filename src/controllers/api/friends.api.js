@@ -1,25 +1,25 @@
-const Friends = require('../../models/friends.schema');
-const Users = require('../../models/users.schema');
-const { response } = require("../../utils/utils");
+let Friends = require('../../models/friends.schema');
+let Users = require('../../models/users.schema');
+let { response } = require("../../utils/utils");
 
 // Danh sách yêu cầu kết bạn
 exports.listFriendsRequests = async (req, res) => {
     try {
-        const { email } = req.params;
+        let currentUser = req.currentUser;
 
-        const optionFind = {
-            "friend.email": email,
+        let optionFind = {
+            "friend.email": currentUser.email,
             status: false
         }
 
-        const dataFriend = await Friends.find(optionFind);
+        let dataFriend = await Friends.find(optionFind);
 
-        const payload = {
+        let payload = {
             total: dataFriend.length,
             friends: dataFriend
         }
 
-        res.status(200).json(response(200, `Lấy danh sách yêu cầu kết bạn của ${email}`, payload));
+        res.status(200).json(response(200, `Lấy danh sách yêu cầu kết bạn của ${currentUser.name}`, payload));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
@@ -29,21 +29,21 @@ exports.listFriendsRequests = async (req, res) => {
 // Danh sách lời mời kết bạn đã gửi
 exports.listOfRequestsSent = async (req, res) => {
     try {
-        const { email } = req.params;
+        let currentUser = req.currentUser;
 
-        const optionFind = {
-            "myUser.email": email,
+        let optionFind = {
+            "myUser.email": currentUser.email,
             status: false
         }
 
-        const dataFriend = await Friends.find(optionFind);
+        let dataFriend = await Friends.find(optionFind);
 
-        const payload = {
+        let payload = {
             total: dataFriend.length,
             friends: dataFriend
         }
 
-        res.status(200).json(response(200, `Lấy danh sách lời mời kết bạn đã gửi của ${email}`, payload));
+        res.status(200).json(response(200, `Lấy danh sách lời mời kết bạn đã gửi của ${currentUser.name}`, payload));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
@@ -53,21 +53,21 @@ exports.listOfRequestsSent = async (req, res) => {
 // Danh sách bạn bè
 exports.listFriends = async (req, res) => {
     try {
-        const { email } = req.params;
+        let currentUser = req.currentUser;
 
-        const optionFind = {
-            "friend.email": email,
+        let optionFind = {
+            "friend.email": currentUser.email,
             status: true
         }
 
-        const dataFriend = await Friends.find(optionFind);
+        let dataFriend = await Friends.find(optionFind);
 
-        const payload = {
+        let payload = {
             total: dataFriend.length,
             friends: dataFriend
         }
 
-        res.status(200).json(response(200, `Lấy danh sách bạn bè của ${email}`, payload));
+        res.status(200).json(response(200, `Lấy danh sách bạn bè của ${currentUser.name}`, payload));
 
     } catch (error) {
         res.status(500).json(response(500, error.message));
@@ -77,29 +77,30 @@ exports.listFriends = async (req, res) => {
 // Yêu cầu kết bạn, chấp nhận kết bạn
 exports.friendRequest = async (req, res, next) => {
     try {
-        const { myEmail, emailFriend } = req.body;
+        let { emailFriend } = req.body;
+        let currentUser = req.currentUser;
 
-        const optionFindOneMyUser = {
-            "myUser.email": myEmail,
+        let optionFindOneMyUser = {
+            "myUser.email": currentUser.email,
             "friend.email": emailFriend
         }
 
-        const optionFindOneMyFriend = {
+        let optionFindOneMyFriend = {
             "myUser.email": emailFriend,
-            "friend.email": myEmail
+            "friend.email": currentUser.email
         }
 
-        const optionUpdate = {
+        let optionUpdate = {
             status: true,
             updatedAt: req.getTime
         };
 
-        const dataMyUser = await Users.findOne({ email: myEmail });
-        const dataMyFriend = await Users.findOne({ email: emailFriend });
-        const dataMyEmail = await Friends.findOne(optionFindOneMyUser);
-        const dataMyEmailFriend = await Friends.findOne(optionFindOneMyFriend);
+        let dataMyUser = req.currentUser;
+        let dataMyFriend = await Users.findOne({ email: emailFriend });
+        let dataMyEmail = await Friends.findOne(optionFindOneMyUser);
+        let dataMyEmailFriend = await Friends.findOne(optionFindOneMyFriend);
 
-        const optionMyUser = {
+        let optionMyUser = {
             myUser: dataMyUser,
             friend: dataMyFriend,
             status: false,
@@ -112,7 +113,6 @@ exports.friendRequest = async (req, res, next) => {
             if (dataMyEmail.status == true) {
                 return res.status(400).json(response(400, `Bạn và ${dataMyFriend.name} đã là bạn bè`));
             }
-
             res.status(400).json(response(400, `Đã gửi lời kết bạn tới ${dataMyFriend.name}, vui lòng chờ đợi`));
         }
 
@@ -152,16 +152,17 @@ exports.friendRequest = async (req, res, next) => {
 // Xóa kết bạn, yêu cầu kết bạn, lời mời kết bạn
 exports.delete = async (req, res) => {
     try {
-        const { myEmail, emailFriend } = req.body;
+        let { emailFriend } = req.body;
+        let currentUser = req.currentUser;
 
-        const optionFindOneMyUser = {
-            "myUser.email": myEmail,
+        let optionFindOneMyUser = {
+            "myUser.email": currentUser.email,
             "friend.email": emailFriend
         }
 
-        const optionFindOneMyFriend = {
+        let optionFindOneMyFriend = {
             "myUser.email": emailFriend,
-            "friend.email": myEmail
+            "friend.email": currentUser.email
         }
 
         await Friends.deleteOne(optionFindOneMyUser);

@@ -20,7 +20,6 @@ const insertUser = joi.object({
 });
 
 const updateUser = joi.object({
-  _id: joi.any(),
   description: joi.string().min(10).max(200).required(),
   hobbies: joi.string().required(),
   facilities: joi.string().required(),
@@ -29,7 +28,6 @@ const updateUser = joi.object({
 
 const insertReport = joi.object({
   emailReceiver: joi.string().email().required(),
-  emailSender: joi.string().email().required(),
   title: joi.string().required(),
   content: joi.string().min(10).max(200).required()
 });

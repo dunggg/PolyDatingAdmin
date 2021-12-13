@@ -1,12 +1,12 @@
-const mongoose = require("mongoose");
+let mongoose = require("mongoose");
 
-const Friends = new mongoose.Schema(
+let Friends = new mongoose.Schema(
     {
         myUser: Object,
         friend: Object,
         status: Boolean,
-        createdAt: String,
-        updatedAt: String
+        createdAt: Date,
+        updatedAt: Date
     },
     { timestamps: false }
 );

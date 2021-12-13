@@ -1,21 +1,21 @@
-const multer = require("multer");
-const { response } = require("../utils/utils");
+let multer = require("multer");
+let { response } = require("../utils/utils");
 
 /**  Multer upload image */
-const storage = multer.diskStorage({
+let storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'src/public/data_images/');
     },
     filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+        let uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
         cb(null, file.fieldname + "-" + uniqueSuffix + ".jpg");
     },
 });
 
-const uploadMulter = multer({
+let uploadMulter = multer({
     storage: storage,
     limits: {
-        fileSize: 0.8 * 1024 * 1024,
+        fileSize: 3 * 1024 * 1024,
         files: 6
     },
     fileFilter(req, file, cb) {
@@ -26,7 +26,7 @@ const uploadMulter = multer({
     },
 }).array("images", 6);
 
-const uploadFile = (req, res, next) => {
+let uploadFile = (req, res, next) => {
     try {
         uploadMulter(req, res, (err) => {
             if (err instanceof multer.MulterError) {

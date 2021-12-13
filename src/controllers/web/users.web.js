@@ -1,8 +1,11 @@
-const User = require('../../models/users.schema');
-const Reports = require('../../models/reports.schema');
-const Masters = require('../../models/masters.schema');
-const _ = require('lodash');
-const moment = require('moment');
+let Masters = require('../../models/masters.schema');
+let Users = require("../../models/users.schema");
+let Friends = require('../../models/friends.schema');
+let Reports = require('../../models/reports.schema');
+let Notifications = require('../../models/notifications.schema');
+let Tokens = require('../../models/tokens.schema');
+let _ = require('lodash');
+let moment = require('moment');
 
 // exports.list = async (req, res) => {
 //   let isSearch = false;
@@ -17,7 +20,7 @@ const moment = require('moment');
 //       facilities: facilitiesParams,
 //       email: searchParams,
 //     } = req.query;
-//     for (const key in req.query) {
+//     for (let key in req.query) {
 //       if (key != null) {
 //         search[`${key}`] = req.query[`${key}`];
 //       }
@@ -25,14 +28,14 @@ const moment = require('moment');
 //     isSearch = true;
 //   }
 //   try {
-//     let perPage = 2;
+//     let perPage = 20;
 //     let page = Number(req.params.page) || 1;
-//     const listUser = await User.find(search)
+//     let listUser = await Users.find(search)
 //       .skip(perPage * page - perPage)
-//       .limit(perPage);
-//     const countDoc = await User.countDocuments(search);
-//     const countPage = Math.ceil(countDoc / perPage);
-//     const arrPage = [];
+//       .limit(perPage).sort({ createdAt: -1 });
+//     let countDoc = await Users.countDocuments(search);
+//     let countPage = Math.ceil(countDoc / perPage);
+//     let arrPage = [];
 //     // nếu tổng countPage - page >= 5
 //     if (countPage - page >= 5) {
 //       // nếu page - 1 khác 0 render từ page -1
@@ -49,7 +52,7 @@ const moment = require('moment');
 //     } else {
 //       // render 5 page cuối
 //       if (countPage >= 5) {
-//         const pageRest = countPage - page;
+//         let pageRest = countPage - page;
 //         for (let i = page - (5 - pageRest); i <= page + pageRest; i++) {
 //           arrPage.push(i);
 //         }
@@ -59,17 +62,21 @@ const moment = require('moment');
 //         }
 //       }
 //     }
+//     let masters = await Masters.findOne();
+//     let reportsWait = await Reports.countDocuments({ status: "Chờ duyệt" });
+
 //     let payload = {
 //       users: listUser,
+//       reportsWait,
 //       arrPage,
 //       countTo: perPage * page,
 //       countFrom: perPage * (page - 1) + 1,
 //       page: page,
 //       pre: Number(page) - 1 || arrPage.length,
 //       next: Number(page) + 1 > arrPage.length ? 1 : Number(page) + 1,
-//       course,
-//       specialized,
-//       facilities,
+//       facilities: masters.facilities,
+//       specialized: masters.specialized,
+//       course: masters.course,
 //       isSearch,
 //       buttonFirt: page > 1 ? true : false,
 //       buttonLast: page !== countPage ? true : false,
@@ -88,143 +95,223 @@ const moment = require('moment');
 //         searchParams,
 //       };
 //     }
-//     res.render('users', payload);
+//     res.render('users-clone', payload);
 //   } catch (error) {
-//     res.status(500).send(500, error.message);
+//     res.send(error.message);
 //   }
 // };
 
-// exports.find = async (req, res, next) => {
-//   try {
-//     const { email } = req.params;
-
-//     const data = await User.findOne({ email });
-
-//     if (!data) return next();
-
-//     res.render('profile', { user: data });
-//   } catch (error) {
-//     res.status(500).send(error.message);
-//   }
-// };
-
-// exports.login = async (req, res) => {
-//   try {
-//     const { email, password } = req.body;
-
-//     if (email == 'admin' && password == 'admin')
-//       return res.redirect('/statistical?format=0&timeStamp=' + moment().unix());
-
-//     const data = await User.findOne({ email, password });
-
-//     if (!data)
-//       return res.render('index', { msgError: 'Sai email hoặc mật khẩu' });
-
-//     if (data.role != 'Admin')
-//       return res.render('index', { msgError: 'Tài khoản không có quyền hạn' });
-
-//     if (data.isActive != 'Kích hoạt')
-//       return res.render('index', { msgError: 'Tài khoản đã bị khóa' });
-
-//     res.redirect('/statistical?format=0&timeStamp=' + moment().unix());
-//   } catch (error) {
-//     res.status(500).send(error.message);
-//   }
-// };
-
-// exports.block = async (req, res) => {
-//   try {
-//     const { _id } = req.params;
-
-//     const data = await User.findByIdAndUpdate({ _id }, { isActive: 'Chặn' });
-
-//     res.redirect(`/users/${data.email}`);
-//   } catch (error) {
-//     res.status(500).send(error.message);
-//   }
-// };
-
-// exports.unblock = async (req, res) => {
-//   try {
-//     const { _id } = req.params;
-
-//     const data = await User.findByIdAndUpdate(
-//       { _id },
-//       { isActive: 'Kích hoạt' },
-//     );
-
-//     res.redirect(`/users/${data.email}`);
-//   } catch (error) {
-//     res.status(500).send(error.message);
-//   }
-// };
-
-// exports.forgotPassword = async (req, res) => {
-//   res.render('forgot-password')
-// }
+let gender = ['Giới tính', 'Nam', 'Nữ'];
+let isActives = ['Trạng thái', 'Kích hoạt', 'Khóa'];
 
 exports.list = async (req, res) => {
   try {
-    const users = await User.find();
-    const masters = await Masters.findOne();
+    let { page } = req.params;
+    let { search,
+      facilitiesOp,
+      specializedOp,
+      courseOp,
+      genderOp,
+      isActivesOp,
+    } = req.query;
 
-    const payload = {
-      users,
+    let pageSize = 2;
+    let pageNumber = Number(page) || 1;
+    let skipPage = (pageSize * pageNumber) - pageSize;
+
+    let users;
+    let countUsers;
+
+    let masters = await Masters.findOne();
+    let reportsWait = await Reports.countDocuments({ status: "Chờ duyệt" });
+
+    if (search || facilitiesOp || specializedOp || courseOp || genderOp || isActivesOp) {
+      let optionFind = {
+        facilities: { $regex: `.*${facilitiesOp}.*` },
+        specialized: { $regex: `.*${specializedOp}.*` },
+        course: { $regex: `.*${courseOp}.*` },
+        gender: { $regex: `.*${genderOp}.*` },
+        isActive: { $regex: `.*${isActivesOp}.*` },
+        $or: [
+          { email: { $regex: `.*${search}.*`, $options: "i" } },
+          { name: { $regex: `.*${search}.*`, $options: "i" } },
+          { hobbies: { $regex: `.*${search}.*`, $options: "i" } },
+          { birthDay: { $regex: `.*${search}.*`, $options: "i" } },
+          { gender: { $regex: `.*${search}.*`, $options: "i" } },
+          { description: { $regex: `.*${search}.*`, $options: "i" } },
+          { facilities: { $regex: `.*${search}.*`, $options: "i" } },
+          { specialized: { $regex: `.*${search}.*`, $options: "i" } },
+          { course: { $regex: `.*${search}.*`, $options: "i" } },
+          { isActive: { $regex: `.*${search}.*`, $options: "i" } },
+        ]
+      };
+
+      users = await Users.find(optionFind)
+        .limit(pageSize).skip(skipPage).sort({ createdAt: -1, updatedAt: -1 });
+
+      countUsers = await Users.countDocuments(optionFind);
+    }
+    else {
+      users = await Users.find()
+        .limit(pageSize).skip(skipPage).sort({ createdAt: -1, updatedAt: -1 });
+
+      countUsers = await Users.countDocuments();
+    }
+
+    let totalUsersPage = Math.ceil(countUsers / pageSize);
+
+    let countUsersPage = [];
+    for (let index = 1; index <= totalUsersPage; index++) {
+      countUsersPage.push(index);
+    }
+
+    let countFrom = pageSize * (pageNumber - 1) + 1;
+    let countTo = (pageSize * pageNumber);
+    let previousPage = pageNumber - 1;
+    let nextPage = pageNumber + 1;
+
+    if (countUsers < skipPage || countUsers < 1) {
+      countFrom = 0;
+      countTo = 0
+    }
+    else if (countUsers < countTo) {
+      countTo = countUsers;
+    }
+
+    let paging = {
+      pageNumber,
+      countUsers,
+      countUsersPage,
+      totalUsersPage,
+      previousPage,
+      nextPage,
+      countFrom,
+      countTo,
+    };
+
+    let payloadMasters = {
       facilities: masters.facilities,
       specialized: masters.specialized,
-      course: masters.course
-    }
+      course: masters.course,
+      gender,
+      isActives
+    };
+
+    let payloadParams = {
+      facilitiesOp,
+      specializedOp,
+      courseOp,
+      genderOp,
+      isActivesOp,
+      search
+    };
+
+    let payload = {
+      users,
+      reportsWait,
+      ...payloadMasters,
+      ...payloadParams,
+      ...paging
+    };
 
     res.render('users', payload);
   } catch (error) {
-    res.status(500).send(error.message)
+    res.send(error.message);
   }
 };
 
 exports.findOne = async (req, res) => {
   try {
-    const { email } = req.params;
+    let { email } = req.params;
 
-    const user = await User.findOne({ email });
-    const reports = await Reports.findOne({ emailReceiver: email })
-
+    let user = await Users.findOne({ email });
     if (!user) return res.sendStatus(404);
 
-    const payload = {
+    let optionFind = {
+      "friend.email": email,
+      status: true
+    }
+
+    let countFriends = await Friends.countDocuments(optionFind);
+    let reportsWait = await Reports.countDocuments({ status: "Chờ duyệt" });
+
+    let payload = {
       user,
-      reports
+      countFriends,
+      reportsWait
     };
 
     res.render('profile', payload);
   } catch (error) {
-    res.status(500).send(error.message)
+    res.send(error.message);
   }
 };
 
 exports.block = async (req, res) => {
   try {
-    const { _id } = req.body;
+    let { _id, checkAction } = req.body;
 
-    const data = await User.findByIdAndUpdate({ _id }, { isActive: false });
+    let payload = {
+      isActive: "Khóa",
+      updatedAt: req.getTime
+    }
 
-    if (!data) return res.sendStatus(404);
+    let user = await Users.findByIdAndUpdate({ _id }, payload);
+    if (!user) return res.sendStatus(404);
 
-    res.redirect(`/users/${data.email}`);
+    if (checkAction == "1") {
+      res.redirect(`/users/page/1`);
+    }
+    else {
+      res.redirect(`/users/${user.email}`);
+    }
+
   } catch (error) {
-    res.status(500).send(error.message);
+    res.send(error.message);
   }
 };
 
 exports.unblock = async (req, res) => {
   try {
-    const { _id } = req.body;
+    let { _id, checkAction } = req.body;
 
-    const data = await User.findByIdAndUpdate({ _id }, { isActive: true });
+    let payload = {
+      reportNumber: 0,
+      isActive: "Kích hoạt",
+      updatedAt: req.getTime
+    }
 
-    if (!data) return res.sendStatus(404);
+    let user = await Users.findOneAndUpdate({ _id }, payload);
+    if (!user) return res.sendStatus(404);
 
-    res.redirect(`/users/${data.email}`);
+    if (checkAction == "1") {
+      res.redirect(`/users/page/1`);
+    }
+    else {
+      res.redirect(`/users/${user.email}`);
+    }
+
   } catch (error) {
-    res.status(500).send(error.message);
+    res.send(error.message);
+  }
+};
+
+exports.delete = async (req, res) => {
+  try {
+    let { _id } = req.body;
+    let data = await Users.findOne({ _id });
+
+    await Friends.deleteMany({ 'myUser.email': data.email });
+    await Friends.deleteMany({ 'friends.email': data.email });
+    await Notifications.deleteMany({ emailSender: data.email });
+    await Notifications.deleteMany({ emailReceiver: data.email });
+    await Reports.deleteMany({ emailSender: data.email });
+    await Reports.deleteMany({ emailReceiver: data.email });
+    await Tokens.deleteOne({ email: data.email });
+    await Users.deleteOne({ _id: data._id });
+
+    res.redirect(`/users/page/1`);
+  } catch (error) {
+    res.send(error.message);
   }
 };

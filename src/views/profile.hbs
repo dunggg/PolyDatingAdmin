@@ -16,9 +16,16 @@
                     <li class="nav-item"><a class="nav-link active" href="/users/page/1"><i
                                 class="fas fa-user"></i><span>Người
                                 dùng</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/reports"><i class="fas fa-flag"></i><span>Báo
-                                cáo</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/notifications"><i
+                    <li class="nav-item">
+                        <a class="nav-link" href="/reports/page/1">
+                            <i class="fas fa-flag"></i>
+                            <span>Báo cáo</span>
+                            {{#if (gt reportsWait 0)}}
+                            <span class="text-warning"> {{reportsWait}} lượt</span>
+                            {{/if}}
+                        </a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="/notifications/page/1"><i
                                 class="fas fa-bell"></i><span>Thông báo</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-sign-out-alt"></i><span>Đăng
                                 xuất</span></a></li>
@@ -71,8 +78,9 @@
                                 <div class="col">
                                     <div class="card shadow mb-3">
                                         <div class="card-header py-3">
-                                            <p class="text-primary m-0 fw-bold">Thông tin chi tiết</p>
+                                            <p class="text-primary m-0 fw-bold col-md-6">Thông tin chi tiết</p>
                                         </div>
+
                                         <div class="card-body">
                                             <div class="col">
                                                 <p><span class="text-black">Id: </span>{{user._id}}</p>
@@ -86,154 +94,108 @@
                                                 </p>
                                                 <p><span class="text-black">Khóa học: </span>{{user.course}}</p>
                                                 <p><span class="text-black">Hiển thị với: </span>{{user.isShow}}</p>
+                                                <p>
+                                                    <span class="text-black">Tìm kiếm sở thích: </span>
+                                                    {{#if (eq user.statusHobby false)}}
+                                                    <span>Tắt</span>
+
+                                                    {{else}}
+                                                    <span>Bật</span>
+                                                    {{/if}}
+                                                </p>
+
+                                                <p><span class="text-black">Bạn bè: </span>{{countFriends}} bạn</p>
 
                                                 <p>
                                                     <span class="text-black">Báo cáo: </span>
+                                                    {{#if (eq user.reportNumber 3)}}
+                                                    <span class="text-warning">{{user.reportNumber}} lượt</span>
+
+                                                    {{else}}
                                                     {{#if (lt user.reportNumber 3)}}
                                                     <span class="text-success">{{user.reportNumber}} lượt</span>
+
                                                     {{else}}
                                                     <span class="text-danger">{{user.reportNumber}} lượt</span>
+
+                                                    {{/if}}
                                                     {{/if}}
                                                 </p>
 
                                                 <p>
-                                                    <span class="text-black">Hoạt động (Active): </span>
-                                                    {{#if (eq user.isActive true)}}
-                                                    <span class="text-success">Kích hoạt</span>
+                                                    <span class="text-black">Trạng thái: </span>
+                                                    {{#if (eq user.isActive "Kích hoạt")}}
+                                                    <span class="text-success">{{user.isActive}}</span>
                                                     {{else}}
-                                                    <span class="text-danger">Chặn</span>
+                                                    <span class="text-danger">{{user.isActive}}</span>
                                                     {{/if}}
                                                 </p>
 
-                                                <p><span class="text-black">Ngày tạo: </span>{{user.createdAt}}</p>
-                                                <p><span class="text-black">Ngày cập nhật: </span>{{user.updatedAt}}
+                                                <p>
+                                                    <span class="text-black">Ngày tạo: </span>{{#newDate
+                                                    user.createdAt}}{{/newDate}}
                                                 </p>
+                                                <p>
+                                                    <span class="text-black">Ngày cập nhật: </span>{{#newDate
+                                                    user.updatedAt}}{{/newDate}}
+                                                </p>
+
+                                                <hr>
+                                                <div class="d-md-flex">
+
+                                                    {{#if (eq user.isActive "Kích hoạt")}}
+                                                    <form action="/users/block" method="post" id="form-block"
+                                                        class="text-end col-md-6">
+
+                                                        <input type="hidden" name="_id" value="{{user._id}}">
+                                                        <input type="hidden" name="checkAction" value="2">
+
+                                                        <button class="btn btn-danger" type="button" style="width: 97%;"
+                                                            onclick="check(`Khóa tài khoản {{user.email}} ? (Xác nhận)`)">
+                                                            <span class="text-white">Khóa</span>
+                                                        </button>
+                                                    </form>
+
+                                                    {{else}}
+                                                    <form action="/users/unblock" method="post" id="form-block"
+                                                        class="text-end col-md-6">
+
+                                                        <input type="hidden" name="_id" value="{{user._id}}">
+                                                        <input type="hidden" name="checkAction" value="2">
+
+                                                        <button class="btn btn-success" type="button"
+                                                            style="width: 97%;"
+                                                            onclick="check(`Mở khóa tài khoản {{user.email}} ? (Xác nhận)`)">
+                                                            <span class="text-white">Kích hoạt</span>
+                                                        </button>
+                                                    </form>
+                                                    {{/if}}
+
+                                                    <form action="/users/delete" method="post" id="form-block2"
+                                                        class="text-end col-md-6">
+
+                                                        <input type="hidden" name="_id" value="{{user._id}}">
+
+                                                        <button class="btn btn-warning" type="button"
+                                                            style="width: 97%;"
+                                                            onclick="check2(`Xóa tài khoản {{user.email}} ? (Xác nhận)`)">
+                                                            <span class="text-white">Xóa tài khoản</span>
+                                                        </button>
+                                                    </form>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        {{!-- Báo cáo --}}
-                        <div class="col-lg-12">
-                            <div class="card shadow">
-                                <div class="card-header py-3">
-                                    <div class="row">
-                                        <p class="text-primary m-0 fw-bold col-md-6">Báo cáo</p>
-
-                                        {{#if (eq user.isActive true)}}
-                                        <form action="/users/block" method="post" id="form-block"
-                                            class="text-end col-md-6 ">
-
-                                            <input type="hidden" value="{{user._id}}" name="_id">
-
-                                            <a href="#" class="text-danger m-0 fw-bold" style="text-decoration: none;"
-                                                onclick="document.getElementById('form-block').submit()">Chặn</a>
-                                        </form>
-
-                                        {{else}}
-                                        <form action="/users/unblock" method="post" id="form-block"
-                                            class="text-end col-md-6 ">
-
-                                            <input type="hidden" value="{{user._id}}" name="_id">
-
-                                            <a href="#" class="text-success m-0 fw-bold" style="text-decoration: none;"
-                                                onclick="document.getElementById('form-block').submit()">Kích hoạt</a>
-                                        </form>
-                                        {{/if}}
-
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-auto">
-                                            <div class="text-md-end dataTables_filter" id="dataTable_filter">
-                                                <label class="form-label">
-                                                    <input type="search" class="form-control form-control-sm"
-                                                        aria-controls="dataTable" placeholder="Tìm kiếm...">
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- ----------------------------------- -->
-                                    <div class="table-responsive table mt-2" role="grid"
-                                        aria-describedby="dataTable_info">
-                                        <table class="table table-hover my-0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Id</th>
-                                                    <th>Tiêu đề</th>
-                                                    <th>Nội dung</th>
-                                                    <th>Hình ảnh</th>
-                                                    <th>Người tố cáo</th>
-                                                    <th>Thời gian</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {{#each reports}}
-                                                <tr>
-                                                    <td>{{@index}}</td>
-                                                    <td>{{this.title}}</td>
-                                                    <td>{{this.content}}</td>
-                                                    <td><a href="{{this.images}}">{{this.images}}</a></td>
-
-                                                    {{!-- <td>Báo cáo</td>
-                                                    <td>Ăn a ăn e Ăn a ăn e Ăn a ăn e Ăn a ăn e</td>
-                                                    <td><img class="rounded-circle me-2" width="30" height="30"
-                                                            src="https://f43-zpg.zdn.vn/2575592389455815324/e11f1916619f97c1ce8e.jpg">
-                                                    </td>
-                                                    <td>Thắng Rách</td>
-                                                    <td>20/09/2021</td>
-                                                    <td>
-                                                        <button class="btn btn-success"><i
-                                                                class="fas fa-check"></i></button>
-                                                        <button class="btn btn-danger"><i
-                                                                class="fas fa-times"></i></i></button>
-                                                    </td> --}}
-                                                </tr>
-                                                {{/each}}
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6 align-self-center">
-                                            <p id="dataTable_info" class="dataTables_info" role="status"
-                                                aria-live="polite">
-                                                Hiển thị 1 đến 10 của 21</p>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <nav
-                                                class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
-                                                <ul class="pagination">
-                                                    <li class="page-item disabled"><a class="page-link" href="#"
-                                                            aria-label="Previous"><span aria-hidden="true">«</span></a>
-                                                    </li>
-                                                    <li class="page-item active"><a class="page-link" href="#">1</a>
-                                                    </li>
-                                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                    <li class="page-item"><a class="page-link" href="#"
-                                                            aria-label="Next"><span aria-hidden="true">»</span></a></li>
-                                                </ul>
-                                            </nav>
-                                        </div>
-                                    </div>
-
-                                    <!-- ----------------------------------- -->
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </div>
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © Brand 2021</span></div>
+                    <div class="text-center my-auto copyright"><span>Poly Dating 2021</span></div>
                 </div>
             </footer>
         </div> <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
@@ -241,3 +203,29 @@
 
     <script src="/public/js/theme.js"></script>
 </body>
+
+<script>
+    function check(value) {
+        let form = document.getElementById('form-block');
+        let check = prompt(value, "");
+
+        if (check === "Xác nhận") {
+            form.submit();
+        }
+        else if (check.length > 0) {
+            alert("Sai thông tin");
+        }
+    };
+
+    function check2(value) {
+        let form = document.getElementById('form-block2');
+        let check = prompt(value, "");
+
+        if (check === "Xác nhận") {
+            form.submit();
+        }
+        else if (check.length > 0) {
+            alert("Sai thông tin");
+        }
+    };
+</script>

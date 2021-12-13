@@ -1,4 +1,4 @@
-const hbs = require('hbs');
+let hbs = require('hbs');
 
 hbs.registerHelper({
   eq: (v1, v2) => v1 === v2,
@@ -15,82 +15,78 @@ hbs.registerHelper({
   },
 });
 
+hbs.registerHelper('newDate', (value) => {
+  return value.toLocaleString();
+});
+
 hbs.registerHelper('compare', function (index, object) {
-  const s1 = Number(object.data.root.page);
-  const s2 = object.data.index + 1;
-  const isSearch = object.data.root.isSearch;
-  const facilitiesParams = object.data.root.facilitiesParams;
-  const specializedParams = object.data.root.specializedParams;
-  const courseParams = object.data.root.courseParams;
-  const genderParams = object.data.root.genderParams;
-  const statusParams = object.data.root.statusParams;
-  const reportParmas = object.data.root.reportParmas;
-  const searchParams = object.data.root.searchParams;
-  const page = object.data.root.page;
+  let isSearch = object.data.root.isSearch;
+  let facilitiesParams = object.data.root.facilitiesParams;
+  let specializedParams = object.data.root.specializedParams;
+  let courseParams = object.data.root.courseParams;
+  let genderParams = object.data.root.genderParams;
+  let statusParams = object.data.root.statusParams;
+  let reportParmas = object.data.root.reportParmas;
+  let searchParams = object.data.root.searchParams;
+  let page = object.data.root.page;
   return page === index
     ? isSearch
-      ? `<li class="page-item active"><a class="page-link" href="/users/page/${index}${
-          facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
-        }${specializedParams ? `&specialized=${specializedParams}` : ''}${
-          courseParams ? `&course=${courseParams}` : ''
-        }${genderParams ? `&gender=${genderParams}` : ''}${
-          reportParmas ? `&report=${reportParmas}` : ''
-        }${statusParams ? `&status=${statusParams}` : ''}${
-          searchParams ? `&email=${searchParams}` : ''
-        }">${index}</a></li>`
+      ? `<li class="page-item active"><a class="page-link" href="/users/page/${index}${facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
+      }${specializedParams ? `&specialized=${specializedParams}` : ''}${courseParams ? `&course=${courseParams}` : ''
+      }${genderParams ? `&gender=${genderParams}` : ''}${reportParmas ? `&report=${reportParmas}` : ''
+      }${statusParams ? `&status=${statusParams}` : ''}${searchParams ? `&email=${searchParams}` : ''
+      }">${index}</a></li>`
       : `<li class="page-item active"><a class="page-link" href="/users/page/${index}">${index}</a></li>`
     : isSearch
-    ? `<li class="page-item"><a class="page-link" href="/users/page/${index}${
-        facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
-      }${specializedParams ? `&specialized=${specializedParams}` : ''}${
-        courseParams ? `&course=${courseParams}` : ''
-      }${genderParams ? `&gender=${genderParams}` : ''}${
-        reportParmas ? `&report=${reportParmas}` : ''
-      }${statusParams ? `&status=${statusParams}` : ''}${
-        searchParams ? `&email=${searchParams}` : ''
+      ? `<li class="page-item"><a class="page-link" href="/users/page/${index}${facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
+      }${specializedParams ? `&specialized=${specializedParams}` : ''}${courseParams ? `&course=${courseParams}` : ''
+      }${genderParams ? `&gender=${genderParams}` : ''}${reportParmas ? `&report=${reportParmas}` : ''
+      }${statusParams ? `&status=${statusParams}` : ''}${searchParams ? `&email=${searchParams}` : ''
       }">${index}</a></li>`
-    : `<li class="page-item"><a class="page-link" href="/users/page/${index}">${index}</a></li>`;
+      : `<li class="page-item"><a class="page-link" href="/users/page/${index}">${index}</a></li>`;
+});
+
+hbs.registerHelper('optionFacilities', function (value, object) {
+  let facilitiesParams = object.data.root.facilitiesParams;
+  return facilitiesParams === value
+    ? "<option selected value='" + value + "'>" + value + '</option>'
+    : "<option value='" + value + "'>" + value + '</option>';
 });
 
 hbs.registerHelper('optionReport', function (any, value, object) {
-  const reportParmas = object?.data?.root.reportParmas;
-  const valOption = value === 'Báo cáo' ? '' : value;
+  let reportParmas = object?.data?.root.reportParmas;
+  let valOption = value === 'Báo cáo' ? '' : value;
   return reportParmas === value
     ? `<option selected value=${valOption}>${value}</option>`
     : `<option value=${valOption}>${value}</option>`;
 });
 
 hbs.registerHelper('optionGender', function (any, value, object) {
-  const genderParams = object.data.root.genderParams;
-  const valOption = value === 'Giới tính' ? '' : value;
+  let genderParams = object.data.root.genderParams;
+  let valOption = value === 'Giới tính' ? '' : value;
   return genderParams === value
     ? `<option selected value=${valOption}>${value}</option>`
     : `<option value=${valOption}>${value}</option>`;
 });
 
 hbs.registerHelper('optionSpecialized', function (any, value, object) {
-  const specializedParams = object.data.root.specializedParams;
+  let specializedParams = object.data.root.specializedParams;
   return specializedParams === value
     ? "<option selected value='" + value + "'>" + value + '</option>'
     : "<option value='" + value + "'>" + value + '</option>';
 });
 
 hbs.registerHelper('optionCourse', function (any, value, object) {
-  const courseParams = object.data.root.courseParams;
+  let courseParams = object.data.root.courseParams;
   return courseParams === value
     ? "<option selected value='" + value + "'>" + value + '</option>'
     : "<option value='" + value + "'>" + value + '</option>';
 });
 
-hbs.registerHelper('optionFacilities', function (any, value, object) {
-  const facilitiesParams = object.data.root.facilitiesParams;
-  return facilitiesParams === value
-    ? "<option selected value='" + value + "'>" + value + '</option>'
-    : "<option value='" + value + "'>" + value + '</option>';
-});
+
 
 hbs.registerHelper('optionStatus', function (any, value, object) {
-  const statusParams = object?.data?.root.statusParams;
+  let statusParams = object?.data?.root.statusParams;
   var val = '';
   if (value === 'Kích hoạt') {
     val = 'true';
@@ -105,7 +101,7 @@ hbs.registerHelper('optionStatus', function (any, value, object) {
 });
 
 hbs.registerHelper('optionTime', function (any, value, object) {
-  const time = object?.data?.root.timeParams;
+  let time = object?.data?.root.timeParams;
   let valTime = '';
   switch (value) {
     case 0:

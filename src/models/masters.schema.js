@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+let mongoose = require("mongoose");
 
-const Masters = new mongoose.Schema(
+let Masters = new mongoose.Schema(
     {
         facilities: [String],
         specialized: [String],
