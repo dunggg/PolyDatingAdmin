@@ -2,6 +2,7 @@ let express = require('express');
 let router = express.Router();
 let uploadFile = require('../middlewares/uploadFile');
 let getTimeZone = require('../middlewares/getTime');
+let { checkTokenWebsite } = require('../middlewares/checkToken');
 let { pushNotificationsAll } = require('../middlewares/notifications');
 let users = require('../controllers/web/users.web');
 let reports = require('../controllers/web/reports.web');
@@ -12,7 +13,7 @@ let exportExcel = require('../utils/exportExcel');
 /* Website */
 router.use(getTimeZone);
 router.get('/', users.index);
-router.post('/login', users.login);
+router.post('/login', users.login, checkTokenWebsite);
 router.post('/users/insert', uploadFile, users.insert);
 
 //1. Users

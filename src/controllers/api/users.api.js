@@ -17,144 +17,53 @@ exports.list = async (req, res) => {
     let hobby = hobbies.slice(1, -1).split(', ');
     let data;
 
+    let search = {
+      role: 'Người dùng',
+    };
+
+    if (shows[0] != 'Mọi người') {
+      search = {
+        ...search,
+        gender: shows[0],
+      };
+    }
+    if (shows[1] != 'Tất cả cơ sở') {
+      search = {
+        ...search,
+        facilities: shows[1],
+      };
+    }
+    if (shows[2] != 'Tất cả chuyên ngành') {
+      search = {
+        ...search,
+        specialized: shows[2],
+      };
+    }
+    if (shows[3] != 'Tất cả khóa học') {
+      search = {
+        ...search,
+        course: shows[3],
+      };
+    }
+
     // Nếu tìm kiếm sở thích giống mình
     if (statusHobby === 'true') {
-      if (
-        shows[0] == 'Mọi người' &&
-        shows[1] != 'Tất cả cơ sở' &&
-        shows[2] != 'Tất cả chuyên ngành' &&
-        shows[3] != 'Tất cả khóa học'
-      ) {
-        let option = {
-          facilities: shows[1],
-          specialized: shows[2],
-          course: shows[3],
-          role: 'Người dùng',
-          hobbies: { $all: hobby },
-        };
-
-        data = await Users.find(option);
-      } else if (
-        shows[0] != 'Mọi người' &&
-        shows[1] == 'Tất cả cơ sở' &&
-        shows[2] != 'Tất cả chuyên ngành' &&
-        shows[3] != 'Tất cả khóa học'
-      ) {
-        let option = {
-          gender: shows[0],
-          specialized: shows[2],
-          course: shows[3],
-          role: 'Người dùng',
-          hobbies: { $all: hobby },
-        };
-
-        data = await Users.find(option);
-      } else if (
-        shows[0] != 'Mọi người' &&
-        shows[1] != 'Tất cả cơ sở' &&
-        shows[2] == 'Tất cả chuyên ngành' &&
-        shows[3] != 'Tất cả khóa học'
-      ) {
-        let option = {
-          gender: shows[0],
-          facilities: shows[1],
-          course: shows[3],
-          role: 'Người dùng',
-          hobbies: { $all: hobby },
-        };
-
-        data = await Users.find(option);
-      } else if (
-        shows[0] != 'Mọi người' &&
-        shows[1] != 'Tất cả cơ sở' &&
-        shows[2] != 'Tất cả chuyên ngành' &&
-        shows[3] == 'Tất cả khóa học'
-      ) {
-        let option = {
-          gender: shows[0],
-          facilities: shows[1],
-          specialized: shows[2],
-          role: 'Người dùng',
-          hobbies: { $all: hobby },
-        };
-
-        data = await Users.find(option);
-      } else {
-        let option = {
-          role: 'Người dùng',
-          hobbies: { $all: hobby },
-        };
-
-        data = await Users.find(option);
-      }
-    }
-    // Không tìm cùng
-    else {
-      if (
-        shows[0] == 'Mọi người' &&
-        shows[1] != 'Tất cả cơ sở' &&
-        shows[2] != 'Tất cả chuyên ngành' &&
-        shows[3] != 'Tất cả khóa học'
-      ) {
-        let option = {
-          facilities: shows[1],
-          specialized: shows[2],
-          course: shows[3],
-          role: 'Người dùng',
-        };
-
-        data = await Users.find(option);
-      } else if (
-        shows[0] != 'Mọi người' &&
-        shows[1] == 'Tất cả cơ sở' &&
-        shows[2] != 'Tất cả chuyên ngành' &&
-        shows[3] != 'Tất cả khóa học'
-      ) {
-        let option = {
-          gender: shows[0],
-          specialized: shows[2],
-          course: shows[3],
-          role: 'Người dùng',
-        };
-
-        data = await Users.find(option);
-      } else if (
-        shows[0] != 'Mọi người' &&
-        shows[1] != 'Tất cả cơ sở' &&
-        shows[2] == 'Tất cả chuyên ngành' &&
-        shows[3] != 'Tất cả khóa học'
-      ) {
-        let option = {
-          gender: shows[0],
-          facilities: shows[1],
-          course: shows[3],
-          role: 'Người dùng',
-        };
-
-        data = await Users.find(option);
-      } else if (
-        shows[0] != 'Mọi người' &&
-        shows[1] != 'Tất cả cơ sở' &&
-        shows[2] != 'Tất cả chuyên ngành' &&
-        shows[3] == 'Tất cả khóa học'
-      ) {
-        let option = {
-          gender: shows[0],
-          facilities: shows[1],
-          specialized: shows[2],
-          role: 'Người dùng',
-        };
-
-        data = await Users.find(option);
-      } else {
-        data = await Users.find({ role: 'Người dùng' });
-      }
+      search = {
+        ...search,
+        hobbies: { $all: hobby },
+      };
+      data = await Users.find(search);
+    } else {
+      data = await Users.find(search);
     }
 
     let payload = {
       total: data.length,
       users: data,
     };
+    res
+      .status(200)
+      .json(response(200, 'Lấy danh sách người dùng thành công', payload));
 
     res
       .status(200)
@@ -265,7 +174,7 @@ exports.updateImages = async (req, res) => {
     let images = currentUser.images;
 
     // Xóa ảnh
-    if (checkRemove === 'true') {
+    if (checkRemove == 'true') {
       if (images.length <= 2) {
         res.status(400).json(response(400, 'Không thể xóa khi còn 2 ảnh'));
       } else {

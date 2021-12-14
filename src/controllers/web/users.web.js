@@ -112,8 +112,11 @@ exports.index = async (req, res) => {
   }
 };
 
-exports.login = async (req, res) => {
+exports.login = async (req, res, next) => {
   try {
+    req.setHeader("ok", "ok")
+    console.log(req.headers);
+
     let { email, password } = req.body;
     let user = await Users.findOne({ email });
 
@@ -126,9 +129,10 @@ exports.login = async (req, res) => {
       res.render('index', { msgError: "Sai mật khẩu" });
     }
     else {
-      res.redirect('/users');
-    }
+      console.log(req);
 
+      // res.redirect('/users');
+    }
   } catch (error) {
     res.send(error.message);
   }

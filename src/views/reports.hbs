@@ -154,9 +154,12 @@
                                             <td>{{@index}}</td>
                                             <td class="text-nowrap">{{this.title}}</td>
                                             <td style="max-width: 500px;">{{this.content}}</td>
+
                                             <td class="text-nowrap">
+                                                {{#if (ne this.images "")}}
                                                 <a style="text-decoration: none;" class="text-primary"
                                                     href="{{this.images}}">Xem hình ảnh</a>
+                                                {{/if}}
                                             </td>
                                             <td>
                                                 <a style="text-decoration: none;" class="text-info"
@@ -186,8 +189,7 @@
                                                 {{#if (eq this.status "Chờ duyệt")}}
                                                 <div style="display: flex">
                                                     <form action="/reports/verify-report-request" method="post"
-                                                        class="text-end col-md-6" id="form-block2"
-                                                        style="margin-right: 5px;">
+                                                        class="text-end col-md-6" style="margin-right: 5px;">
 
                                                         <input type="hidden" value="{{this.emailReceiver}}"
                                                             name="email">
@@ -200,7 +202,7 @@
                                                     </form>
 
                                                     <form action="/reports/verify-report-request" method="post"
-                                                        class="text-end col-md-6" id="form-block2">
+                                                        class="text-end col-md-6" style="display: flex">
 
                                                         <input type="hidden" value="{{this.emailReceiver}}"
                                                             name="email">
@@ -208,20 +210,37 @@
                                                         <input type="hidden" value="false" name="action">
 
                                                         <button class="btn btn-danger" type="submit">
-                                                            <i class="fas fa-times"></i></i>
+                                                            <i class="fas fa-times"></i>
                                                         </button>
                                                     </form>
                                                 </div>
                                                 {{else}}
-                                                <div style="display: flex;">
-                                                    <button class="btn btn-success" disabled=""
-                                                        style="margin-right: 5px;">
-                                                        <i class="fas fa-check text-white"></i>
-                                                    </button>
+                                                <div style="display: flex">
+                                                    <form action="/reports/verify-report-request" method="post"
+                                                        class="text-end col-md-6" style="margin-right: 5px;">
 
-                                                    <button class="btn btn-danger" disabled="">
-                                                        <i class="fas fa-times"></i></i>
-                                                    </button>
+                                                        <input type="hidden" value="{{this.emailReceiver}}"
+                                                            name="email">
+                                                        <input type="hidden" value="{{this._id}}" name="_idReport">
+                                                        <input type="hidden" value="true" name="action">
+
+                                                        <button class="btn btn-success" type="submit" disabled>
+                                                            <i class="fas fa-check text-white"></i>
+                                                        </button>
+                                                    </form>
+
+                                                    <form action="/reports/verify-report-request" method="post"
+                                                        class="text-end col-md-6" style="display: flex">
+
+                                                        <input type="hidden" value="{{this.emailReceiver}}"
+                                                            name="email">
+                                                        <input type="hidden" value="{{this._id}}" name="_idReport">
+                                                        <input type="hidden" value="false" name="action">
+
+                                                        <button class="btn btn-danger" type="submit" disabled>
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                                 {{/if}}
                                             </td>
@@ -327,6 +346,16 @@
         statusIp.value = statusOp.value;
         titleIp.value = titleOp.value;
         searchIp.value = btnSearch.value;
+
+        if (statusOp.value == '') {
+            statusIp.name = '';
+        }
+        if (titleOp.value == '') {
+            titleIp.name = '';
+        }
+        if (btnSearch.value == '') {
+            searchIp.name = '';
+        }
 
         form.submit();
     }

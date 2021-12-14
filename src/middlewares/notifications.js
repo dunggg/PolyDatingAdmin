@@ -20,7 +20,7 @@ let pushNotificationsFriendsRequest = async (req, res) => {
             emailReceiver: notifiData.emailReceiver,
             title: "Yêu cầu kết bạn",
             content: notifiData.content,
-            link: null,
+            link: "",
             createdAt: req.getTime
         }
 

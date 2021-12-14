@@ -130,6 +130,12 @@ exports.friendRequest = async (req, res, next) => {
             updatedAt: req.getTime
         };
 
+        let optionNotifi = {
+            emailSender: dataMyUser.email,
+            emailReceiver: dataMyFriend.email,
+            token: dataMyFriend.notificationToken
+        }
+
         // Nếu A kết bạn B, chỉ được gửi 1 lần. Nếu đã là bạn bè thì không được gửi.
         if (dataMyEmail) {
             if (dataMyEmail.status == true) {
@@ -145,9 +151,7 @@ exports.friendRequest = async (req, res, next) => {
             await Friends.updateOne(optionFindOneMyFriend, optionUpdate);
 
             req.notifiData = {
-                emailSender: dataMyUser.email,
-                emailReceiver: dataMyFriend.email,
-                token: dataMyFriend.notificationToken,
+                ...optionNotifi,
                 content: `${dataMyUser.name} đã chấp nhận lời mời kết bạn của bạn`,
                 message: `Chấp nhận lời mời kết bạn của ${dataMyFriend.name}`,
             }
@@ -159,9 +163,7 @@ exports.friendRequest = async (req, res, next) => {
             await Friends.create(optionMyUser);
 
             req.notifiData = {
-                emailSender: dataMyUser.email,
-                emailReceiver: dataMyFriend.email,
-                token: dataMyUser.notificationToken,
+                ...optionNotifi,
                 content: `${dataMyUser.name} đã gửi lời mời kết bạn tới bạn`,
                 message: `Gửi lời mời kết bạn tới ${dataMyFriend.name}`,
             }
