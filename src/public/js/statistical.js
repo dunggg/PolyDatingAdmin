@@ -1,10 +1,10 @@
 $(document).ready(function () {
   // get value emlement input statistical
   const totalMatch = $('input[name="totalMatch"]')[0];
-  const totalActivityUser = $('input[name="totalActivityUser"]')[0];
-  const totalTimeActivityUser = $('input[name="totalTimeActivityUser"]')[0];
+  // const totalActivityUser = $('input[name="totalActivityUser"]')[0];
+  // const totalTimeActivityUser = $('input[name="totalTimeActivityUser"]')[0];
   const totalReport = $('input[name="totalReport"]')[0];
-  const totalMessage = $('input[name="totalMessage"]')[0];
+  // const totalMessage = $('input[name="totalMessage"]')[0];
   const totalBlock = $('input[name="totalBlock"]')[0];
   const data = $('input[name="data"]')[0];
   const titleChart = $('#titleChart');
@@ -24,20 +24,20 @@ $(document).ready(function () {
   const arrTotalMatch = totalMatch.value
     .split(',')
     .map((value) => Number(value));
-  const arrTotalActivityUser = totalActivityUser.value
-    .split(',')
-    .map((value) => Number(value));
-  const arrTotalTimeActivityUser = totalTimeActivityUser.value
-    .split(',')
-    .map((value) => Number(value));
+  // const arrTotalActivityUser = totalActivityUser.value
+  //   .split(',')
+  //   .map((value) => Number(value));
+  // const arrTotalTimeActivityUser = totalTimeActivityUser.value
+  //   .split(',')
+  //   .map((value) => Number(value));
 
   const arrTotalReport = totalReport.value
     .split(',')
     .map((value) => Number(value));
 
-  const arrTotalMessage = totalMessage.value
-    .split(',')
-    .map((value) => Number(value));
+  // const arrTotalMessage = totalMessage.value
+  //   .split(',')
+  //   .map((value) => Number(value));
 
   const arrTotalBlock = totalBlock.value
     .split(',')

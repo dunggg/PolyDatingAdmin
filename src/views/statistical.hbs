@@ -61,26 +61,7 @@
                                         <label class="form-label">
                                             <select class="d-inline-block form-select form-select-sm" id="facilitiesOp">
                                                 {{#each facilities}}
-<<<<<<< HEAD
                                                 {{#optionFacilities "" this}}{{/optionFacilities}}
-=======
-
-                                                {{#if (eq this 'Lựa chọn cơ sở')}}
-                                                <option value="">{{this}} </option>
-
-                                                {{else}}
-                                                {{#if (eq this @root.facilitiesOp)}}
-                                                <option value="{{@root.facilitiesOp}}" selected="">
-                                                    {{@root.facilitiesOp}}
-                                                </option>
-
-                                                {{else}}
-                                                <option value="{{this}}">{{this}}</option>
-
-                                                {{/if}}
-                                                {{/if}}
-
->>>>>>> a1de539fcbf7e1e6678c165852a2f017bf7960ee
                                                 {{/each}}
                                             </select>
                                         </label>
@@ -93,26 +74,7 @@
                                             <select class="d-inline-block form-select form-select-sm"
                                                 id="specializedOp">
                                                 {{#each specialized}}
-<<<<<<< HEAD
                                                 {{#optionSpecialized "" this}} {{/optionSpecialized}}
-=======
-
-                                                {{#if (eq this 'Lựa chọn ngành học')}}
-                                                <option value="">{{this}}</option>
-
-                                                {{else}}
-                                                {{#if (eq this @root.specializedOp)}}
-                                                <option value="{{@root.specializedOp}}" selected="">
-                                                    {{@root.specializedOp}}
-                                                </option>
-
-                                                {{else}}
-                                                <option value="{{this}}">{{this}}</option>
-
-                                                {{/if}}
-                                                {{/if}}
-
->>>>>>> a1de539fcbf7e1e6678c165852a2f017bf7960ee
                                                 {{/each}}
                                             </select>
                                         </label>
@@ -125,26 +87,7 @@
                                         <label class="form-label">
                                             <select class="d-inline-block form-select form-select-sm">
                                                 {{#each course}}
-<<<<<<< HEAD
                                                 {{#optionCourse "" this}} {{/optionCourse}}
-=======
-
-                                                {{#if (eq this 'Lựa chọn khóa học')}}
-                                                <option value="">{{this}}</option>
-
-                                                {{else}}
-                                                {{#if (eq this @root.courseOp)}}
-                                                <option value="{{@root.courseOp}}" selected="">
-                                                    {{@root.courseOp}}
-                                                </option>
-
-                                                {{else}}
-                                                <option value="{{this}}">{{this}}</option>
-
-                                                {{/if}}
-                                                {{/if}}
-
->>>>>>> a1de539fcbf7e1e6678c165852a2f017bf7960ee
                                                 {{/each}}
                                             </select>
                                         </label>
@@ -166,7 +109,6 @@
                                 <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
-<<<<<<< HEAD
                                             <form action="/statistical">
                                                 <input hidden name="facilities" />
                                                 <input hidden name="specialized" />
@@ -176,18 +118,6 @@
                                                 <input id="btnSearch" type="submit"
                                                     class="form-control form-control-sm btn-primary"
                                                     aria-controls="dataTable" value="Tìm kiếm">
-=======
-                                            <form action="/statistical" method="get" id="id-form5">
-                                                <input type="hidden" id="facilitiesIp" name="facilitiesOp">
-                                                <input type="hidden" id="specializedIp" name="specializedOp">
-                                                <input type="hidden" id="courseIp" name="courseOp">
-                                                <input type="hidden" id="formatIp" name="format" />
-                                                <input type="hidden" id="timeStampIp" name="timeStamp" />
-
-                                                <input type="submit" class="form-control form-control-sm btn-primary"
-                                                    onclick="checkSubmit(`0`,`{{timeStamp}}`)" aria-controls="dataTable"
-                                                    value="Tìm kiếm">
->>>>>>> a1de539fcbf7e1e6678c165852a2f017bf7960ee
                                             </form>
                                         </label>
                                     </div>
@@ -215,7 +145,6 @@
 
                             </div>
 
-<<<<<<< HEAD
 
 
                             <hr>
@@ -234,24 +163,6 @@
 
                                 <div class="col-md-3 mb-2">
                                     <p class="fw-bold h5">Số báo cáo: </p>
-=======
-                            <hr>
-                            <div class="row">
-                                <div class="col-md-3 mb-2">
-                                    <p class="fw-bold h5">Tổng người dùng: 50 {{totalUser}}</p>
-                                </div>
-
-                                <div class="col-md-3 mb-2">
-                                    <p class="fw-bold h5">Sinh viên Nam: 50 {{totalUserMale}}</p>
-                                </div>
-
-                                <div class="col-md-3 mb-2">
-                                    <p class="fw-bold h5">Sinh viên Nữ: 50 {{totalUserFemale}}</p>
-                                </div>
-
-                                <div class="col-md-3 mb-2">
-                                    <p class="fw-bold h5">Số báo cáo: 50 {{totalReports}}</p>
->>>>>>> a1de539fcbf7e1e6678c165852a2f017bf7960ee
                                 </div>
                             </div>
                         </div>
@@ -280,7 +191,8 @@
                                                     <div style="position:absolute;width:200%;height:200%;left:0; top:0">
                                                     </div>
                                                 </div>
-                                            </div> <canvas id="chart-line" width="300" height="200"
+                                            </div>
+                                            <canvas id="chart-line" width="300" height="200"
                                                 class="chartjs-render-monitor"
                                                 style="display: block; width: 300; height: 200px;"></canvas>
                                         </div>
