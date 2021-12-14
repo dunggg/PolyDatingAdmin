@@ -94,9 +94,9 @@ exports.insert = async (req, res, next) => {
             let ontion = {
                 emailSender: "polydating@gmail.com.vn",
                 emailReceiver: dataUsers[i].email,
-                title: null || title,
-                content: null || content,
-                link: null || link,
+                title: title || "",
+                content: content || "",
+                link: link || "",
                 createdAt: req.getTime
             }
             await Notifications.create(ontion);

@@ -14,8 +14,8 @@
                     <li class="nav-item"><a class="nav-link active"
                             href="/statistical?format=0&timeStamp={{timeStamp}}"><i
                                 class="fas fa-tachometer-alt"></i><span>Thống kê</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/users"><i
-                                class="fas fa-user"></i></i><span>Người dùng</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/users"><i class="fas fa-user"></i></i><span>Người
+                                dùng</span></a></li>
                     <li class="nav-item">
                         <a class="nav-link " href="/reports">
                             <i class="fas fa-flag"></i>
@@ -36,7 +36,7 @@
             </div>
         </nav>
 
-        <input hidden id='titleChart' value='{{title}}' />
+        <input type="hidden" id='titleChart' value='{{title}}' />
 
         <div class="d-flex flex-column" id="content-wrapper">
             <div id="content">
@@ -62,8 +62,8 @@
                                             <select class="d-inline-block form-select form-select-sm" id="facilitiesOp">
                                                 {{#each facilities}}
 
-                                                {{#if (eq this 'Vai trò')}}
-                                                <option value="">{{this}}</option>
+                                                {{#if (eq this 'Lựa chọn cơ sở')}}
+                                                <option value="">{{this}} </option>
 
                                                 {{else}}
                                                 {{#if (eq this @root.facilitiesOp)}}
@@ -90,7 +90,7 @@
                                                 id="specializedOp">
                                                 {{#each specialized}}
 
-                                                {{#if (eq this 'Lựa chọn cơ sở')}}
+                                                {{#if (eq this 'Lựa chọn ngành học')}}
                                                 <option value="">{{this}}</option>
 
                                                 {{else}}
@@ -117,7 +117,7 @@
                                             <select class="d-inline-block form-select form-select-sm" id="courseOp">
                                                 {{#each course}}
 
-                                                {{#if (eq this 'Lựa chọn ngành học')}}
+                                                {{#if (eq this 'Lựa chọn khóa học')}}
                                                 <option value="">{{this}}</option>
 
                                                 {{else}}
@@ -157,10 +157,12 @@
                                                 <input type="hidden" id="facilitiesIp" name="facilitiesOp">
                                                 <input type="hidden" id="specializedIp" name="specializedOp">
                                                 <input type="hidden" id="courseIp" name="courseOp">
-                                                <input type="hidden" id="searchIp" name="search">
+                                                <input type="hidden" id="formatIp" name="format" />
+                                                <input type="hidden" id="timeStampIp" name="timeStamp" />
 
                                                 <input type="submit" class="form-control form-control-sm btn-primary"
-                                                    aria-controls="dataTable" value="Tìm kiếm">
+                                                    onclick="checkSubmit(`0`,`{{timeStamp}}`)" aria-controls="dataTable"
+                                                    value="Tìm kiếm">
                                             </form>
                                         </label>
                                     </div>
@@ -177,39 +179,28 @@
                                 </div>
                             </div>
 
-                            <form action="/statistical">
-                                <input hidden name="facilities" />
-                                <input hidden name="specialized" />
-                                <input hidden name="course" />
-                                <input hidden name="format" value="0" />
-                                <input hidden name="timeStamp" value="{{timeStamp}}" />
-                            </form>
-
                             <hr>
                             <div class="row">
                                 <div class="col-md-3 mb-2">
-                                    <p class="fw-bold h5">Tổng người dùng: 50{{totalUser}}</p>
+                                    <p class="fw-bold h5">Tổng người dùng: 50 {{totalUser}}</p>
                                 </div>
 
                                 <div class="col-md-3 mb-2">
-                                    <p class="fw-bold h5">Sinh viên Nam: 50{{totalUserMale}}</p>
+                                    <p class="fw-bold h5">Sinh viên Nam: 50 {{totalUserMale}}</p>
                                 </div>
 
                                 <div class="col-md-3 mb-2">
-                                    <p class="fw-bold h5">Sinh viên Nữ: 50{{totalUserFemale}}</p>
+                                    <p class="fw-bold h5">Sinh viên Nữ: 50 {{totalUserFemale}}</p>
                                 </div>
 
                                 <div class="col-md-3 mb-2">
-                                    <p class="fw-bold h5">Số báo cáo: 50</p>
+                                    <p class="fw-bold h5">Số báo cáo: 50 {{totalReports}}</p>
                                 </div>
                             </div>
                         </div>
 
                         <input type="hidden" name="totalMatch" value="{{totalMatch}}" />
-                        <input type="hidden" name="totalActivityUser" value="{{totalActivityUser}}" />
-                        <input type="hidden" name="totalTimeActivityUser" value="{{totalTimeActivityUser}}" />
-                        <input type="hidden" name="totalReport" value="{{totalReport}}" />
-                        <input type="hidden" name="totalMessage" value="{{totalMessage}}" />
+                        <input type="hidden" name="totalReport" value="{{totalReports}}" />
                         <input type="hidden" name="totalBlock" value="{{totalBlock}}" />
                         <input type="hidden" name="data" value="{{data}}" />
 
@@ -257,3 +248,28 @@
     <script src="/public/js/form-users.js"></script>
     <script src="/public/js/statistical.js"></script>
 </body>
+
+
+<script>
+    function checkSubmit(format, timeStamp) {
+        let form = document.getElementById('id-form5');
+
+        let facilitiesOp = document.getElementById('facilitiesOp');
+        let specializedOp = document.getElementById('specializedOp');
+        let courseOp = document.getElementById('courseOp');
+
+        let facilitiesIp = document.getElementById('facilitiesIp');
+        let specializedIp = document.getElementById('specializedIp');
+        let courseIp = document.getElementById('courseIp');
+        let formatIp = document.getElementById('formatIp');
+        let timeStampIp = document.getElementById('timeStampIp');
+
+        facilitiesIp.value = facilitiesOp.value;
+        specializedIp.value = specializedOp.value;
+        courseIp.value = courseOp.value;
+        formatIp.value = format;
+        timeStampIp.value = timeStamp;
+
+        form.submit();
+    }
+</script>

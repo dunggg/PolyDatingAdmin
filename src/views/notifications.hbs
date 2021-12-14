@@ -258,6 +258,11 @@
         let searchIp = document.getElementById('searchIp');
 
         searchIp.value = btnSearch.value;
+
+        if (btnSearch.value == '') {
+            searchIp.name = '';
+        }
+
         form.submit();
     }
 </script>

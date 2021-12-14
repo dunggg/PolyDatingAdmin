@@ -22,7 +22,8 @@ let checkToken = async (req, res, next) => {
         else {
             req.currentUser = user;
             next();
-        };
+        }
+
     } catch (error) {
         if (error.message == "jwt malformed") {
             return res.sendStatus(401);
@@ -31,15 +32,11 @@ let checkToken = async (req, res, next) => {
     }
 };
 
-let checkTokenWeb = async (req, res, next) => {
+let checkTokenWebsite = async (req, res, next) => {
     try {
-        let authorizationHeader = req.headers['authorization'];
-        if (!authorizationHeader) return res.sendStatus(400);
+        let currentUser = req.currentUser;
 
-        let token = authorizationHeader.split(' ')[1];
-
-        let dataToken = jwt.verify(token, info.accessKey);
-        let user = await Users.findOne({ email: dataToken });
+        let accessToken = jwt.verify
 
         if (!user) {
             res.status(404).json(response(404, `Tài khoản không tồn tại`, null));
@@ -59,4 +56,4 @@ let checkTokenWeb = async (req, res, next) => {
     }
 };
 
-module.exports = { checkToken, checkTokenWeb };
+module.exports = { checkToken, checkTokenWebsite };

@@ -17,6 +17,9 @@ exports.list = async (req, res) => {
     let hobby = hobbies.slice(1, -1).split(', ');
     let data;
 
+    console.log(isShow);
+    console.log(shows);
+
     // Nếu tìm kiếm sở thích giống mình
     if (statusHobby === "true") {
       if (shows[0] == "Mọi người"
@@ -264,7 +267,7 @@ exports.updateImages = async (req, res) => {
     let images = currentUser.images;
 
     // Xóa ảnh
-    if (checkRemove === "true") {
+    if (checkRemove == "true") {
       if (images.length <= 2) {
         res.status(400).json(response(400, "Không thể xóa khi còn 2 ảnh"));
       }

@@ -328,6 +328,16 @@
         titleIp.value = titleOp.value;
         searchIp.value = btnSearch.value;
 
+        if (statusOp.value == '') {
+            statusIp.name = '';
+        }
+        if (titleOp.value == '') {
+            titleIp.name = '';
+        }
+        if (btnSearch.value == '') {
+            searchIp.name = '';
+        }
+
         form.submit();
     }
 </script>
