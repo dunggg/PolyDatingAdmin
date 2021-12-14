@@ -1,13 +1,9 @@
 let Masters = require('../../models/masters.schema');
-let User = require('../../models/users.schema');
-let Friend = require('../../models/friends.schema');
-let Report = require('../../models/reports.schema');
-let _ = require('lodash');
-let moment = require('moment');
-let json = require('../../config/masters.json');
+let Users = require('../../models/users.schema');
+let Friends = require('../../models/friends.schema');
+let Reports = require('../../models/reports.schema');
 let exportExcel = require('../../utils/exportExcel');
-
-let { course, specialized, facilities } = json[0];
+let moment = require('moment');
 
 let randomNumber = (length) => {
   var arr = [];
@@ -44,78 +40,78 @@ let getTimeStampMonthsOfYear = (timeStamp = moment().unix()) => {
   return listMonthOfYear;
 };
 
-let listTotalReportDaysOfMonth = (totalReport, timeStamp) => {
+let listTotalReportsDaysOfMonth = (totalReports, timeStamp) => {
   let listDayOfMonth = getDayOfMonth(timeStamp);
-  let listTotalReport = [];
+  let listTotalReports = [];
   for (let i = 0; i < listDayOfMonth.length; i++) {
-    let totalForTimeStamp = totalReport.filter(
+    let totalForTimeStamp = totalReports.filter(
       (value) =>
         moment(value.createAt).format('DD/MM/YYYY') ===
         moment(listDayOfMonth[i] * 1000).format('DD/MM/YYYY'),
     );
-    listTotalReport.push(totalForTimeStamp.length);
+    listTotalReports.push(totalForTimeStamp.length);
   }
-  return listTotalReport;
+  return listTotalReports;
 };
 
-let listTotalMonthsOfYear = (totalReport, timeStamp) => {
+let listTotalMonthsOfYear = (totalReports, timeStamp) => {
   let listMonth = getTimeStampMonthsOfYear(timeStamp);
-  let listTotalReport = [];
+  let listTotalReports = [];
   for (let i = 0; i < listMonth.length; i++) {
-    let totalForTimeStamp = totalReport.filter(
+    let totalForTimeStamp = totalReports.filter(
       (value) =>
         moment(value.createAt).format('MM/YYYY') ===
         moment(listMonth[i] * 1000).format('MM/YYYY'),
     );
-    listTotalReport.push(totalForTimeStamp.length);
+    listTotalReports.push(totalForTimeStamp.length);
   }
-  return listTotalReport;
+  return listTotalReports;
 };
 
-let listTotalReportYears = (totalReport, timeStamp) => {
+let listTotalReportsYears = (totalReports, timeStamp) => {
   let yearNow = 2020;
   let listYear = [];
   for (let i = 0; i <= 10; i++) {
     let time = moment(`${yearNow + i}`).unix();
     listYear.push(time);
   }
-  let listTotalReport = [];
+  let listTotalReports = [];
   for (let i = 0; i < listYear.length; i++) {
-    let totalForTimeStamp = totalReport.filter(
+    let totalForTimeStamp = totalReports.filter(
       (value) =>
         moment(value.createAt).format('YYYY') ===
         moment(listYear[i] * 1000).format('YYYY'),
     );
-    listTotalReport.push(totalForTimeStamp.length);
+    listTotalReports.push(totalForTimeStamp.length);
   }
-  return listTotalReport;
+  return listTotalReports;
 };
 
 let countMatch = async (timeStamp, format, objSearch) => {
-  let listFriend = await Friend.find({ status: true, ...objSearch });
+  let listFriends = await Friends.find({ status: true, ...objSearch });
   let list = [];
   switch (Number(format)) {
     case 0:
-      list = listTotalReportDaysOfMonth(listFriend, timeStamp);
+      list = listTotalReportsDaysOfMonth(listFriends, timeStamp);
       break;
     case 2:
-      list = listTotalReportYears(listFriend, timeStamp);
+      list = listTotalReportsYears(listFriends, timeStamp);
       break;
     default:
-      list = listTotalMonthsOfYear(listFriend, timeStamp);
+      list = listTotalMonthsOfYear(listFriends, timeStamp);
   }
   return list;
 };
 
-let countReport = async (timeStamp, format, objSearch) => {
-  let total = await Report.find(objSearch);
+let countReports = async (timeStamp, format, objSearch) => {
+  let total = await Reports.find(objSearch);
   let list = [];
   switch (Number(format)) {
     case 0:
-      list = listTotalReportDaysOfMonth(total, timeStamp);
+      list = listTotalReportsDaysOfMonth(total, timeStamp);
       break;
     case 2:
-      list = listTotalReportYears(total, timeStamp);
+      list = listTotalReportsYears(total, timeStamp);
       break;
     default:
       list = listTotalMonthsOfYear(total, timeStamp);
@@ -123,15 +119,21 @@ let countReport = async (timeStamp, format, objSearch) => {
   return list;
 };
 
+let dataDate = ['Ngày', 'Tháng', 'Năm'];
+
 let statistical = async (req, res) => {
   try {
     let {
       timeStamp,
       format,
-      course: courseParams,
-      specialized: specializedParams,
-      facilities: facilitiesParams,
+      facilitiesOp,
+      specializedOp,
+      courseOp
     } = req.query;
+
+    let dataMasters = await Masters.findOne();
+    let reportsWait = await Reports.countDocuments({ status: "Chờ duyệt" });
+
     let data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     if (Number(format) === 0) {
       data = Array.from(
@@ -148,43 +150,45 @@ let statistical = async (req, res) => {
 
     let objSearch = {};
 
-    objSearch = courseParams ? { ...objSearch, course: courseParams } : {};
-    objSearch = specializedParams
-      ? { ...objSearch, specialized: specializedParams }
-      : {};
-    objSearch = facilitiesParams
-      ? { ...objSearch, facilities: facilitiesParams }
-      : {};
+    objSearch = facilitiesOp ? { ...objSearch, facilities: facilitiesOp } : {};
+    objSearch = specializedOp ? { ...objSearch, specialized: specializedOp } : {};
+    objSearch = courseOp ? { ...objSearch, course: courseOp } : {};
 
-    let totalUser = await User.countDocuments(objSearch);
-    let totalUserMale = await User.countDocuments({
+    let totalUsers = await Users.countDocuments(objSearch);
+    let totalUsersMale = await Users.countDocuments({
       gender: 'Nam',
       ...objSearch,
     });
-    let totalUserFemale = await User.countDocuments({
+    let totalUsersFemale = await Users.countDocuments({
       gender: 'Nữ',
       ...objSearch,
     });
-    let totalReport = await countReport(timeStamp, format, objSearch);
+    let totalReports = await countReports(timeStamp, format, objSearch);
     let totalMatch = await countMatch(timeStamp, format, objSearch);
 
-    res.render('statistical', {
-      totalUser,
-      totalUserMale,
-      totalUserFemale,
+    let payloadMaster = {
+      facilities: dataMasters.facilities,
+      specialized: dataMasters.specialized,
+      course: dataMasters.course,
+      facilitiesOp,
+      specializedOp,
+      courseOp,
+      dataDate
+    }
+
+    let payload = {
+      totalUsers,
+      totalUsersMale,
+      totalUsersFemale,
       totalMatch,
-      totalActivityUser: randomNumber(data.length),
-      totalTimeActivityUser: randomNumber(data.length),
-      totalReport,
+      totalActivityUsers: randomNumber(data.length),
+      totalTimeActivityUsers: randomNumber(data.length),
+      totalReports,
       totalMessage: randomNumber(data.length),
       totalBlock: randomNumber(data.length),
       data,
-      course: course,
-      specialized: specialized,
-      facilities: facilities,
-      courseParams,
-      specializedParams,
-      facilitiesParams,
+      reportsWait,
+      ...payloadMaster,
       timeParams: format,
       timeStamp: moment().unix(),
       title:
@@ -194,8 +198,10 @@ let statistical = async (req, res) => {
             ? `từ năm ${data[0]} đến năm ${data[data.length - 1]}`
             : `tháng ${moment(timeStamp * 1000).format('MM')} năm ${moment(
               timeStamp * 1000,
-            ).format('YYYY')}`,
-    });
+            ).format('YYYY')}`
+    }
+
+    res.render('statistical', payload);
   } catch (error) {
     res.send(error.message);
   }

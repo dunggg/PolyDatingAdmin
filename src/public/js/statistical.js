@@ -105,22 +105,22 @@ $(document).ready(function () {
     },
   });
 
-  // form input action
-  let form = $('form');
-  let btnSearch = $('#btnSearch')[0];
-  let select = $('select');
-  let input = $('form>input');
-  btnSearch.addEventListener('click', function () {
-    select[0].value.trim() === 'Lựa chọn cơ sở'
-      ? input[0].remove()
-      : (input[0].value = select[0].value);
-    select[1].value.trim() === 'Lựa chọn ngành học'
-      ? input[1].remove()
-      : (input[1].value = select[1].value);
-    select[2].value.trim() === 'Lựa chọn khóa học'
-      ? input[2].remove()
-      : (input[2].value = select[2].value);
-    input[3].value = select[3].value;
-    form[0].submit();
-  });
+  // // form input action
+  // let form = $('form');
+  // let btnSearch = $('#btnSearch')[0];
+  // let select = $('select');
+  // let input = $('form>input');
+  // btnSearch.addEventListener('click', function () {
+  //   select[0].value.trim() === 'Lựa chọn cơ sở'
+  //     ? input[0].remove()
+  //     : (input[0].value = select[0].value);
+  //   select[1].value.trim() === 'Lựa chọn ngành học'
+  //     ? input[1].remove()
+  //     : (input[1].value = select[1].value);
+  //   select[2].value.trim() === 'Lựa chọn khóa học'
+  //     ? input[2].remove()
+  //     : (input[2].value = select[2].value);
+  //   input[3].value = select[3].value;
+  //   form[0].submit();
+  // });
 });

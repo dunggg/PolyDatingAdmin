@@ -14,10 +14,17 @@
                     <li class="nav-item"><a class="nav-link active"
                             href="/statistical?format=0&timeStamp={{timeStamp}}"><i
                                 class="fas fa-tachometer-alt"></i><span>Thống kê</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/users/page/1"><i
+                    <li class="nav-item"><a class="nav-link" href="/users"><i
                                 class="fas fa-user"></i></i><span>Người dùng</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/reports"><i class="fas fa-flag"></i><span>Báo
-                                cáo</span></a></li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/reports">
+                            <i class="fas fa-flag"></i>
+                            <span>Báo cáo</span>
+                            {{#if (gt reportsWait 0)}}
+                            <span class="text-warning"> {{reportsWait}} lượt</span>
+                            {{/if}}
+                        </a>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="/notifications"><i
                                 class="fas fa-bell"></i><span>Thông
                                 báo</span></a></li>
@@ -52,9 +59,24 @@
                                 <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
-                                            <select class="d-inline-block form-select form-select-sm">
+                                            <select class="d-inline-block form-select form-select-sm" id="facilitiesOp">
                                                 {{#each facilities}}
-                                                {{#optionFacilities "" this}}{{/optionFacilities}}
+
+                                                {{#if (eq this 'Vai trò')}}
+                                                <option value="">{{this}}</option>
+
+                                                {{else}}
+                                                {{#if (eq this @root.facilitiesOp)}}
+                                                <option value="{{@root.facilitiesOp}}" selected="">
+                                                    {{@root.facilitiesOp}}
+                                                </option>
+
+                                                {{else}}
+                                                <option value="{{this}}">{{this}}</option>
+
+                                                {{/if}}
+                                                {{/if}}
+
                                                 {{/each}}
                                             </select>
                                         </label>
@@ -64,9 +86,25 @@
                                 <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
-                                            <select class="d-inline-block form-select form-select-sm">
+                                            <select class="d-inline-block form-select form-select-sm"
+                                                id="specializedOp">
                                                 {{#each specialized}}
-                                                {{#optionSpecialized "" this}} {{/optionSpecialized}}
+
+                                                {{#if (eq this 'Lựa chọn cơ sở')}}
+                                                <option value="">{{this}}</option>
+
+                                                {{else}}
+                                                {{#if (eq this @root.specializedOp)}}
+                                                <option value="{{@root.specializedOp}}" selected="">
+                                                    {{@root.specializedOp}}
+                                                </option>
+
+                                                {{else}}
+                                                <option value="{{this}}">{{this}}</option>
+
+                                                {{/if}}
+                                                {{/if}}
+
                                                 {{/each}}
                                             </select>
                                         </label>
@@ -76,9 +114,24 @@
                                 <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
-                                            <select class="d-inline-block form-select form-select-sm">
+                                            <select class="d-inline-block form-select form-select-sm" id="courseOp">
                                                 {{#each course}}
-                                                {{#optionCourse "" this}} {{/optionCourse}}
+
+                                                {{#if (eq this 'Lựa chọn ngành học')}}
+                                                <option value="">{{this}}</option>
+
+                                                {{else}}
+                                                {{#if (eq this @root.courseOp)}}
+                                                <option value="{{@root.courseOp}}" selected="">
+                                                    {{@root.courseOp}}
+                                                </option>
+
+                                                {{else}}
+                                                <option value="{{this}}">{{this}}</option>
+
+                                                {{/if}}
+                                                {{/if}}
+
                                                 {{/each}}
                                             </select>
                                         </label>
@@ -89,9 +142,9 @@
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
                                             <select class="d-inline-block form-select form-select-sm">
-                                                {{#optionTime "" 0}} {{/optionTime}}
-                                                {{#optionTime "" 1}} {{/optionTime}}
-                                                {{#optionTime "" 2}} {{/optionTime}}
+                                                {{#each dataDate}}
+                                                <option value="{{this}}">{{this}}</option>
+                                                {{/each}}
                                             </select>
                                         </label>
                                     </div>
@@ -100,13 +153,10 @@
                                 <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
-                                            <form action="/users" method="get" id="id-form5">
+                                            <form action="/statistical" method="get" id="id-form5">
                                                 <input type="hidden" id="facilitiesIp" name="facilitiesOp">
                                                 <input type="hidden" id="specializedIp" name="specializedOp">
                                                 <input type="hidden" id="courseIp" name="courseOp">
-                                                <input type="hidden" id="genderIp" name="genderOp">
-                                                <input type="hidden" id="isActivesIp" name="isActivesOp">
-                                                <input type="hidden" id="roleIp" name="roleOp">
                                                 <input type="hidden" id="searchIp" name="search">
 
                                                 <input type="submit" class="form-control form-control-sm btn-primary"
@@ -138,15 +188,15 @@
                             <hr>
                             <div class="row">
                                 <div class="col-md-3 mb-2">
-                                    <p class="fw-bold h5">Tổng người dùng: {{totalUser}}</p>
+                                    <p class="fw-bold h5">Tổng người dùng: 50{{totalUser}}</p>
                                 </div>
 
                                 <div class="col-md-3 mb-2">
-                                    <p class="fw-bold h5">Sinh viên Nam: {{totalUserMale}}</p>
+                                    <p class="fw-bold h5">Sinh viên Nam: 50{{totalUserMale}}</p>
                                 </div>
 
                                 <div class="col-md-3 mb-2">
-                                    <p class="fw-bold h5">Sinh viên Nữ: {{totalUserFemale}}</p>
+                                    <p class="fw-bold h5">Sinh viên Nữ: 50{{totalUserFemale}}</p>
                                 </div>
 
                                 <div class="col-md-3 mb-2">
@@ -196,7 +246,7 @@
             </div>
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © Brand 2021</span></div>
+                    <div class="text-center my-auto copyright"><span>Poly Dating 2021</span></div>
                 </div>
             </footer>
         </div>
