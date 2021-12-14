@@ -6,6 +6,7 @@ let { response, insertUser, updateUser } = require("../../utils/utils");
 let info = require('../../config/info');
 let randomString = require('randomstring');
 let jwt = require('jsonwebtoken');
+const { login } = require("../web/users.web");
 
 let pathUrl = "https://poly-dating.herokuapp.com/public/data_images/";
 
@@ -17,148 +18,51 @@ exports.list = async (req, res) => {
     let hobby = hobbies.slice(1, -1).split(', ');
     let data;
 
-    console.log(isShow);
-    console.log(shows);
+    let search = {
+      role: 'Người dùng'
+    };
+
+    if (shows[0] != "Mọi người") {
+      search = {
+        ...search,
+        gender: shows[0]
+      }
+    }
+    if (shows[1] != "Tất cả cơ sở") {
+      search = {
+        ...search,
+        facilities: shows[1]
+      }
+    }
+    if (shows[2] != "Tất cả chuyên ngành") {
+      search = {
+        ...search,
+        specialized: shows[2]
+      }
+    }
+    if (shows[3] != "Tất cả khóa học") {
+      search = {
+        ...search,
+        course: shows[3]
+      }
+    }
 
     // Nếu tìm kiếm sở thích giống mình
     if (statusHobby === "true") {
-      if (shows[0] == "Mọi người"
-        && shows[1] != "Tất cả cơ sở"
-        && shows[2] != "Tất cả chuyên ngành"
-        && shows[3] != "Tất cả khóa học") {
-
-        let option = {
-          facilities: shows[1],
-          specialized: shows[2],
-          course: shows[3],
-          role: 'Người dùng',
-          hobbies: { $all: hobby }
-        }
-
-        data = await Users.find(option);
+      search = {
+        ...search,
+        hobbies: { $all: hobby }
       }
-      else if (shows[0] != "Mọi người"
-        && shows[1] == "Tất cả cơ sở"
-        && shows[2] != "Tất cả chuyên ngành"
-        && shows[3] != "Tất cả khóa học") {
-
-        let option = {
-          gender: shows[0],
-          specialized: shows[2],
-          course: shows[3],
-          role: 'Người dùng',
-          hobbies: { $all: hobby }
-        }
-
-        data = await Users.find(option);
-      }
-      else if (shows[0] != "Mọi người"
-        && shows[1] != "Tất cả cơ sở"
-        && shows[2] == "Tất cả chuyên ngành"
-        && shows[3] != "Tất cả khóa học") {
-
-        let option = {
-          gender: shows[0],
-          facilities: shows[1],
-          course: shows[3],
-          role: 'Người dùng',
-          hobbies: { $all: hobby }
-        }
-
-        data = await Users.find(option);
-      }
-      else if (shows[0] != "Mọi người"
-        && shows[1] != "Tất cả cơ sở"
-        && shows[2] != "Tất cả chuyên ngành"
-        && shows[3] == "Tất cả khóa học") {
-
-        let option = {
-          gender: shows[0],
-          facilities: shows[1],
-          specialized: shows[2],
-          role: 'Người dùng',
-          hobbies: { $all: hobby }
-        }
-
-        data = await Users.find(option);
-      }
-      else {
-        let option = {
-          role: 'Người dùng',
-          hobbies: { $all: hobby }
-        }
-
-        data = await Users.find(option);
-      }
+      data = await Users.find(search);
     }
-    // Không tìm cùng
     else {
-      if (shows[0] == "Mọi người"
-        && shows[1] != "Tất cả cơ sở"
-        && shows[2] != "Tất cả chuyên ngành"
-        && shows[3] != "Tất cả khóa học") {
-
-        let option = {
-          facilities: shows[1],
-          specialized: shows[2],
-          course: shows[3],
-          role: 'Người dùng'
-        }
-
-        data = await Users.find(option);
-      }
-      else if (shows[0] != "Mọi người"
-        && shows[1] == "Tất cả cơ sở"
-        && shows[2] != "Tất cả chuyên ngành"
-        && shows[3] != "Tất cả khóa học") {
-
-        let option = {
-          gender: shows[0],
-          specialized: shows[2],
-          course: shows[3],
-          role: 'Người dùng'
-        }
-
-        data = await Users.find(option);
-      }
-      else if (shows[0] != "Mọi người"
-        && shows[1] != "Tất cả cơ sở"
-        && shows[2] == "Tất cả chuyên ngành"
-        && shows[3] != "Tất cả khóa học") {
-
-        let option = {
-          gender: shows[0],
-          facilities: shows[1],
-          course: shows[3],
-          role: 'Người dùng'
-        }
-
-        data = await Users.find(option);
-      }
-      else if (shows[0] != "Mọi người"
-        && shows[1] != "Tất cả cơ sở"
-        && shows[2] != "Tất cả chuyên ngành"
-        && shows[3] == "Tất cả khóa học") {
-
-        let option = {
-          gender: shows[0],
-          facilities: shows[1],
-          specialized: shows[2],
-          role: 'Người dùng'
-        }
-
-        data = await Users.find(option);
-      }
-      else {
-        data = await Users.find({ role: 'Người dùng' });
-      }
+      data = await Users.find(search);
     }
 
     let payload = {
       total: data.length,
       users: data
     }
-
     res.status(200).json(response(200, "Lấy danh sách người dùng thành công", payload));
 
   } catch (error) {
