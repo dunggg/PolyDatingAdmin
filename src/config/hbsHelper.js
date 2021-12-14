@@ -19,10 +19,6 @@ hbs.registerHelper('newDate', (value) => {
   return value.toLocaleString();
 });
 
-hbs.registerHelper('newDateRemoveHours', (value) => {
-  return value.toLocaleString().slice(0, -12);
-});
-
 hbs.registerHelper('compare', function (index, object) {
   let isSearch = object.data.root.isSearch;
   let facilitiesParams = object.data.root.facilitiesParams;
