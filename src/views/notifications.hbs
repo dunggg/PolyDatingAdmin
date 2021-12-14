@@ -13,10 +13,12 @@
                 <ul class="navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link" href="/statistical?format=0&timeStamp={{timeStamp}}"><i
                                 class="fas fa-tachometer-alt"></i><span>Thống kê</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/users/page/1"><i class="fas fa-user"></i><span>Người
+                    <li class="nav-item"><a class="nav-link" href="/employees"><i class="fas fa-user-cog"></i>
+                            <span>Nhân viên</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/users"><i class="fas fa-user"></i><span>Người
                                 dùng</span></a></li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/reports/page/1">
+                        <a class="nav-link" href="/reports">
                             <i class="fas fa-flag"></i>
                             <span>Báo cáo</span>
                             {{#if (gt reportsWait 0)}}
@@ -24,7 +26,7 @@
                             {{/if}}
                         </a>
                     </li>
-                    <li class="nav-item"><a class="nav-link active" href="/notifications/page/1"><i
+                    <li class="nav-item"><a class="nav-link active" href="/notifications"><i
                                 class="fas fa-bell"></i><span>Thông báo</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-sign-out-alt"></i><span>Đăng
                                 xuất</span></a></li>
@@ -75,7 +77,7 @@
                                                         <input type="text" name="link" class="form-control">
                                                     </div>
 
-                                                    <div class="mb-3">
+                                                    <div>
                                                         <label class="form-label">Nội dung</label>
                                                         <textarea class="form-control" name="content" required
                                                             style="resize: none;" rows="4"></textarea>
@@ -108,7 +110,7 @@
                                 <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
-                                            <form action="/notifications/page/1" method="get" id="id-form7">
+                                            <form action="/notifications" method="get" id="id-form7">
                                                 <input type="hidden" id="searchIp" name="search">
 
                                                 <input type="submit" class="form-control form-control-sm btn-primary"
@@ -158,12 +160,11 @@
                                             <td class="text-nowrap">{{#newDate this.createdAt}}{{/newDate}}</td>
                                             <td>
                                                 <form action="/notifications/delete" method="post"
-                                                    class="text-end col-md-6" style="display: flex" id="form-block2">
+                                                    class="text-end col-md-6" style="display: flex">
 
                                                     <input type="hidden" value="{{this._id}}" name="_id">
 
-                                                    <button class="btn btn-danger" type="button"
-                                                        onclick="check(`Xác nhận xóa thông báo {{this.title}} ?`)">
+                                                    <button class="btn btn-danger" type="submit">
                                                         <i class="fas fa-times"></i></i>
                                                     </button>
                                                 </form>
@@ -252,15 +253,6 @@
 </body>
 
 <script>
-    function check(v) {
-        let form = document.getElementById('form-block2');
-        let check = confirm(v);
-
-        if (check == true) {
-            return form.submit();
-        }
-    }
-
     function checkSubmit() {
         let form = document.getElementById('id-form7');
 

@@ -1,5 +1,4 @@
 let Notifications = require('../models/notifications.schema');
-let Tokens = require('../models/tokens.schema');
 let { response } = require("../utils/utils");
 let info = require('../config/info');
 let fetch = require('node-fetch');
@@ -15,7 +14,6 @@ let optionConfig = {
 let pushNotificationsFriendsRequest = async (req, res) => {
     try {
         let notifiData = req.notifiData;
-        let dataToken = await Tokens.findOne({ email: notifiData.emailReceiver });
 
         let optionNotifi = {
             emailSender: notifiData.emailSender,
@@ -33,7 +31,7 @@ let pushNotificationsFriendsRequest = async (req, res) => {
                 title: `Poly Dating - ${optionNotifi.title}`,
                 content: notifiData.content
             },
-            'to': dataToken.token
+            'to': notifiData.token
         };
 
         let optionPush = {

@@ -13,10 +13,12 @@
                 <ul class="navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link" href="/statistical?format=0&timeStamp={{timeStamp}}"><i
                                 class="fas fa-tachometer-alt"></i><span>Thống kê</span></a></li>
-                    <li class="nav-item"><a class="nav-link active" href="/users/page/1"><i class="fas fa-user"></i>
+                    <li class="nav-item"><a class="nav-link" href="/employees"><i class="fas fa-user-cog"></i>
+                            <span>Nhân viên</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/users"><i class="fas fa-user"></i>
                             <span>Người dùng</span></a></li>
                     <li class="nav-item">
-                        <a class="nav-link " href="/reports/page/1">
+                        <a class="nav-link " href="/reports">
                             <i class="fas fa-flag"></i>
                             <span>Báo cáo</span>
                             {{#if (gt reportsWait 0)}}
@@ -24,7 +26,7 @@
                             {{/if}}
                         </a>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="/notifications/page/1"><i
+                    <li class="nav-item"><a class="nav-link" href="/notifications"><i
                                 class="fas fa-bell"></i><span>Thông
                                 báo</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-sign-out-alt"></i><span>Đăng
@@ -48,10 +50,96 @@
                 <div class="container-fluid">
                     <div class="card shadow">
                         <div class="card-header py-3">
-                            <p class="text-primary m-0 fw-bold col-md-6">Thông tin người dùng</p>
+                            <div class="row">
+                                <p class="text-primary m-0 fw-bold col-md-6">Thông tin người dùng</p>
+                                <a href="#" class="text-danger m-0 fw-bold col-md-6 text-end" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal" style="text-decoration: none;">Thêm nhân viên</a>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal" tabindex="-1" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title text-danger">Thêm nhân viên</h5>
+                                            </div>
+                                            <!-- form -->
+                                            <form action="/users/insert" method="post" enctype="multipart/form-data">
+                                                <div class="modal-body row g-3">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Email</label>
+                                                        <input type="email" name="email" class="form-control" required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Họ tên</label>
+                                                        <input type="text" name="name" class="form-control" required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Số điện
+                                                            thoại</label>
+                                                        <input type="number" name="phone" class="form-control" required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Ngày sinh</label>
+                                                        <input type="date" name="birthDay" class="form-control"
+                                                            required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Giới tính</label>
+                                                        <select name="gender" class="form-select" required>
+                                                            <option value="" selected>Chọn...</option>
+                                                            <option value="Nam">Nam</option>
+                                                            <option value="Nữ">Nữ</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Hình ảnh</label>
+                                                        <input type="file" name="images" accept="image/jpeg, image/jpg"
+                                                            class="form-control" required>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-primary">Gửi</button>
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Hủy</button>
+                                                </div>
+                                            </form>
+                                            <!-- end form -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- -------------------- -->
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="row">
+                                <div class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <select class="d-inline-block form-select form-select-sm" id="roleOp">
+                                                {{#each role}}
+
+                                                {{#if (eq this 'Vai trò')}}
+                                                <option value="">{{this}}</option>
+
+                                                {{else}}
+                                                {{#if (eq this @root.roleOp)}}
+                                                <option value="{{@root.roleOp}}" selected="">
+                                                    {{@root.roleOp}}
+                                                </option>
+
+                                                {{else}}
+                                                <option value="{{this}}">{{this}}</option>
+
+                                                {{/if}}
+                                                {{/if}}
+
+                                                {{/each}}
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+
                                 <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
@@ -200,12 +288,13 @@
                                 <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
-                                            <form action="/users/page/1" method="get" id="id-form5">
+                                            <form action="/users" method="get" id="id-form5">
                                                 <input type="hidden" id="facilitiesIp" name="facilitiesOp">
                                                 <input type="hidden" id="specializedIp" name="specializedOp">
                                                 <input type="hidden" id="courseIp" name="courseOp">
                                                 <input type="hidden" id="genderIp" name="genderOp">
                                                 <input type="hidden" id="isActivesIp" name="isActivesOp">
+                                                <input type="hidden" id="roleIp" name="roleOp">
                                                 <input type="hidden" id="searchIp" name="search">
 
                                                 <input type="submit" onclick="checkSubmit()"
@@ -225,6 +314,8 @@
                                             <th nowrap>STT</th>
                                             <th nowrap>Email</th>
                                             <th nowrap>Họ tên</th>
+                                            <th nowrap>Vai trò</th>
+                                            <th nowrap>Số điện thoại</th>
                                             <th nowrap>Giới tính</th>
                                             <th nowrap>Ngày sinh</th>
                                             <th nowrap>Sở thích</th>
@@ -251,6 +342,8 @@
                                                     src="{{this.images.[0]}}">
                                                 {{this.name}}
                                             </td>
+                                            <td class="text-nowrap">{{this.role}}</td>
+                                            <td class="text-nowrap">{{this.phone}}</td>
                                             <td class="text-nowrap">{{this.gender}}</td>
                                             <td class="text-nowrap">{{this.birthDay}}</td>
                                             <td class="text-nowrap">{{this.hobbies}}</td>
@@ -284,52 +377,47 @@
                                             <td>
                                                 {{#if (eq this.isActive "Kích hoạt")}}
                                                 <div style="display: flex">
-                                                    <form action="/users/block" method="post" id="form-block"
-                                                        class="text-end col-md-6">
+                                                    <form action="/users/block" method="post" class="text-end col-md-6">
 
                                                         <input type="hidden" name="_id" value="{{this._id}}">
                                                         <input type="hidden" name="checkAction" value="1">
 
-                                                        <button class="btn btn-danger" type="button"
-                                                            style="margin-right: 5px;"
-                                                            onclick="check(`Khóa tài khoản {{this.email}} ? (Xác nhận)`)">
+                                                        <button class="btn btn-danger" type="submit"
+                                                            style="margin-right: 5px;">
                                                             <i class="fas fa-lock text-white"></i>
                                                         </button>
                                                     </form>
 
-                                                    <form action="/users/delete" method="post" id="form-block2"
+                                                    <form action="/users/delete" method="post"
                                                         class="text-end col-md-6">
 
                                                         <input type="hidden" name="_id" value="{{this._id}}">
 
-                                                        <button class="btn btn-warning" type="button"
-                                                            onclick="check2(`Xóa tài khoản {{this.email}} ? (Xác nhận)`)">
+                                                        <button class="btn btn-warning" type="submit">
                                                             <i class="fas fa-trash-alt text-white"></i>
                                                         </button>
                                                     </form>
                                                 </div>
                                                 {{else}}
                                                 <div style="display: flex;">
-                                                    <form action="/users/unblock" method="post" id="form-block"
+                                                    <form action="/users/unblock" method="post"
                                                         class="text-end col-md-6">
 
                                                         <input type="hidden" name="_id" value="{{this._id}}">
                                                         <input type="hidden" name="checkAction" value="1">
 
-                                                        <button class="btn btn-success" type="button"
-                                                            style="margin-right: 5px;"
-                                                            onclick="check(`Mở khóa tài khoản {{this.email}} ? (Xác nhận)`)">
+                                                        <button class="btn btn-success" type="submit"
+                                                            style="margin-right: 5px;">
                                                             <i class="fas fa-unlock text-white"></i>
                                                         </button>
                                                     </form>
 
-                                                    <form action="/users/delete" method="post" id="form-block2"
+                                                    <form action="/users/delete" method="post"
                                                         class="text-end col-md-6">
 
                                                         <input type="hidden" name="_id" value="{{this._id}}">
 
-                                                        <button class="btn btn-warning" type="button"
-                                                            onclick="check2(`Xóa tài khoản {{this.email}} ? (Xác nhận)`)">
+                                                        <button class="btn btn-warning" type="submit">
                                                             <i class="fas fa-trash-alt text-white"></i>
                                                         </button>
                                                     </form>
@@ -432,6 +520,7 @@
         let courseOp = document.getElementById('courseOp');
         let genderOp = document.getElementById('genderOp');
         let isActivesOp = document.getElementById('isActivesOp');
+        let roleOp = document.getElementById('roleOp');
         let btnSearch = document.getElementById('btnSearch');
 
         let facilitiesIp = document.getElementById('facilitiesIp');
@@ -439,6 +528,7 @@
         let courseIp = document.getElementById('courseIp');
         let genderIp = document.getElementById('genderIp');
         let isActivesIp = document.getElementById('isActivesIp');
+        let roleIp = document.getElementById('roleIp');
         let searchIp = document.getElementById('searchIp');
 
         facilitiesIp.value = facilitiesOp.value;
@@ -446,32 +536,9 @@
         courseIp.value = courseOp.value;
         genderIp.value = genderOp.value;
         isActivesIp.value = isActivesOp.value;
+        roleIp.value = roleOp.value;
         searchIp.value = btnSearch.value;
 
         form.submit();
     }
-
-    function check(value) {
-        let form = document.getElementById('form-block');
-        let check = prompt(value, "");
-
-        if (check === "Xác nhận") {
-            form.submit();
-        }
-        else if (check.length > 0) {
-            alert("Sai thông tin");
-        }
-    };
-
-    function check2(value) {
-        let form = document.getElementById('form-block2');
-        let check = prompt(value, "");
-
-        if (check === "Xác nhận") {
-            form.submit();
-        }
-        else if (check.length > 0) {
-            alert("Sai thông tin");
-        }
-    };
 </script>

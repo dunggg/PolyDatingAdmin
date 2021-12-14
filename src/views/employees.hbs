@@ -1,0 +1,470 @@
+<body id="page-top">
+    <div id="wrapper">
+        <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
+            <div class="container-fluid d-flex flex-column p-0">
+                <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0"
+                    href="/statistical">
+                    <div class="sidebar-brand-icon rotate-n-15">
+                        <img src="/public/img/bee.png" alt="">
+                    </div>
+                    <div class="sidebar-brand-text mx-3"><span>POLY DATING</span></div>
+                </a>
+                <hr class="sidebar-divider my-0">
+                <ul class="navbar-nav text-light" id="accordionSidebar">
+                    <li class="nav-item"><a class="nav-link" href="/statistical?format=0&timeStamp={{timeStamp}}"><i
+                                class="fas fa-tachometer-alt"></i><span>Thống kê</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/employees"><i class="fas fa-user-cog"></i>
+                            <span>Nhân viên</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/users"><i class="fas fa-user"></i>
+                            <span>Người dùng</span></a></li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/reports">
+                            <i class="fas fa-flag"></i>
+                            <span>Báo cáo</span>
+                            {{#if (gt reportsWait 0)}}
+                            <span class="text-warning"> {{reportsWait}} lượt</span>
+                            {{/if}}
+                        </a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="/notifications"><i
+                                class="fas fa-bell"></i><span>Thông
+                                báo</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-sign-out-alt"></i><span>Đăng
+                                xuất</span></a></li>
+                </ul>
+                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0"
+                        id="sidebarToggle" type="button"></button></div>
+            </div>
+        </nav>
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
+                    <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3"
+                            id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
+                        <div class="d-sm-inline-block me-auto md-3 my-2 my-md-0 mw-100 navbar-search">
+                            <h4 class="text-dark mb-0">Nhân viên</h4>
+                        </div>
+                    </div>
+                </nav>
+
+                <div class="container-fluid">
+                    <div class="card shadow">
+                        <div class="card-header py-3">
+                            <div class="row">
+                                <p class="text-primary m-0 fw-bold col-md-6">Thông tin nhân viên</p>
+                                <a href="#" class="text-danger m-0 fw-bold col-md-6 text-end" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal" style="text-decoration: none;">Thêm nhân viên</a>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal" tabindex="-1" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title text-danger">Thêm nhân viên</h5>
+                                            </div>
+                                            <!-- form -->
+                                            <form action="/employees/insert" method="post"
+                                                enctype="multipart/form-data">
+                                                <div class="modal-body row g-3">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Email</label>
+                                                        <input type="email" name="email" class="form-control" required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Họ tên</label>
+                                                        <input type="text" name="name" class="form-control" required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Số điện
+                                                            thoại</label>
+                                                        <input type="number" name="phone" class="form-control" required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Ngày sinh</label>
+                                                        <input type="date" name="birthDay" class="form-control"
+                                                            required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Giới tính</label>
+                                                        <select name="gender" class="form-select" required>
+                                                            <option value="" selected>Chọn...</option>
+                                                            <option value="Nam">Nam</option>
+                                                            <option value="Nữ">Nữ</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Vai trò</label>
+                                                        <select name="role" class="form-select" required>
+                                                            <option value="" selected>Chọn...</option>
+                                                            <option value="Quản lý">Quản lý</option>
+                                                            <option value="Nhân viên">Nhân viên</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <label class="form-label">Hình ảnh</label>
+                                                        <input type="file" name="images" accept="image/jpeg, image/jpg"
+                                                            class="form-control" required>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-primary">Gửi</button>
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Hủy</button>
+                                                </div>
+                                            </form>
+                                            <!-- end form -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- -------------------- -->
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <select class="d-inline-block form-select form-select-sm" id="roleOp">
+                                                {{#each role}}
+
+                                                {{#if (eq this 'Vai trò')}}
+                                                <option value="">{{this}}</option>
+
+                                                {{else}}
+                                                {{#if (eq this @root.roleOp)}}
+                                                <option value="{{@root.roleOp}}" selected="">
+                                                    {{@root.roleOp}}
+                                                </option>
+
+                                                {{else}}
+                                                <option value="{{this}}">{{this}}</option>
+
+                                                {{/if}}
+                                                {{/if}}
+
+                                                {{/each}}
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <select class="d-inline-block form-select form-select-sm" id="genderOp">
+                                                {{#each gender}}
+
+                                                {{#if (eq this 'Giới tính')}}
+                                                <option value="">{{this}}</option>
+
+                                                {{else}}
+                                                {{#if (eq this @root.genderOp)}}
+                                                <option value="{{@root.genderOp}}" selected="">
+                                                    {{@root.genderOp}}
+                                                </option>
+
+                                                {{else}}
+                                                <option value="{{this}}">{{this}}</option>
+
+                                                {{/if}}
+                                                {{/if}}
+
+                                                {{/each}}
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <select class="d-inline-block form-select form-select-sm" id="isActivesOp">
+                                                {{#each isActives}}
+
+                                                {{#if (eq this 'Trạng thái')}}
+                                                <option value="">{{this}}</option>
+
+                                                {{else}}
+                                                {{#if (eq this @root.isActivesOp)}}
+                                                <option value="{{@root.isActivesOp}}" selected="">
+                                                    {{@root.isActivesOp}}
+                                                </option>
+
+                                                {{else}}
+                                                <option value="{{this}}">{{this}}</option>
+
+                                                {{/if}}
+                                                {{/if}}
+
+                                                {{/each}}
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <input type="search" class="form-control form-control-sm" id="btnSearch"
+                                                aria-controls="dataTable" placeholder="Tìm kiếm..." value="{{search}}">
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <form action="/employees" method="get" id="id-form5">
+                                                <input type="hidden" id="roleIp" name="roleOp">
+                                                <input type="hidden" id="genderIp" name="genderOp">
+                                                <input type="hidden" id="isActivesIp" name="isActivesOp">
+                                                <input type="hidden" id="searchIp" name="search">
+
+                                                <input type="submit" onclick="checkSubmit()"
+                                                    class="form-control form-control-sm btn-primary"
+                                                    aria-controls="dataTable" value="Tìm kiếm">
+                                            </form>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- ----------------------------------- -->
+                            <div class="table-responsive mt-2" role="grid" aria-describedby="dataTable_info">
+                                <table class="table table-hover my-0">
+                                    <thead>
+                                        <tr>
+                                            <th nowrap>STT</th>
+                                            <th nowrap>Email</th>
+                                            <th nowrap>Họ tên</th>
+                                            <th nowrap>Giới tính</th>
+                                            <th nowrap>Ngày sinh</th>
+                                            <th nowrap>Số điện thoại</th>
+                                            <th nowrap>Vai trò</th>
+                                            <th nowrap>Trạng thái</th>
+                                            <th nowrap>Ngày tạo</th>
+                                            <th nowrap>Ngày cập nhật</th>
+                                            <th nowrap>Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each employees}}
+                                        <tr>
+                                            <td>{{@index}}</td>
+                                            <td>
+                                                <a style="text-decoration: none;" class="text-info"
+                                                    href="/users/{{this.email}}">{{this.email}}</a>
+                                            </td>
+                                            <td class="text-nowrap">
+                                                <img class="rounded-circle me-2" width="30" height="30"
+                                                    src="{{this.images.[0]}}">
+                                                {{this.name}}
+                                            </td>
+                                            <td class="text-nowrap">{{this.gender}}</td>
+                                            <td class="text-nowrap">{{this.birthDay}}</td>
+                                            <td class="text-nowrap">{{this.phone}}</td>
+                                            <td class="text-nowrap">{{this.role}}</td>
+                                            <td class="text-nowrap">
+                                                {{#if (eq this.isActive "Kích hoạt")}}
+                                                <span class="text-success">Kích hoạt</span>
+                                                {{else}}
+                                                <span class="text-danger">Khóa</span>
+                                                {{/if}}
+                                            </td>
+                                            <td class="text-nowrap">{{#newDate this.createdAt}}{{/newDate}}</td>
+                                            <td class="text-nowrap">{{#newDate this.updatedAt}}{{/newDate}}</td>
+
+                                            <td>
+                                                {{#if (eq this.isActive "Kích hoạt")}}
+                                                <div style="display: flex">
+                                                    <form action="/employees/block" method="post" id="form-block"
+                                                        class="text-end col-md-6">
+
+                                                        <input type="hidden" name="_id" value="{{this._id}}">
+                                                        <input type="hidden" name="checkAction" value="1">
+
+                                                        <button class="btn btn-danger" type="submit"
+                                                            style="margin-right: 5px;">
+                                                            <i class="fas fa-lock text-white"></i>
+                                                        </button>
+                                                    </form>
+
+                                                    <form action="/employees/delete" method="post" id="form-block2"
+                                                        class="text-end col-md-6">
+
+                                                        <input type="hidden" name="_id" value="{{this._id}}">
+
+                                                        <button class="btn btn-warning" type="submit">
+                                                            <i class="fas fa-trash-alt text-white"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                {{else}}
+                                                <div style="display: flex;">
+                                                    <form action="/employees/unblock" method="post" id="form-block"
+                                                        class="text-end col-md-6">
+
+                                                        <input type="hidden" name="_id" value="{{this._id}}">
+                                                        <input type="hidden" name="checkAction" value="1">
+
+                                                        <button class="btn btn-success" type="submit"
+                                                            style="margin-right: 5px;">
+                                                            <i class="fas fa-lock text-white"></i>
+                                                        </button>
+                                                    </form>
+
+                                                    <form action="/employees/delete" method="post" id="form-block2"
+                                                        class="text-end col-md-6">
+
+                                                        <input type="hidden" name="_id" value="{{this._id}}">
+
+                                                        <button class="btn btn-warning" type="submit">
+                                                            <i class="fas fa-trash-alt text-white"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                {{/if}}
+                                            </td>
+                                        </tr>
+                                        {{/each }}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-md-6 align-self-center">
+                                    <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">
+                                        Hiển thị {{countFrom}} đến {{countTo}} trong tổng {{countEmployees}}</p>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <nav
+                                        class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                                        <ul class="pagination">
+
+                                            {{!-- Nếu page < 2 thì ẩn nút pre --}} {{#if ( gt countEmployees 0)}} {{#if
+                                                (lt pageNumber 2)}} <li class="page-item disabled"><a class="page-link"
+                                                    href="#" aria-label="Previous"><span aria-hidden="true">«</span></a>
+                                                </li>
+                                                {{else}}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="/employees/page/{{previousPage}}"
+                                                        aria-label="Previous">
+                                                        <span aria-hidden="true">«</span>
+                                                    </a>
+                                                </li>
+                                                {{/if}}
+                                                {{/if}}
+
+                                                {{!-- ------------------------------- --}}
+
+                                                {{!-- List page --}}
+                                                {{#each countEmployeesPage}}
+
+                                                {{#if (eq this @root.pageNumber)}}
+                                                <li class="page-item active"><a class="page-link"
+                                                        href="/employees/page/{{this}}">{{this}}</a>
+                                                </li>
+                                                {{else}}
+                                                <li class="page-item"><a class="page-link"
+                                                        href="/employees/page/{{this}}">{{this}}</a>
+                                                </li>
+                                                {{/if}}
+
+                                                {{/each}}
+                                                {{!-- ------------------------------- --}}
+
+                                                {{!-- Nếu page = tổng số page thì ẩn nút next --}}
+                                                {{#if (eq pageNumber totalEmployeesPage)}}
+                                                <li class="page-item disabled"><a class="page-link" href="#"
+                                                        aria-label="Previous"><span aria-hidden="true">»</span></a>
+                                                </li>
+                                                {{else}}
+                                                {{#if (gt countEmployees 0)}}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="/employees/page/{{nextPage}}"
+                                                        aria-label="Previous">
+                                                        <span aria-hidden="true">»</span>
+                                                    </a>
+                                                </li>
+                                                {{/if}}
+                                                {{/if}}
+                                                {{!-- ------------------------------- --}}
+                                        </ul>
+                                    </nav>
+                                </div>
+
+                            </div>
+                            <!-- ----------------------------------- -->
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Poly Dating 2021</span></div>
+                </div>
+            </footer>
+        </div>
+        <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    </div>
+
+    <script src="/public/js/theme.js"></script>
+</body>
+
+<script>
+    function checkSubmit() {
+        let form = document.getElementById('id-form5');
+
+        let roleOp = document.getElementById('roleOp');
+        let genderOp = document.getElementById('genderOp');
+        let isActivesOp = document.getElementById('isActivesOp');
+        let btnSearch = document.getElementById('btnSearch');
+
+        let roleIp = document.getElementById('roleIp');
+        let genderIp = document.getElementById('genderIp');
+        let isActivesIp = document.getElementById('isActivesIp');
+        let searchIp = document.getElementById('searchIp');
+
+        roleIp.value = roleOp.value;
+        genderIp.value = genderOp.value;
+        isActivesIp.value = isActivesOp.value;
+        searchIp.value = btnSearch.value;
+
+        form.submit();
+    };
+
+    function check(value, id, checkAction) {
+        let form = document.getElementById('form-block');
+        let _id = document.getElementById('_id1');
+        let checkAction2 = document.getElementById('check1');
+
+        let check = prompt(value, "");
+
+        if (check === "Xác nhận") {
+            _id.value = id;
+            checkAction2.value = checkAction;
+            form.submit();
+        }
+        else if (check.length > 0) {
+            alert("Sai thông tin");
+        }
+    };
+
+    function check2(value, id) {
+        let form = document.getElementById('form-block2');
+        let _id = document.getElementById('_id2');
+        let check = prompt(value, "");
+
+        if (check === "Xác nhận") {
+            _id.value = id;
+            form.submit();
+        }
+        else if (check.length > 0) {
+            alert("Sai thông tin");
+        }
+    };
+</script>

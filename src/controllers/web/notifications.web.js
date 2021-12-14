@@ -1,6 +1,5 @@
 let Users = require("../../models/users.schema");
 let Reports = require('../../models/reports.schema');
-let Tokens = require("../../models/tokens.schema");
 let Notifications = require('../../models/notifications.schema');
 
 exports.list = async (req, res) => {
@@ -89,8 +88,7 @@ exports.insert = async (req, res, next) => {
         let { title, link, content } = req.body;
 
         let dataUsers = await Users.find();
-        let dataTokens = await Tokens.find();
-        let dateUsersTokens = [];
+        let dataUsersTokens = [];
 
         for (let i = 0; i < dataUsers.length; i++) {
             let ontion = {
@@ -102,16 +100,16 @@ exports.insert = async (req, res, next) => {
                 createdAt: req.getTime
             }
             await Notifications.create(ontion);
-        }
 
-        for (let j = 0; j < dataTokens.length; j++) {
-            dateUsersTokens.push(dataTokens[j].token);
+            if (!dataUsers[i].notificationToken) {
+                dataUsersTokens.push(dataUsers[i].notificationToken);
+            }
         }
 
         req.notifiData = {
             title,
             content,
-            tokens: dateUsersTokens
+            tokens: dataUsersTokens
         }
         next();
 
@@ -125,7 +123,7 @@ exports.delete = async (req, res) => {
         let { _id } = req.body;
 
         await Notifications.deleteOne({ _id });
-        res.redirect('/notifications/page/1');
+        res.redirect('/notifications');
     } catch (error) {
         res.send(error.message);
     }

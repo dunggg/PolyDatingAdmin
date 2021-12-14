@@ -7,7 +7,7 @@ let statusReports = ['Trạng thái', 'Chấp thuận', "Từ chối", "Chờ du
 exports.list = async (req, res) => {
     try {
         let { page } = req.params;
-        let { search, status, title } = req.query;
+        let { search, titleOp, statusOp, } = req.query;
 
         let pageSize = 20;
         let pageNumber = Number(page) || 1;
@@ -21,10 +21,10 @@ exports.list = async (req, res) => {
 
         let reportsWait = await Reports.countDocuments({ status: "Chờ duyệt" });
 
-        if (search || status || title) {
+        if (search || titleOp || statusOp) {
             let optionFind = {
-                title: { $regex: `.*${title}.*` },
-                status: { $regex: `.*${status}.*` },
+                title: { $regex: `.*${titleOp}.*` },
+                status: { $regex: `.*${statusOp}.*` },
                 $or: [
                     { emailSender: { $regex: `.*${search}.*`, $options: "i" } },
                     { emailReceiver: { $regex: `.*${search}.*`, $options: "i" } },
@@ -81,8 +81,8 @@ exports.list = async (req, res) => {
             reports,
             statusReports,
             dataTitleReports: dataTitleReports.reports,
-            title,
-            status,
+            titleOp,
+            statusOp,
             search,
             reportsWait,
             ...paging
@@ -132,7 +132,7 @@ exports.verifyReportRequest = async (req, res) => {
 
         await Reports.updateOne({ _id: _idReport }, { status });
 
-        res.redirect(`/reports/page/1`);
+        res.redirect(`/reports`);
     } catch (error) {
         res.send(error.message);
     }

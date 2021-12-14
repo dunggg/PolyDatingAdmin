@@ -13,10 +13,12 @@
                 <ul class="navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link" href="/statistical?format=0&timeStamp={{timeStamp}}"><i
                                 class="fas fa-tachometer-alt"></i><span>Thống kê</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/users/page/1"><i class="fas fa-user"></i><span>Người
+                    <li class="nav-item"><a class="nav-link" href="/employees"><i class="fas fa-user-cog"></i>
+                            <span>Nhân viên</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/users"><i class="fas fa-user"></i><span>Người
                                 dùng</span></a></li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="/reports/page/1">
+                        <a class="nav-link active" href="/reports">
                             <i class="fas fa-flag"></i>
                             <span>Báo cáo</span>
                             {{#if (gt reportsWait 0)}}
@@ -24,7 +26,7 @@
                             {{/if}}
                         </a>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="/notifications/page/1"><i
+                    <li class="nav-item"><a class="nav-link" href="/notifications"><i
                                 class="fas fa-bell"></i><span>Thông
                                 báo</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-sign-out-alt"></i><span>Đăng
@@ -63,8 +65,9 @@
                                                 <option value="">{{this}}</option>
 
                                                 {{else}}
-                                                {{#if (eq this @root.status)}}
-                                                <option value="{{@root.status}}" selected="">{{@root.status}}
+                                                {{#if (eq this @root.statusOp)}}
+                                                <option value="{{@root.statusOp}}" selected="">
+                                                    {{@root.statusOp}}
                                                 </option>
 
                                                 {{else}}
@@ -89,8 +92,9 @@
                                                 <option value="">{{this}}</option>
 
                                                 {{else}}
-                                                {{#if (eq this @root.title)}}
-                                                <option value="{{@root.title}}" selected="">{{@root.title}}
+                                                {{#if (eq this @root.titleOp)}}
+                                                <option value="{{@root.titleOp}}" selected="">
+                                                    {{@root.titleOp}}
                                                 </option>
 
                                                 {{else}}
@@ -117,9 +121,9 @@
                                 <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
-                                            <form action="/reports/page/1" method="get" id="id-form6">
-                                                <input type="hidden" id="statusIp" name="status">
-                                                <input type="hidden" id="titleIp" name="title">
+                                            <form action="/reports" method="get" id="id-form6">
+                                                <input type="hidden" id="statusIp" name="statusOp">
+                                                <input type="hidden" id="titleIp" name="titleOp">
                                                 <input type="hidden" id="searchIp" name="search">
 
                                                 <input type="submit" class="form-control form-control-sm btn-primary"
@@ -192,23 +196,20 @@
                                                         <input type="hidden" value="{{this._id}}" name="_idReport">
                                                         <input type="hidden" value="true" name="action">
 
-                                                        <button class="btn btn-success" type="button"
-                                                            onclick="check(`Chấp thuận báo cáo của {{this.emailSender}}`)">
+                                                        <button class="btn btn-success" type="submit">
                                                             <i class="fas fa-check text-white"></i>
                                                         </button>
                                                     </form>
 
                                                     <form action="/reports/verify-report-request" method="post"
-                                                        class="text-end col-md-6" style="display: flex"
-                                                        id="form-block2">
+                                                        class="text-end col-md-6" id="form-block2">
 
                                                         <input type="hidden" value="{{this.emailReceiver}}"
                                                             name="email">
                                                         <input type="hidden" value="{{this._id}}" name="_idReport">
                                                         <input type="hidden" value="false" name="action">
 
-                                                        <button class="btn btn-danger" type="button"
-                                                            onclick="check(`Từ chối báo cáo của {{this.emailSender}}`)">
+                                                        <button class="btn btn-danger" type="submit">
                                                             <i class="fas fa-times"></i></i>
                                                         </button>
                                                     </form>
@@ -314,15 +315,6 @@
 </body>
 
 <script>
-    function check(v) {
-        let form = document.getElementById('form-block2');
-        let check = confirm(v);
-
-        if (check == true) {
-            return form.submit();
-        }
-    }
-
     function checkSubmit() {
         let form = document.getElementById('id-form6');
 

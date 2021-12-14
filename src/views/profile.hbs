@@ -13,9 +13,11 @@
                 <ul class="navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link" href="/statistical"><i
                                 class="fas fa-tachometer-alt"></i><span>Thống kê</span></a></li>
-                    <li class="nav-item"><a class="nav-link active" href="/users/page/1"><i
-                                class="fas fa-user"></i><span>Người
-                                dùng</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/employees"><i class="fas fa-user-cog"></i>
+                            <span>Nhân viên</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/users/page/1">
+                            <i class="fas fa-user"></i>
+                            <span>Người dùng</span></a></li>
                     <li class="nav-item">
                         <a class="nav-link" href="/reports/page/1">
                             <i class="fas fa-flag"></i>
@@ -150,8 +152,8 @@
                                                         <input type="hidden" name="_id" value="{{user._id}}">
                                                         <input type="hidden" name="checkAction" value="2">
 
-                                                        <button class="btn btn-danger" type="button" style="width: 97%;"
-                                                            onclick="check(`Khóa tài khoản {{user.email}} ? (Xác nhận)`)">
+                                                        <button class="btn btn-danger" type="submit"
+                                                            style="width: 97%;">
                                                             <span class="text-white">Khóa</span>
                                                         </button>
                                                     </form>
@@ -163,9 +165,8 @@
                                                         <input type="hidden" name="_id" value="{{user._id}}">
                                                         <input type="hidden" name="checkAction" value="2">
 
-                                                        <button class="btn btn-success" type="button"
-                                                            style="width: 97%;"
-                                                            onclick="check(`Mở khóa tài khoản {{user.email}} ? (Xác nhận)`)">
+                                                        <button class="btn btn-success" type="submit"
+                                                            style="width: 97%;">
                                                             <span class="text-white">Kích hoạt</span>
                                                         </button>
                                                     </form>
@@ -203,29 +204,3 @@
 
     <script src="/public/js/theme.js"></script>
 </body>
-
-<script>
-    function check(value) {
-        let form = document.getElementById('form-block');
-        let check = prompt(value, "");
-
-        if (check === "Xác nhận") {
-            form.submit();
-        }
-        else if (check.length > 0) {
-            alert("Sai thông tin");
-        }
-    };
-
-    function check2(value) {
-        let form = document.getElementById('form-block2');
-        let check = prompt(value, "");
-
-        if (check === "Xác nhận") {
-            form.submit();
-        }
-        else if (check.length > 0) {
-            alert("Sai thông tin");
-        }
-    };
-</script>

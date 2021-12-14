@@ -125,6 +125,7 @@ exports.friendRequest = async (req, res, next) => {
             req.notifiData = {
                 emailSender: dataMyUser.email,
                 emailReceiver: dataMyFriend.email,
+                token: dataMyFriend.notificationToken,
                 content: `${dataMyUser.name} đã chấp nhận lời mời kết bạn của bạn`,
                 message: `Chấp nhận lời mời kết bạn của ${dataMyFriend.name}`,
             }
@@ -138,6 +139,7 @@ exports.friendRequest = async (req, res, next) => {
             req.notifiData = {
                 emailSender: dataMyUser.email,
                 emailReceiver: dataMyFriend.email,
+                token: dataMyUser.notificationToken,
                 content: `${dataMyUser.name} đã gửi lời mời kết bạn tới bạn`,
                 message: `Gửi lời mời kết bạn tới ${dataMyFriend.name}`,
             }

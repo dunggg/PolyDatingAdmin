@@ -2,7 +2,6 @@ let Users = require("../../models/users.schema");
 let Friends = require('../../models/friends.schema');
 let Reports = require('../../models/reports.schema');
 let Notifications = require('../../models/notifications.schema');
-let Tokens = require('../../models/tokens.schema');
 let { response, insertUser, updateUser } = require("../../utils/utils");
 let info = require('../../config/info');
 let randomString = require('randomstring');
@@ -22,13 +21,18 @@ exports.list = async (req, res) => {
     if (statusHobby === "true") {
       let option = {
         isShow: shows,
+        role: 'Người dùng',
         hobbies: { $all: hobby }
       }
       data = await Users.find(option);
     }
     // Không tìm cùng
     else {
-      data = await Users.find({ isShow: shows });
+      let option = {
+        isShow: shows,
+        role: 'Người dùng'
+      }
+      data = await Users.find(option);
     }
 
     let payload = {
@@ -55,16 +59,13 @@ exports.signIn = async (req, res) => {
       res.status(403).json(response(403, `Tài khoản của bạn đã bị khóa`, user));
     }
     else {
-      let dataToken = await Tokens.findOne({ email });
-
-      if (!dataToken) {
+      if (!user.notificationToken) {
         let optionToken = {
-          email,
-          token: "null" || token,
-          createdAt: req.getTime,
+          notificationToken: token || null,
+          updatedAt: req.getTime,
         }
 
-        await Tokens.create(optionToken);
+        await Users.updateOne({ _id: user._id }, optionToken);
       }
       res.status(200).json(response(200, "Đăng nhập thành công", user));
     };
@@ -75,7 +76,12 @@ exports.signIn = async (req, res) => {
 
 exports.signOut = async (req, res) => {
   try {
-    await Tokens.deleteOne({ email: req.currentUser.email });
+    let optionToken = {
+      notificationToken: null,
+      updatedAt: req.getTime,
+    }
+
+    await Users.updateOne({ _id: req.currentUser._id }, optionToken);
     res.status(200).json(response(200, "Đăng xuất thành công"));
 
   } catch (error) {
@@ -105,35 +111,30 @@ exports.signUp = async (req, res) => {
 
       let payload = {
         email: value.email,
+        password: null,
         name: value.name,
         images,
         hobbies,
-        birthDay: value.birthDay,
         gender: value.gender,
+        birthDay: value.birthDay,
+        phone: null,
         description: "Không có gì để hiển thị",
         facilities: value.facilities,
         specialized: value.specialized,
         course: value.course,
         isShow,
         isActive: "Kích hoạt",
+        role: 'Người dùng',
         statusHobby: false,
         reportNumber: 0,
         code: null,
         accessToken,
+        notificationToken: value.token,
         createdAt: req.getTime,
         updatedAt: req.getTime
       }
 
-      await Users.create(payload); // Create User
-
-      let optionToken = {
-        email: value.email,
-        token: value.token,
-        createdAt: req.getTime,
-      }
-
-      await Tokens.create(optionToken); // Create Token
-
+      await Users.create(payload);
       res.status(200).json(response(200, "Tạo tài khoản thành công"))
     }
   } catch (error) {
@@ -171,7 +172,10 @@ exports.updateImages = async (req, res) => {
       updatedAt: req.getTime
     }
 
-    await Users.updateOne({ _id: currentUser._id }, payload)
+    let userUpdate = await Users.findOneAndUpdate({ _id: currentUser._id }, payload);
+    await Friends.updateMany({ 'myUser.email': currentUser.email }, userUpdate);
+    await Friends.updateMany({ 'friend.email': currentUser.email }, userUpdate);
+
     res.status(200).json(response(200, "Cập nhật ảnh thành công", images));
 
   } catch (error) {
@@ -185,17 +189,21 @@ exports.updateInformation = async (req, res) => {
 
     if (error) return res.status(400).json(response(400, error.message));
 
+    let currentUser = req.currentUser;
     let hobbies = value.hobbies.slice(1, -1).split(', ');
 
     let payload = {
-      description: value.description,
       hobbies,
+      description: value.description,
       facilities: value.facilities,
       specialized: value.specialized,
       updatedAt: req.getTime
     }
 
-    await Users.updateOne({ _id: req.currentUser._id }, payload);
+    let userUpdate = await Users.findOneAndUpdate({ _id: currentUser._id }, payload);
+    await Friends.updateMany({ 'myUser.email': currentUser.email }, userUpdate);
+    await Friends.updateMany({ 'friend.email': currentUser.email }, userUpdate);
+
     res.status(200).json(response(200, "Cập nhật thông tin thành công"));
 
   } catch (error) {
@@ -207,6 +215,7 @@ exports.updateIsShow = async (req, res) => {
   try {
     let { isShow } = req.body;
 
+    let currentUser = req.currentUser;
     let shows = isShow.slice(1, -1).split(', ');
 
     let payload = {
@@ -214,7 +223,10 @@ exports.updateIsShow = async (req, res) => {
       updatedAt: req.getTime
     }
 
-    await Users.updateOne({ _id: req.currentUser._id }, payload);
+    let userUpdate = await Users.findOneAndUpdate({ _id: currentUser._id }, payload);
+    await Friends.updateMany({ 'myUser.email': currentUser.email }, userUpdate);
+    await Friends.updateMany({ 'friend.email': currentUser.email }, userUpdate);
+
     res.status(200).json(response(200, "Cập nhật hiển thị thành công"));
 
   } catch (error) {
@@ -225,14 +237,18 @@ exports.updateIsShow = async (req, res) => {
 exports.updateStatusHobby = async (req, res) => {
   try {
     let { statusHobby } = req.body;
+    let currentUser = req.currentUser;
 
     let payload = {
       statusHobby,
       updatedAt: req.getTime
     }
 
-    await Users.updateOne({ _id: req.currentUser._id }, payload);
-    res.status(200).json(response(200, "Cập nhật tìm kiếm sở thích thành công"));
+    let userUpdate = await Users.findOneAndUpdate({ _id: currentUser._id }, payload);
+    await Friends.updateMany({ 'myUser.email': currentUser.email }, userUpdate);
+    await Friends.updateMany({ 'friend.email': currentUser.email }, userUpdate);
+
+    res.status(200).json(response(200, "Cập nhật tìm kiếm theo sở thích thành công"));
 
   } catch (error) {
     res.status(500).json(response(500, error.message));
@@ -242,28 +258,33 @@ exports.updateStatusHobby = async (req, res) => {
 exports.requestCode = async (req, res, next) => {
   try {
     let codeRandom = randomString.generate(6);
+    let currentUser = req.currentUser;
 
     let payload = {
       code: codeRandom,
       updatedAt: req.getTime
     }
 
-    await Users.updateOne({ _id: req.currentUser._id }, payload);
+    let userUpdate = await Users.findOneAndUpdate({ _id: currentUser._id }, payload);
+    await Friends.updateMany({ 'myUser.email': currentUser.email }, userUpdate);
+    await Friends.updateMany({ 'friend.email': currentUser.email }, userUpdate);
 
     // Nếu sau 5 phút (300000 ms) code không được nhập thì xóa code
     setTimeout(async () => {
-      let time = new Date().toLocaleString("VN", { timeZone: "Asia/Ho_Chi_Minh" });
+      let time = new Date();
 
       let payload2 = {
         code: null,
         updatedAt: time
       }
 
-      await Users.updateOne({ _id: req.currentUser._id }, payload2);
+      let userUpdate = await Users.findOneAndUpdate({ _id: currentUser._id }, payload2);
+      await Friends.updateMany({ 'myUser.email': currentUser.email }, userUpdate);
+      await Friends.updateMany({ 'friend.email': currentUser.email }, userUpdate);
     }, 300000);
 
     req.decoded = {
-      email: req.currentUser.email,
+      email: currentUser.email,
       codeRandom
     };
     next()
@@ -292,7 +313,6 @@ exports.delete = async (req, res) => {
       await Notifications.deleteMany({ emailReceiver: currentUser.email });
       await Reports.deleteMany({ emailSender: currentUser.email });
       await Reports.deleteMany({ emailReceiver: currentUser.email });
-      await Tokens.deleteOne({ email: currentUser.email });
       await Users.deleteOne({ _id: currentUser._id });
 
       res.status(200).json(response(200, "Xóa tài khoản thành công"));

@@ -3,9 +3,12 @@ let Users = require("../../models/users.schema");
 let Friends = require('../../models/friends.schema');
 let Reports = require('../../models/reports.schema');
 let Notifications = require('../../models/notifications.schema');
-let Tokens = require('../../models/tokens.schema');
+let info = require('../../config/info');
+let jwt = require('jsonwebtoken');
 let _ = require('lodash');
 let moment = require('moment');
+
+let pathUrl = "https://poly-dating.herokuapp.com/public/data_images/";
 
 // exports.list = async (req, res) => {
 //   let isSearch = false;
@@ -103,6 +106,7 @@ let moment = require('moment');
 
 let gender = ['Giới tính', 'Nam', 'Nữ'];
 let isActives = ['Trạng thái', 'Kích hoạt', 'Khóa'];
+let role = ['Vai trò', 'Quản trị viên', 'Người dùng'];
 
 exports.list = async (req, res) => {
   try {
@@ -113,9 +117,10 @@ exports.list = async (req, res) => {
       courseOp,
       genderOp,
       isActivesOp,
+      roleOp
     } = req.query;
 
-    let pageSize = 2;
+    let pageSize = 20;
     let pageNumber = Number(page) || 1;
     let skipPage = (pageSize * pageNumber) - pageSize;
 
@@ -125,35 +130,38 @@ exports.list = async (req, res) => {
     let masters = await Masters.findOne();
     let reportsWait = await Reports.countDocuments({ status: "Chờ duyệt" });
 
-    if (search || facilitiesOp || specializedOp || courseOp || genderOp || isActivesOp) {
+    if (search || facilitiesOp || specializedOp || courseOp || genderOp || isActivesOp || roleOp) {
       let optionFind = {
         facilities: { $regex: `.*${facilitiesOp}.*` },
         specialized: { $regex: `.*${specializedOp}.*` },
         course: { $regex: `.*${courseOp}.*` },
         gender: { $regex: `.*${genderOp}.*` },
         isActive: { $regex: `.*${isActivesOp}.*` },
+        role: { $regex: `.*${roleOp}.*` },
         $or: [
           { email: { $regex: `.*${search}.*`, $options: "i" } },
           { name: { $regex: `.*${search}.*`, $options: "i" } },
           { hobbies: { $regex: `.*${search}.*`, $options: "i" } },
-          { birthDay: { $regex: `.*${search}.*`, $options: "i" } },
           { gender: { $regex: `.*${search}.*`, $options: "i" } },
+          { birthDay: { $regex: `.*${search}.*`, $options: "i" } },
+          { phone: { $regex: `.*${search}.*`, $options: "i" } },
           { description: { $regex: `.*${search}.*`, $options: "i" } },
           { facilities: { $regex: `.*${search}.*`, $options: "i" } },
           { specialized: { $regex: `.*${search}.*`, $options: "i" } },
           { course: { $regex: `.*${search}.*`, $options: "i" } },
           { isActive: { $regex: `.*${search}.*`, $options: "i" } },
+          { role: { $regex: `.*${search}.*`, $options: "i" } }
         ]
       };
 
       users = await Users.find(optionFind)
-        .limit(pageSize).skip(skipPage).sort({ createdAt: -1, updatedAt: -1 });
+        .limit(pageSize).skip(skipPage).sort({ role: -1 });
 
       countUsers = await Users.countDocuments(optionFind);
     }
     else {
       users = await Users.find()
-        .limit(pageSize).skip(skipPage).sort({ createdAt: -1, updatedAt: -1 });
+        .limit(pageSize).skip(skipPage).sort({ role: -1 });
 
       countUsers = await Users.countDocuments();
     }
@@ -194,7 +202,8 @@ exports.list = async (req, res) => {
       specialized: masters.specialized,
       course: masters.course,
       gender,
-      isActives
+      isActives,
+      role
     };
 
     let payloadParams = {
@@ -203,6 +212,7 @@ exports.list = async (req, res) => {
       courseOp,
       genderOp,
       isActivesOp,
+      roleOp,
       search
     };
 
@@ -247,6 +257,51 @@ exports.findOne = async (req, res) => {
   }
 };
 
+exports.insert = async (req, res) => {
+  try {
+    let { email, name, gender, birthDay, phone } = req.body;
+
+    let images;
+    if (req.files.length > 0) {
+      images = pathUrl + req.files[0].filename;
+    }
+
+    let hashPass = jwt.sign(email + name, info.hassPassKey);
+    let accessToken = jwt.sign(email, info.accessKey);
+
+    let payload = {
+      email,
+      password: hashPass,
+      name,
+      images,
+      hobbies: null,
+      gender,
+      birthDay,
+      phone: Number(phone),
+      description: null,
+      facilities: null,
+      specialized: null,
+      course: null,
+      isShow: null,
+      isActive: "Kích hoạt",
+      role: "Quản trị viên",
+      statusHobby: null,
+      reportNumber: 0,
+      code: null,
+      accessToken,
+      notificationToken: null,
+      createdAt: req.getTime,
+      updatedAt: req.getTime
+    }
+
+    await Users.create(payload);
+    res.redirect('/users');
+
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
 exports.block = async (req, res) => {
   try {
     let { _id, checkAction } = req.body;
@@ -256,11 +311,11 @@ exports.block = async (req, res) => {
       updatedAt: req.getTime
     }
 
-    let user = await Users.findByIdAndUpdate({ _id }, payload);
+    let user = await Users.findOneAndUpdate({ _id }, payload);
     if (!user) return res.sendStatus(404);
 
     if (checkAction == "1") {
-      res.redirect(`/users/page/1`);
+      res.redirect(`/users`);
     }
     else {
       res.redirect(`/users/${user.email}`);
@@ -285,7 +340,7 @@ exports.unblock = async (req, res) => {
     if (!user) return res.sendStatus(404);
 
     if (checkAction == "1") {
-      res.redirect(`/users/page/1`);
+      res.redirect(`/users`);
     }
     else {
       res.redirect(`/users/${user.email}`);
@@ -307,10 +362,9 @@ exports.delete = async (req, res) => {
     await Notifications.deleteMany({ emailReceiver: data.email });
     await Reports.deleteMany({ emailSender: data.email });
     await Reports.deleteMany({ emailReceiver: data.email });
-    await Tokens.deleteOne({ email: data.email });
     await Users.deleteOne({ _id: data._id });
 
-    res.redirect(`/users/page/1`);
+    res.redirect(`/users`);
   } catch (error) {
     res.send(error.message);
   }
