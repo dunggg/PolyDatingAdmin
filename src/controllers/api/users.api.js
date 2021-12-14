@@ -286,7 +286,24 @@ exports.updateImages = async (req, res) => {
       updatedAt: req.getTime
     }
 
-    await Users.updateOne({ _id: currentUser._id }, payload);
+    let newUser = await Users.findOneAndUpdate({ _id: currentUser._id }, payload);
+
+    let optionUpdate = {
+      email: newUser.email,
+      name: newUser.name,
+      images: newUser.images,
+      hobbies: newUser.hobbies,
+      gender: newUser.gender,
+      birthDay: newUser.birthDay,
+      description: newUser.description,
+      facilities: newUser.facilities,
+      specialized: newUser.specialized,
+      course: newUser.course
+    }
+
+    await Friends.updateMany({ 'myUser.email': newUser.email }, optionUpdate);
+    await Friends.updateMany({ 'friend.email': newUser.email }, optionUpdate);
+
     res.status(200).json(response(200, "Cập nhật ảnh thành công", images));
 
   } catch (error) {
@@ -311,7 +328,24 @@ exports.updateInformation = async (req, res) => {
       updatedAt: req.getTime
     }
 
-    await Users.updateOne({ _id: currentUser._id }, payload);
+    let newUser = await Users.findOneAndUpdate({ _id: currentUser._id }, payload);
+
+    let optionUpdate = {
+      email: newUser.email,
+      name: newUser.name,
+      images: newUser.images,
+      hobbies: newUser.hobbies,
+      gender: newUser.gender,
+      birthDay: newUser.birthDay,
+      description: newUser.description,
+      facilities: newUser.facilities,
+      specialized: newUser.specialized,
+      course: newUser.course
+    }
+
+    await Friends.updateMany({ 'myUser.email': newUser.email }, optionUpdate);
+    await Friends.updateMany({ 'friend.email': newUser.email }, optionUpdate);
+
     res.status(200).json(response(200, "Cập nhật thông tin thành công"));
 
   } catch (error) {

@@ -143,7 +143,7 @@ exports.insert = async (req, res) => {
       images = pathUrl + req.files[0].filename;
     }
 
-    let hashPass = jwt.sign(email + name, info.hassPassKey);
+    let hashPass = jwt.sign(email + phone, info.hassPassKey);
     let accessToken = jwt.sign(email, info.accessKey);
 
     let payload = {
