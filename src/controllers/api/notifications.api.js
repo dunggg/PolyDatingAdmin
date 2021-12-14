@@ -22,7 +22,7 @@ exports.delete = async (req, res) => {
 
         let payload = {
             _id,
-            'emailReceiver.email': req.currentUser.email
+            emailReceiver: req.currentUser.email
         }
 
         await Nofitications.deleteOne(payload);
