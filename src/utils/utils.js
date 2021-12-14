@@ -11,7 +11,7 @@ const insertUser = joi.object({
   email: joi.string().email().min(10).max(50).required(),
   name: joi.string().min(5).max(20).required(),
   hobbies: joi.string().required(),
-  birthDay: joi.any().required(),
+  birthDay: joi.string().required(),
   gender: joi.string().required(),
   facilities: joi.string().required(),
   specialized: joi.string().required(),

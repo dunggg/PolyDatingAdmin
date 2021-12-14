@@ -61,13 +61,13 @@ exports.list = async (req, res) => {
     // }
     // else if (shows[0] != "Mọi người"
     //   && shows[1] != "Tất cả cơ sở"
-    //   && shows[2] == "Tất cả chuyên ngành"
-    //   && shows[3] != "Tất cả khóa học") {
+    //   && shows[2] != "Tất cả chuyên ngành"
+    //   && shows[3] == "Tất cả khóa học") {
 
     //   let option = {
     //     gender: shows[0],
     //     facilities: shows[1],
-    //     course: shows[3],
+    //     specialized: shows[2],
     //     role: 'Người dùng'
     //   }
 
