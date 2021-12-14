@@ -102,9 +102,29 @@ exports.friendRequest = async (req, res, next) => {
 
         let optionMyUser = {
             myUser: {
-                email: dataMyUser
+                email: dataMyUser.email,
+                name: dataMyUser.name,
+                images: dataMyUser.images,
+                hobbies: dataMyUser.hobbies,
+                gender: dataMyUser.gender,
+                birthDay: dataMyUser.birthDay,
+                description: dataMyUser.description,
+                facilities: dataMyUser.facilities,
+                specialized: dataMyUser.specialized,
+                course: dataMyUser.course
             },
-            friend: dataMyFriend,
+            friend: {
+                email: dataMyFriend.email,
+                name: dataMyFriend.name,
+                images: dataMyFriend.images,
+                hobbies: dataMyFriend.hobbies,
+                gender: dataMyFriend.gender,
+                birthDay: dataMyFriend.birthDay,
+                description: dataMyFriend.description,
+                facilities: dataMyFriend.facilities,
+                specialized: dataMyFriend.specialized,
+                course: dataMyFriend.course
+            },
             status: false,
             createdAt: req.getTime,
             updatedAt: req.getTime
