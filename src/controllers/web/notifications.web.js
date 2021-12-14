@@ -101,7 +101,7 @@ exports.insert = async (req, res, next) => {
             }
             await Notifications.create(ontion);
 
-            if (!dataUsers[i].notificationToken) {
+            if (dataUsers[i].notificationToken) {
                 dataUsersTokens.push(dataUsers[i].notificationToken);
             }
         }

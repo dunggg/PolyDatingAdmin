@@ -1,12 +1,12 @@
 <div style="display:flex;align-items:center;flex-direction:column;margin-top:100px">
     <p class="hide">Vui lòng đợi giây lát</p>
     <div class="loader hide"></div>
-    <a style="display:none" class="show" href="/public/file/{{fileName}}.xlsx" download>Download</a>
+    <a style="display:none" class="show" href="/public/files/{{fileName}}.xlsx" download>Download</a>
 </div>
 
 <script>
-    const elementHide = $('.hide');
-    const show = $('.show');
+    let elementHide = $('.hide');
+    let show = $('.show');
     setTimeout(() => {
         elementHide[0].style.display = "none";
         elementHide[1].style.display = "none";

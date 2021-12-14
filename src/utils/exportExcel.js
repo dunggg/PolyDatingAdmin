@@ -1,19 +1,19 @@
 // Require library
-var xl = require('excel4node');
-const { v4 } = require('uuid');
+let xl = require('excel4node');
+let { v4 } = require('uuid');
 
-const exportExcel = () => {
+let exportExcel = () => {
   // Create a new instance of a Workbook class
-  var wb = new xl.Workbook();
+  let wb = new xl.Workbook();
 
   // Add Worksheets to the workbook
-  var ws = wb.addWorksheet('Tất cả');
-  var ws2 = wb.addWorksheet('Tháng 11');
-  var ws3 = wb.addWorksheet('Năm 2021');
-  var ws4 = wb.addWorksheet('10 năm');
+  let ws = wb.addWorksheet('Tất cả');
+  let ws2 = wb.addWorksheet('Tháng 11');
+  let ws3 = wb.addWorksheet('Năm 2021');
+  let ws4 = wb.addWorksheet('10 năm');
 
   // Create a reusable style
-  var style = wb.createStyle({
+  let style = wb.createStyle({
     font: {
       color: '#FF0800',
       size: 12,
@@ -247,8 +247,8 @@ const exportExcel = () => {
     .number(5)
     .style({ font: { size: 13 } });
 
-  const fileName = v4();
-  wb.write(`src/public/file/${fileName}.xlsx`);
+  let fileName = v4();
+  wb.write(`src/public/files/${fileName}.xlsx`);
   return fileName + '.xlsx';
 };
 

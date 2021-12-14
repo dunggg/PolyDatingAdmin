@@ -1,26 +1,24 @@
-const express = require('express');
-const router = express.Router();
-const uploadFile = require('../middlewares/uploadFile');
-const getTimeZone = require('../middlewares/getTime');
-const checkToken = require('../middlewares/checkToken');
-const { sendMailRequestCode } = require('../middlewares/sendMail');
-const {
-  pushNotificationsFriendsRequest,
-} = require('../middlewares/notifications');
-const masters = require('../controllers/api/masters.api');
-const users = require('../controllers/api/users.api');
-const friends = require('../controllers/api/friends.api');
-const reports = require('../controllers/api/reports.api');
-const notifications = require('../controllers/api/notifications.api');
+let express = require('express');
+let router = express.Router();
+let uploadFile = require('../middlewares/uploadFile');
+let getTimeZone = require('../middlewares/getTime');
+let { checkToken } = require('../middlewares/checkToken');
+let { sendMailRequestCode } = require('../middlewares/sendMail');
+let { pushNotificationsFriendsRequest } = require('../middlewares/notifications');
+let masters = require('../controllers/api/masters.api');
+let users = require('../controllers/api/users.api');
+let friends = require('../controllers/api/friends.api');
+let reports = require('../controllers/api/reports.api');
+let notifications = require('../controllers/api/notifications.api');
 
 /* API */
 // 1. Master
 router.get('/master/list', masters.list);
 
+router.use(getTimeZone);
 router.post('/users/sign-up', uploadFile, users.signUp);
 router.post('/users/sign-in', users.signIn);
 router.use(checkToken);
-router.use(getTimeZone);
 
 // 2. Users
 router.get('/users/list', users.list);
@@ -36,11 +34,7 @@ router.post('/users/delete', users.delete);
 router.get('/friends/list-friends-requests', friends.listFriendsRequests);
 router.get('/friends/list-of-requests-sent', friends.listOfRequestsSent);
 router.get('/friends/list-friends', friends.listFriends);
-router.post(
-  '/friends/friend-request',
-  friends.friendRequest,
-  pushNotificationsFriendsRequest,
-);
+router.post('/friends/friend-request', friends.friendRequest, pushNotificationsFriendsRequest);
 router.post('/friends/delete', friends.delete);
 
 // 4. Reports

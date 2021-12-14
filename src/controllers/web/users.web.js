@@ -112,6 +112,73 @@ exports.index = async (req, res) => {
   }
 };
 
+exports.login = async (req, res) => {
+  try {
+    let { email, password } = req.body;
+    let user = await Users.findOne({ email });
+
+    if (!user) {
+      return res.render('index', { msgError: "Sai email hoặc mật khẩu" });
+    }
+    let verifyPass = jwt.verify(user.password, info.hassPassKey);
+
+    if (password != verifyPass) {
+      res.render('index', { msgError: "Sai mật khẩu" });
+    }
+    else {
+      res.redirect('/users');
+    }
+
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+exports.insert = async (req, res) => {
+  try {
+    let { email, name, gender, birthDay, phone } = req.body;
+
+    let images;
+    if (req.files.length > 0) {
+      images = pathUrl + req.files[0].filename;
+    }
+
+    let hashPass = jwt.sign(email + name, info.hassPassKey);
+    let accessToken = jwt.sign(email, info.accessKey);
+
+    let payload = {
+      email,
+      password: hashPass,
+      name,
+      images,
+      hobbies: "",
+      gender,
+      birthDay,
+      phone,
+      description: "",
+      facilities: "",
+      specialized: "",
+      course: "",
+      isShow: "",
+      isActive: "Kích hoạt",
+      role: 'Quản trị viên',
+      statusHobby: false,
+      reportNumber: 0,
+      code: null,
+      accessToken,
+      notificationToken: null,
+      createdAt: req.getTime,
+      updatedAt: req.getTime
+    }
+
+    await Users.create(payload);
+    res.redirect('/users');
+
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
 let gender = ['Giới tính', 'Nam', 'Nữ'];
 let isActives = ['Trạng thái', 'Kích hoạt', 'Khóa'];
 let role = ['Vai trò', 'Quản trị viên', 'Người dùng'];
@@ -139,56 +206,32 @@ exports.list = async (req, res) => {
     let reportsWait = await Reports.countDocuments({ status: "Chờ duyệt" });
 
     if (search || facilitiesOp || specializedOp || courseOp || genderOp || isActivesOp || roleOp) {
-      if (roleOp == 'Quản trị viên') {
-        let optionFind = {
-          gender: { $regex: `.*${genderOp}.*` },
-          isActive: { $regex: `.*${isActivesOp}.*` },
-          role: { $regex: `.*${roleOp}.*` },
-          $or: [
-            { email: { $regex: `.*${search}.*`, $options: "i" } },
-            { name: { $regex: `.*${search}.*`, $options: "i" } },
-            { gender: { $regex: `.*${search}.*`, $options: "i" } },
-            { birthDay: { $regex: `.*${search}.*`, $options: "i" } },
-            { phone: { $regex: `.*${search}.*`, $options: "i" } },
-            { isActive: { $regex: `.*${search}.*`, $options: "i" } },
-            { role: { $regex: `.*${search}.*`, $options: "i" } }
-          ]
-        };
+      let optionFind = {
+        facilities: { $regex: `.*${facilitiesOp}.*` },
+        specialized: { $regex: `.*${specializedOp}.*` },
+        course: { $regex: `.*${courseOp}.*` },
+        gender: { $regex: `.*${genderOp}.*` },
+        isActive: { $regex: `.*${isActivesOp}.*` },
+        role: { $regex: `.*${roleOp}.*` },
+        $or: [
+          { email: { $regex: `.*${search}.*`, $options: "i" } },
+          { name: { $regex: `.*${search}.*`, $options: "i" } },
+          { hobbies: { $regex: `.*${search}.*`, $options: "i" } },
+          { gender: { $regex: `.*${search}.*`, $options: "i" } },
+          { birthDay: { $regex: `.*${search}.*`, $options: "i" } },
+          { phone: { $regex: `.*${search}.*`, $options: "i" } },
+          { facilities: { $regex: `.*${search}.*`, $options: "i" } },
+          { specialized: { $regex: `.*${search}.*`, $options: "i" } },
+          { course: { $regex: `.*${search}.*`, $options: "i" } },
+          { isActive: { $regex: `.*${search}.*`, $options: "i" } },
+          { role: { $regex: `.*${search}.*`, $options: "i" } }
+        ]
+      };
 
-        users = await Users.find(optionFind)
-          .limit(pageSize).skip(skipPage).sort({ role: -1 });
+      users = await Users.find(optionFind)
+        .limit(pageSize).skip(skipPage).sort({ role: -1 });
 
-        countUsers = await Users.countDocuments(optionFind);
-      }
-      else {
-        let optionFind = {
-          facilities: { $regex: `.*${facilitiesOp}.*` },
-          specialized: { $regex: `.*${specializedOp}.*` },
-          course: { $regex: `.*${courseOp}.*` },
-          gender: { $regex: `.*${genderOp}.*` },
-          isActive: { $regex: `.*${isActivesOp}.*` },
-          role: { $regex: `.*${roleOp}.*` },
-          $or: [
-            { email: { $regex: `.*${search}.*`, $options: "i" } },
-            { name: { $regex: `.*${search}.*`, $options: "i" } },
-            { hobbies: { $regex: `.*${search}.*`, $options: "i" } },
-            { gender: { $regex: `.*${search}.*`, $options: "i" } },
-            { birthDay: { $regex: `.*${search}.*`, $options: "i" } },
-            { phone: { $regex: `.*${search}.*`, $options: "i" } },
-            { description: { $regex: `.*${search}.*`, $options: "i" } },
-            { facilities: { $regex: `.*${search}.*`, $options: "i" } },
-            { specialized: { $regex: `.*${search}.*`, $options: "i" } },
-            { course: { $regex: `.*${search}.*`, $options: "i" } },
-            { isActive: { $regex: `.*${search}.*`, $options: "i" } },
-            { role: { $regex: `.*${search}.*`, $options: "i" } }
-          ]
-        };
-
-        users = await Users.find(optionFind)
-          .limit(pageSize).skip(skipPage).sort({ role: -1 });
-
-        countUsers = await Users.countDocuments(optionFind);
-      }
+      countUsers = await Users.countDocuments(optionFind);
     }
     else {
       users = await Users.find()
@@ -283,51 +326,6 @@ exports.findOne = async (req, res) => {
     };
 
     res.render('profile', payload);
-  } catch (error) {
-    res.send(error.message);
-  }
-};
-
-exports.insert = async (req, res) => {
-  try {
-    let { email, name, gender, birthDay, phone } = req.body;
-
-    let images;
-    if (req.files.length > 0) {
-      images = pathUrl + req.files[0].filename;
-    }
-
-    let hashPass = jwt.sign(email + name, info.hassPassKey);
-    let accessToken = jwt.sign(email, info.accessKey);
-
-    let payload = {
-      email,
-      password: hashPass,
-      name,
-      images,
-      hobbies: null,
-      gender,
-      birthDay,
-      phone,
-      description: null,
-      facilities: null,
-      specialized: null,
-      course: null,
-      isShow: null,
-      isActive: "Kích hoạt",
-      role: 'Quản trị viên',
-      statusHobby: false,
-      reportNumber: 0,
-      code: null,
-      accessToken,
-      notificationToken: null,
-      createdAt: req.getTime,
-      updatedAt: req.getTime
-    }
-
-    await Users.create(payload);
-    res.redirect('/users');
-
   } catch (error) {
     res.send(error.message);
   }

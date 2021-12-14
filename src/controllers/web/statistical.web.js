@@ -1,11 +1,13 @@
-const User = require('../../models/users.schema');
-const Friend = require('../../models/friends.schema');
-const Report = require('../../models/reports.schema');
-const _ = require('lodash');
-const moment = require('moment');
-const json = require('../../config/masters.json');
+let Masters = require('../../models/masters.schema');
+let User = require('../../models/users.schema');
+let Friend = require('../../models/friends.schema');
+let Report = require('../../models/reports.schema');
+let _ = require('lodash');
+let moment = require('moment');
+let json = require('../../config/masters.json');
+let exportExcel = require('../../utils/exportExcel');
 
-const { course, specialized, facilities } = json[0];
+let { course, specialized, facilities } = json[0];
 
 let randomNumber = (length) => {
   var arr = [];
@@ -16,12 +18,12 @@ let randomNumber = (length) => {
   return arr;
 };
 
-const getDayOfMonth = (timeStamp) => {
+let getDayOfMonth = (timeStamp) => {
   let listDayOfMonth = [];
   let month = moment(timeStamp * 1000).format('MM');
   let year = moment(timeStamp * 1000).format('YYYY');
   for (let i = 0; i < moment(timeStamp * 1000).daysInMonth(); i++) {
-    const time = moment(
+    let time = moment(
       `${year}/${month}/${moment(timeStamp * 1000)
         .startOf('month')
         .add(i, 'days')
@@ -32,21 +34,21 @@ const getDayOfMonth = (timeStamp) => {
   return listDayOfMonth;
 };
 
-const getTimeStampMonthsOfYear = (timeStamp = moment().unix()) => {
+let getTimeStampMonthsOfYear = (timeStamp = moment().unix()) => {
   let listMonthOfYear = [];
   let year = moment(timeStamp * 1000).format('YYYY');
   for (let i = 0; i < 12; i++) {
-    const time = moment(`${year}/${i + 1}`).unix();
+    let time = moment(`${year}/${i + 1}`).unix();
     listMonthOfYear.push(time);
   }
   return listMonthOfYear;
 };
 
-const listTotalReportDaysOfMonth = (totalReport, timeStamp) => {
-  const listDayOfMonth = getDayOfMonth(timeStamp);
-  const listTotalReport = [];
+let listTotalReportDaysOfMonth = (totalReport, timeStamp) => {
+  let listDayOfMonth = getDayOfMonth(timeStamp);
+  let listTotalReport = [];
   for (let i = 0; i < listDayOfMonth.length; i++) {
-    const totalForTimeStamp = totalReport.filter(
+    let totalForTimeStamp = totalReport.filter(
       (value) =>
         moment(value.createAt).format('DD/MM/YYYY') ===
         moment(listDayOfMonth[i] * 1000).format('DD/MM/YYYY'),
@@ -56,11 +58,11 @@ const listTotalReportDaysOfMonth = (totalReport, timeStamp) => {
   return listTotalReport;
 };
 
-const listTotalMonthsOfYear = (totalReport, timeStamp) => {
-  const listMonth = getTimeStampMonthsOfYear(timeStamp);
-  const listTotalReport = [];
+let listTotalMonthsOfYear = (totalReport, timeStamp) => {
+  let listMonth = getTimeStampMonthsOfYear(timeStamp);
+  let listTotalReport = [];
   for (let i = 0; i < listMonth.length; i++) {
-    const totalForTimeStamp = totalReport.filter(
+    let totalForTimeStamp = totalReport.filter(
       (value) =>
         moment(value.createAt).format('MM/YYYY') ===
         moment(listMonth[i] * 1000).format('MM/YYYY'),
@@ -70,16 +72,16 @@ const listTotalMonthsOfYear = (totalReport, timeStamp) => {
   return listTotalReport;
 };
 
-const listTotalReportYears = (totalReport, timeStamp) => {
-  const yearNow = 2020;
-  const listYear = [];
+let listTotalReportYears = (totalReport, timeStamp) => {
+  let yearNow = 2020;
+  let listYear = [];
   for (let i = 0; i <= 10; i++) {
-    const time = moment(`${yearNow + i}`).unix();
+    let time = moment(`${yearNow + i}`).unix();
     listYear.push(time);
   }
-  const listTotalReport = [];
+  let listTotalReport = [];
   for (let i = 0; i < listYear.length; i++) {
-    const totalForTimeStamp = totalReport.filter(
+    let totalForTimeStamp = totalReport.filter(
       (value) =>
         moment(value.createAt).format('YYYY') ===
         moment(listYear[i] * 1000).format('YYYY'),
@@ -89,8 +91,8 @@ const listTotalReportYears = (totalReport, timeStamp) => {
   return listTotalReport;
 };
 
-const countMatch = async (timeStamp, format, objSearch) => {
-  const listFriend = await Friend.find({ status: true, ...objSearch });
+let countMatch = async (timeStamp, format, objSearch) => {
+  let listFriend = await Friend.find({ status: true, ...objSearch });
   let list = [];
   switch (Number(format)) {
     case 0:
@@ -105,8 +107,8 @@ const countMatch = async (timeStamp, format, objSearch) => {
   return list;
 };
 
-const countReport = async (timeStamp, format, objSearch) => {
-  const total = await Report.find(objSearch);
+let countReport = async (timeStamp, format, objSearch) => {
+  let total = await Report.find(objSearch);
   let list = [];
   switch (Number(format)) {
     case 0:
@@ -121,9 +123,9 @@ const countReport = async (timeStamp, format, objSearch) => {
   return list;
 };
 
-exports.statistical = async (req, res) => {
+let statistical = async (req, res) => {
   try {
-    const {
+    let {
       timeStamp,
       format,
       course: courseParams,
@@ -154,17 +156,17 @@ exports.statistical = async (req, res) => {
       ? { ...objSearch, facilities: facilitiesParams }
       : {};
 
-    const totalUser = await User.countDocuments(objSearch);
-    const totalUserMale = await User.countDocuments({
+    let totalUser = await User.countDocuments(objSearch);
+    let totalUserMale = await User.countDocuments({
       gender: 'Nam',
       ...objSearch,
     });
-    const totalUserFemale = await User.countDocuments({
+    let totalUserFemale = await User.countDocuments({
       gender: 'Nữ',
       ...objSearch,
     });
-    const totalReport = await countReport(timeStamp, format, objSearch);
-    const totalMatch = await countMatch(timeStamp, format, objSearch);
+    let totalReport = await countReport(timeStamp, format, objSearch);
+    let totalMatch = await countMatch(timeStamp, format, objSearch);
 
     res.render('statistical', {
       totalUser,
@@ -189,8 +191,8 @@ exports.statistical = async (req, res) => {
         data.length === 12
           ? `năm ${moment(timeStamp * 1000).format('YYYY')}`
           : data.length === 11
-          ? `từ năm ${data[0]} đến năm ${data[data.length - 1]}`
-          : `tháng ${moment(timeStamp * 1000).format('MM')} năm ${moment(
+            ? `từ năm ${data[0]} đến năm ${data[data.length - 1]}`
+            : `tháng ${moment(timeStamp * 1000).format('MM')} năm ${moment(
               timeStamp * 1000,
             ).format('YYYY')}`,
     });
@@ -198,3 +200,14 @@ exports.statistical = async (req, res) => {
     res.send(error.message);
   }
 };
+
+let exportFile = async (req, res) => {
+  try {
+    let fileName = exportExcel();
+    res.render('download_xlsx', { fileName });
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+module.exports = { statistical, exportFile };

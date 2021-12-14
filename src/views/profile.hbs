@@ -50,7 +50,11 @@
                         <div class="col-lg-6">
                             <div class="card shadow mb-3">
                                 <div class="card-header py-3">
-                                    <p class="text-primary m-0 fw-bold">Hồ sơ</p>
+                                    {{#if (eq user.role "Quản trị viên")}}
+                                    <p class="text-primary m-0 fw-bold">Hồ sơ quản trị viên</p>
+                                    {{else}}
+                                    <p class="text-primary m-0 fw-bold">Hồ sơ người dùng</p>
+                                    {{/if}}
                                 </div>
 
                                 <div class="card-body">
@@ -60,6 +64,7 @@
                                         <p class="text-black fw-bold h4">{{user.name}}</p>
                                     </div>
 
+                                    {{#if (eq user.role "Người dùng")}}
                                     <p><span class="text-black">Giới thiệu: </span>{{user.description}}</p>
                                     <hr>
 
@@ -68,7 +73,7 @@
                                         <img class="rounded m-2" src="{{this}}" width="130" height="130">
                                         {{/each}}
                                     </div>
-
+                                    {{/if}}
                                 </div>
                             </div>
                         </div>
@@ -83,11 +88,16 @@
 
                                         <div class="card-body">
                                             <div class="col">
-                                                <p><span class="text-black">Id: </span>{{user._id}}</p>
                                                 <p><span class="text-black">Email: </span>{{user.email}}</p>
                                                 <p><span class="text-black">Họ tên: </span>{{user.name}}</p>
                                                 <p><span class="text-black">Giới tính: </span>{{user.gender}}</p>
                                                 <p><span class="text-black">Ngày sinh: </span>{{user.birthDay}}</p>
+
+                                                {{#if (eq user.role "Quản trị viên")}}
+                                                <p><span class="text-black">Số điện thoại: </span>{{user.phone}}</p>
+                                                {{/if}}
+
+                                                {{#if (eq user.role "Người dùng")}}
                                                 <p><span class="text-black">Sở thích: </span>{{user.hobbies}}</p>
                                                 <p><span class="text-black">Cơ sở: </span>{{user.facilities}}</p>
                                                 <p><span class="text-black">Chuyên ngành: </span>{{user.specialized}}
@@ -103,9 +113,7 @@
                                                     <span>Bật</span>
                                                     {{/if}}
                                                 </p>
-
                                                 <p><span class="text-black">Bạn bè: </span>{{countFriends}} bạn</p>
-
                                                 <p>
                                                     <span class="text-black">Báo cáo: </span>
                                                     {{#if (eq user.reportNumber 3)}}
@@ -119,6 +127,16 @@
                                                     <span class="text-danger">{{user.reportNumber}} lượt</span>
 
                                                     {{/if}}
+                                                    {{/if}}
+                                                </p>
+                                                {{/if}}
+
+                                                <p>
+                                                    <span class="text-black">Vai trò: </span>
+                                                    {{#if (eq user.role "Quản trị viên")}}
+                                                    <span>{{user.role}}</span>
+                                                    {{else}}
+                                                    <span>{{user.role}}</span>
                                                     {{/if}}
                                                 </p>
 
@@ -142,10 +160,8 @@
 
                                                 <hr>
                                                 <div class="d-md-flex">
-
                                                     {{#if (eq user.isActive "Kích hoạt")}}
-                                                    <form action="/users/block" method="post" id="form-block"
-                                                        class="text-end col-md-6">
+                                                    <form action="/users/block" method="post" class="text-end col-md-6">
 
                                                         <input type="hidden" name="_id" value="{{user._id}}">
                                                         <input type="hidden" name="checkAction" value="2">
@@ -157,7 +173,7 @@
                                                     </form>
 
                                                     {{else}}
-                                                    <form action="/users/unblock" method="post" id="form-block"
+                                                    <form action="/users/unblock" method="post"
                                                         class="text-end col-md-6">
 
                                                         <input type="hidden" name="_id" value="{{user._id}}">
@@ -170,19 +186,17 @@
                                                     </form>
                                                     {{/if}}
 
-                                                    <form action="/users/delete" method="post" id="form-block2"
+                                                    <form action="/users/delete" method="post"
                                                         class="text-end col-md-6">
 
                                                         <input type="hidden" name="_id" value="{{user._id}}">
 
-                                                        <button class="btn btn-warning" type="button"
-                                                            style="width: 97%;"
-                                                            onclick="check2(`Xóa tài khoản {{user.email}} ? (Xác nhận)`)">
+                                                        <button class="btn btn-warning" type="submit"
+                                                            style="width: 97%;">
                                                             <span class="text-white">Xóa tài khoản</span>
                                                         </button>
                                                     </form>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>

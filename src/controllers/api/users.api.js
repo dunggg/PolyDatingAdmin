@@ -175,14 +175,12 @@ exports.signIn = async (req, res) => {
       res.status(403).json(response(403, `Tài khoản của bạn đã bị khóa`, user));
     }
     else {
-      if (!user.notificationToken) {
-        let optionToken = {
-          notificationToken: token || null,
-          updatedAt: req.getTime,
-        }
-
-        await Users.updateOne({ _id: user._id }, optionToken);
+      let optionToken = {
+        notificationToken: token || null,
+        updatedAt: req.getTime,
       }
+
+      await Users.updateOne({ _id: user._id }, optionToken);
       res.status(200).json(response(200, "Đăng nhập thành công", user));
     };
   } catch (error) {

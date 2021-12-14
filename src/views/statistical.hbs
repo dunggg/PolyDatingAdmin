@@ -49,7 +49,7 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-auto text-nowrap">
+                                <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
                                             <select class="d-inline-block form-select form-select-sm">
@@ -61,7 +61,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-auto text-nowrap">
+                                <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
                                             <select class="d-inline-block form-select form-select-sm">
@@ -73,7 +73,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-auto text-nowrap">
+                                <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
                                             <select class="d-inline-block form-select form-select-sm">
@@ -85,7 +85,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-auto text-nowrap">
+                                <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
                                             <select class="d-inline-block form-select form-select-sm">
@@ -96,7 +96,35 @@
                                         </label>
                                     </div>
                                 </div>
-                                <button id="btnSearch" type="button" class="btn btn-primary">Search</button>
+
+                                <div class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <form action="/users" method="get" id="id-form5">
+                                                <input type="hidden" id="facilitiesIp" name="facilitiesOp">
+                                                <input type="hidden" id="specializedIp" name="specializedOp">
+                                                <input type="hidden" id="courseIp" name="courseOp">
+                                                <input type="hidden" id="genderIp" name="genderOp">
+                                                <input type="hidden" id="isActivesIp" name="isActivesOp">
+                                                <input type="hidden" id="roleIp" name="roleOp">
+                                                <input type="hidden" id="searchIp" name="search">
+
+                                                <input type="submit" class="form-control form-control-sm btn-primary"
+                                                    aria-controls="dataTable" value="Tìm kiếm">
+                                            </form>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <a class="btn btn-primary btn-sm" href="/export-xlsx">
+                                                <i class="fas fa-download fa-sm text-white-50"></i> Export
+                                            </a>
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
 
                             <form action="/statistical">
@@ -109,29 +137,23 @@
 
                             <hr>
                             <div class="row">
-                                <div class="col-md-4 mb-2">
+                                <div class="col-md-3 mb-2">
                                     <p class="fw-bold h5">Tổng người dùng: {{totalUser}}</p>
                                 </div>
 
-                                <div class="col-md-4 mb-2">
+                                <div class="col-md-3 mb-2">
                                     <p class="fw-bold h5">Sinh viên Nam: {{totalUserMale}}</p>
                                 </div>
 
-                                <div class="col-md-4 mb-2">
+                                <div class="col-md-3 mb-2">
                                     <p class="fw-bold h5">Sinh viên Nữ: {{totalUserFemale}}</p>
                                 </div>
 
-                                <div class="col-md-4 mb-2">
-                                    <p class="fw-bold h5">Số lượt nhắn tin: 50</p>
-                                </div>
-
-                                <div class="col-md-4 mb-2">
-                                    <p class="fw-bold h5">Số phiếu báo cáo: 50</p>
+                                <div class="col-md-3 mb-2">
+                                    <p class="fw-bold h5">Số báo cáo: 50</p>
                                 </div>
                             </div>
                         </div>
-
-                        <a href="/export-xlsx">Export</a>
 
                         <input type="hidden" name="totalMatch" value="{{totalMatch}}" />
                         <input type="hidden" name="totalActivityUser" value="{{totalActivityUser}}" />
@@ -160,45 +182,14 @@
                                                     <div style="position:absolute;width:200%;height:200%;left:0; top:0">
                                                     </div>
                                                 </div>
-                                            </div> <canvas id="chart-line" width="299" height="200"
+                                            </div> <canvas id="chart-line" width="300" height="200"
                                                 class="chartjs-render-monitor"
-                                                style="display: block; width: 299px; height: 200px;"></canvas>
+                                                style="display: block; width: 300; height: 200px;"></canvas>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">First</th>
-                                    <th scope="col">Last</th>
-                                    <th scope="col">Handle</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td>Larry</td>
-                                    <td>the Bird</td>
-                                    <td>@twitter</td>
-                                </tr>
-                            </tbody>
-                        </table>
 
                     </div>
                 </div>

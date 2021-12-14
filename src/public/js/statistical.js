@@ -1,13 +1,11 @@
 $(document).ready(function () {
   // get value emlement input statistical
-  const totalMatch = $('input[name="totalMatch"]')[0];
-  const totalActivityUser = $('input[name="totalActivityUser"]')[0];
-  const totalTimeActivityUser = $('input[name="totalTimeActivityUser"]')[0];
-  const totalReport = $('input[name="totalReport"]')[0];
-  const totalMessage = $('input[name="totalMessage"]')[0];
-  const totalBlock = $('input[name="totalBlock"]')[0];
-  const data = $('input[name="data"]')[0];
-  const titleChart = $('#titleChart');
+  let totalMatch = $('input[name="totalMatch"]')[0];
+  let totalReport = $('input[name="totalReport"]')[0];
+  let totalMessage = $('input[name="totalMessage"]')[0];
+  let totalBlock = $('input[name="totalBlock"]')[0];
+  let data = $('input[name="data"]')[0];
+  let titleChart = $('#titleChart');
 
   let labelString = '';
 
@@ -19,32 +17,26 @@ $(document).ready(function () {
     labelString = 'Ngày';
   }
 
-  const arrLabel = data.value.split(',').map((value) => Number(value));
+  let arrLabel = data.value.split(',').map((value) => Number(value));
 
-  const arrTotalMatch = totalMatch.value
-    .split(',')
-    .map((value) => Number(value));
-  const arrTotalActivityUser = totalActivityUser.value
-    .split(',')
-    .map((value) => Number(value));
-  const arrTotalTimeActivityUser = totalTimeActivityUser.value
+  let arrTotalMatch = totalMatch.value
     .split(',')
     .map((value) => Number(value));
 
-  const arrTotalReport = totalReport.value
+  let arrTotalReport = totalReport.value
     .split(',')
     .map((value) => Number(value));
 
-  const arrTotalMessage = totalMessage.value
+  let arrTotalMessage = totalMessage.value
     .split(',')
     .map((value) => Number(value));
 
-  const arrTotalBlock = totalBlock.value
+  let arrTotalBlock = totalBlock.value
     .split(',')
     .map((value) => Number(value));
 
-  var ctx = $('#chart-line');
-  var myLineChart = new Chart(ctx, {
+  let ctx = $('#chart-line');
+  let myLineChart = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: arrLabel,
@@ -55,20 +47,6 @@ $(document).ready(function () {
           borderColor: '#FF99FF',
           backgroundColor: '#FF99FF',
           fill: false,
-        },
-        {
-          data: arrTotalTimeActivityUser,
-          label: 'Thời gian hoạt động của người dùng',
-          borderColor: '#458af7',
-          fill: true,
-          backgroundColor: '#458af7',
-        },
-        {
-          data: arrTotalActivityUser,
-          label: 'Số lượng người dùng hoạt động',
-          borderColor: '#33FF33',
-          fill: false,
-          backgroundColor: '#33FF33',
         },
         {
           data: arrTotalReport,
@@ -128,10 +106,10 @@ $(document).ready(function () {
   });
 
   // form input action
-  const form = $('form');
-  const btnSearch = $('#btnSearch')[0];
-  const select = $('select');
-  const input = $('form>input');
+  let form = $('form');
+  let btnSearch = $('#btnSearch')[0];
+  let select = $('select');
+  let input = $('form>input');
   btnSearch.addEventListener('click', function () {
     select[0].value.trim() === 'Lựa chọn cơ sở'
       ? input[0].remove()
