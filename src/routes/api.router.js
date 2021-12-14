@@ -4,7 +4,9 @@ let uploadFile = require('../middlewares/uploadFile');
 let getTimeZone = require('../middlewares/getTime');
 let { checkToken } = require('../middlewares/checkToken');
 let { sendMailRequestCode } = require('../middlewares/sendMail');
-let { pushNotificationsFriendsRequest } = require('../middlewares/notifications');
+let {
+  pushNotificationsFriendsRequest,
+} = require('../middlewares/notifications');
 let masters = require('../controllers/api/masters.api');
 let users = require('../controllers/api/users.api');
 let friends = require('../controllers/api/friends.api');
@@ -34,7 +36,11 @@ router.post('/users/delete', users.delete);
 router.get('/friends/list-friends-requests', friends.listFriendsRequests);
 router.get('/friends/list-of-requests-sent', friends.listOfRequestsSent);
 router.get('/friends/list-friends', friends.listFriends);
-router.post('/friends/friend-request', friends.friendRequest, pushNotificationsFriendsRequest);
+router.post(
+  '/friends/friend-request',
+  friends.friendRequest,
+  pushNotificationsFriendsRequest,
+);
 router.post('/friends/delete', friends.delete);
 
 // 4. Reports

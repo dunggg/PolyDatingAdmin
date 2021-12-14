@@ -119,20 +119,34 @@ let countReports = async (timeStamp, format, objSearch) => {
   return list;
 };
 
-let dataDate = ['Ngày', 'Tháng', 'Năm'];
+let countBlock = async (timeStamp, format, objSearch) => {
+  let total = await Users.find({ ...objSearch, isActive: 'Khóa' });
+  let list = [];
+  switch (Number(format)) {
+    case 0:
+      list = listTotalReportsDaysOfMonth(total, timeStamp);
+      break;
+    case 2:
+      list = listTotalReportsYears(total, timeStamp);
+      break;
+    default:
+      list = listTotalMonthsOfYear(total, timeStamp);
+  }
+  return list;
+};
 
 let statistical = async (req, res) => {
   try {
     let {
       timeStamp,
       format,
-      facilitiesOp,
-      specializedOp,
-      courseOp
+      course: courseParams,
+      specialized: specializedParams,
+      facilities: facilitiesParams,
     } = req.query;
 
-    let dataMasters = await Masters.findOne();
-    let reportsWait = await Reports.countDocuments({ status: "Chờ duyệt" });
+    let { facilities, specialized, course } = await Masters.findOne();
+    let reportsWait = await Reports.countDocuments({ status: 'Chờ duyệt' });
 
     let data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     if (Number(format) === 0) {
@@ -150,58 +164,52 @@ let statistical = async (req, res) => {
 
     let objSearch = {};
 
-    objSearch = facilitiesOp ? { ...objSearch, facilities: facilitiesOp } : {};
-    objSearch = specializedOp ? { ...objSearch, specialized: specializedOp } : {};
-    objSearch = courseOp ? { ...objSearch, course: courseOp } : {};
+    objSearch = courseParams ? { ...objSearch, course: courseParams } : {};
+    objSearch = specializedParams
+      ? { ...objSearch, specialized: specializedParams }
+      : {};
+    objSearch = facilitiesParams
+      ? { ...objSearch, facilities: facilitiesParams }
+      : {};
 
-    let totalUsers = await Users.countDocuments(objSearch);
-    let totalUsersMale = await Users.countDocuments({
+    let totalUser = await Users.countDocuments(objSearch);
+    let totalUserMale = await Users.countDocuments({
       gender: 'Nam',
       ...objSearch,
     });
-    let totalUsersFemale = await Users.countDocuments({
+    let totalUserFemale = await Users.countDocuments({
       gender: 'Nữ',
       ...objSearch,
     });
-    let totalReports = await countReports(timeStamp, format, objSearch);
+    let totalReport = await countReports(timeStamp, format, objSearch);
     let totalMatch = await countMatch(timeStamp, format, objSearch);
+    let totalBlock = await countBlock(timeStamp, format, objSearch);
 
-    let payloadMaster = {
-      facilities: dataMasters.facilities,
-      specialized: dataMasters.specialized,
-      course: dataMasters.course,
-      facilitiesOp,
-      specializedOp,
-      courseOp,
-      dataDate
-    }
-
-    let payload = {
-      totalUsers,
-      totalUsersMale,
-      totalUsersFemale,
+    res.render('statistical', {
+      totalUser,
+      totalUserMale,
+      totalUserFemale,
       totalMatch,
-      totalActivityUsers: randomNumber(data.length),
-      totalTimeActivityUsers: randomNumber(data.length),
-      totalReports,
-      totalMessage: randomNumber(data.length),
-      totalBlock: randomNumber(data.length),
+      totalReport,
+      totalBlock,
       data,
-      reportsWait,
-      ...payloadMaster,
+      course: course,
+      specialized: specialized,
+      facilities,
+      courseParams,
+      specializedParams,
+      facilitiesParams,
       timeParams: format,
       timeStamp: moment().unix(),
       title:
         data.length === 12
           ? `năm ${moment(timeStamp * 1000).format('YYYY')}`
           : data.length === 11
-            ? `từ năm ${data[0]} đến năm ${data[data.length - 1]}`
-            : `tháng ${moment(timeStamp * 1000).format('MM')} năm ${moment(
+          ? `từ năm ${data[0]} đến năm ${data[data.length - 1]}`
+          : `tháng ${moment(timeStamp * 1000).format('MM')} năm ${moment(
               timeStamp * 1000,
-            ).format('YYYY')}`
-    }
-
-    res.render('statistical', payload);
+            ).format('YYYY')}`,
+    });
   } catch (error) {
     res.send(error.message);
   }
