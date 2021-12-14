@@ -286,14 +286,11 @@ exports.updateImages = async (req, res) => {
       updatedAt: req.getTime
     }
 
-    let userUpdate = await Users.findOneAndUpdate({ _id: currentUser._id }, payload);
-    await Friends.updateMany({ 'myUser.email': currentUser.email }, userUpdate);
-    await Friends.updateMany({ 'friend.email': currentUser.email }, userUpdate);
-
+    await Users.updateOne({ _id: currentUser._id }, payload);
     res.status(200).json(response(200, "Cập nhật ảnh thành công", images));
 
   } catch (error) {
-    res.status(500).json(response(500, "Đầu buồi bạn"));
+    res.status(500).json(response(500, error.message));
   }
 };
 
@@ -314,10 +311,7 @@ exports.updateInformation = async (req, res) => {
       updatedAt: req.getTime
     }
 
-    let userUpdate = await Users.findOneAndUpdate({ _id: currentUser._id }, payload);
-    await Friends.updateMany({ 'myUser.email': currentUser.email }, userUpdate);
-    await Friends.updateMany({ 'friend.email': currentUser.email }, userUpdate);
-
+    await Users.updateOne({ _id: currentUser._id }, payload);
     res.status(200).json(response(200, "Cập nhật thông tin thành công"));
 
   } catch (error) {
@@ -337,10 +331,7 @@ exports.updateIsShow = async (req, res) => {
       updatedAt: req.getTime
     }
 
-    let userUpdate = await Users.findOneAndUpdate({ _id: currentUser._id }, payload);
-    await Friends.updateMany({ 'myUser.email': currentUser.email }, userUpdate);
-    await Friends.updateMany({ 'friend.email': currentUser.email }, userUpdate);
-
+    await Users.updateOne({ _id: currentUser._id }, payload);
     res.status(200).json(response(200, "Cập nhật hiển thị thành công"));
 
   } catch (error) {
@@ -358,10 +349,7 @@ exports.updateStatusHobby = async (req, res) => {
       updatedAt: req.getTime
     }
 
-    let userUpdate = await Users.findOneAndUpdate({ _id: currentUser._id }, payload);
-    await Friends.updateMany({ 'myUser.email': currentUser.email }, userUpdate);
-    await Friends.updateMany({ 'friend.email': currentUser.email }, userUpdate);
-
+    await Users.updateOne({ _id: currentUser._id }, payload);
     res.status(200).json(response(200, "Cập nhật tìm kiếm theo sở thích thành công"));
 
   } catch (error) {
@@ -378,10 +366,7 @@ exports.requestCode = async (req, res, next) => {
       code: codeRandom,
       updatedAt: req.getTime
     }
-
-    let userUpdate = await Users.findOneAndUpdate({ _id: currentUser._id }, payload);
-    await Friends.updateMany({ 'myUser.email': currentUser.email }, userUpdate);
-    await Friends.updateMany({ 'friend.email': currentUser.email }, userUpdate);
+    await Users.updateOne({ _id: currentUser._id }, payload);
 
     // Nếu sau 5 phút (300000 ms) code không được nhập thì xóa code
     setTimeout(async () => {
@@ -391,10 +376,7 @@ exports.requestCode = async (req, res, next) => {
         code: null,
         updatedAt: time
       }
-
-      let userUpdate = await Users.findOneAndUpdate({ _id: currentUser._id }, payload2);
-      await Friends.updateMany({ 'myUser.email': currentUser.email }, userUpdate);
-      await Friends.updateMany({ 'friend.email': currentUser.email }, userUpdate);
+      await Users.updateOne({ _id: currentUser._id }, payload2);
     }, 300000);
 
     req.decoded = {

@@ -101,7 +101,9 @@ exports.friendRequest = async (req, res, next) => {
         let dataMyEmailFriend = await Friends.findOne(optionFindOneMyFriend);
 
         let optionMyUser = {
-            myUser: dataMyUser,
+            myUser: {
+                email: dataMyUser
+            },
             friend: dataMyFriend,
             status: false,
             createdAt: req.getTime,
