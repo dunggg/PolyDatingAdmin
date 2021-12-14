@@ -133,7 +133,7 @@ exports.friendRequest = async (req, res, next) => {
         let optionNotifi = {
             emailSender: dataMyUser.email,
             emailReceiver: dataMyFriend.email,
-            token: dataMyUser.notificationToken
+            token: dataMyFriend.notificationToken
         }
 
         // Nếu A kết bạn B, chỉ được gửi 1 lần. Nếu đã là bạn bè thì không được gửi.
