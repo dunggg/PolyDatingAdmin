@@ -19,6 +19,10 @@ hbs.registerHelper('newDate', (value) => {
   return value.toLocaleString();
 });
 
+hbs.registerHelper('newDateRemoveHours', (value) => {
+  return value.toLocaleString().slice(0, -12);
+});
+
 hbs.registerHelper('compare', function (index, object) {
   let isSearch = object.data.root.isSearch;
   let facilitiesParams = object.data.root.facilitiesParams;
@@ -31,27 +35,19 @@ hbs.registerHelper('compare', function (index, object) {
   let page = object.data.root.page;
   return page === index
     ? isSearch
-      ? `<li class="page-item active"><a class="page-link" href="/users/page/${index}${
-          facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
-        }${specializedParams ? `&specialized=${specializedParams}` : ''}${
-          courseParams ? `&course=${courseParams}` : ''
-        }${genderParams ? `&gender=${genderParams}` : ''}${
-          reportParmas ? `&report=${reportParmas}` : ''
-        }${statusParams ? `&status=${statusParams}` : ''}${
-          searchParams ? `&email=${searchParams}` : ''
-        }">${index}</a></li>`
+      ? `<li class="page-item active"><a class="page-link" href="/users/page/${index}${facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
+      }${specializedParams ? `&specialized=${specializedParams}` : ''}${courseParams ? `&course=${courseParams}` : ''
+      }${genderParams ? `&gender=${genderParams}` : ''}${reportParmas ? `&report=${reportParmas}` : ''
+      }${statusParams ? `&status=${statusParams}` : ''}${searchParams ? `&email=${searchParams}` : ''
+      }">${index}</a></li>`
       : `<li class="page-item active"><a class="page-link" href="/users/page/${index}">${index}</a></li>`
     : isSearch
-    ? `<li class="page-item"><a class="page-link" href="/users/page/${index}${
-        facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
-      }${specializedParams ? `&specialized=${specializedParams}` : ''}${
-        courseParams ? `&course=${courseParams}` : ''
-      }${genderParams ? `&gender=${genderParams}` : ''}${
-        reportParmas ? `&report=${reportParmas}` : ''
-      }${statusParams ? `&status=${statusParams}` : ''}${
-        searchParams ? `&email=${searchParams}` : ''
+      ? `<li class="page-item"><a class="page-link" href="/users/page/${index}${facilitiesParams ? `?facilities=${facilitiesParams}` : '?'
+      }${specializedParams ? `&specialized=${specializedParams}` : ''}${courseParams ? `&course=${courseParams}` : ''
+      }${genderParams ? `&gender=${genderParams}` : ''}${reportParmas ? `&report=${reportParmas}` : ''
+      }${statusParams ? `&status=${statusParams}` : ''}${searchParams ? `&email=${searchParams}` : ''
       }">${index}</a></li>`
-    : `<li class="page-item"><a class="page-link" href="/users/page/${index}">${index}</a></li>`;
+      : `<li class="page-item"><a class="page-link" href="/users/page/${index}">${index}</a></li>`;
 });
 
 hbs.registerHelper('optionFacilities', function (value, object) {

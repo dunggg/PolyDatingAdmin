@@ -104,6 +104,14 @@ let pathUrl = "https://poly-dating.herokuapp.com/public/data_images/";
 //   }
 // };
 
+exports.index = async (req, res) => {
+  try {
+    res.render('index');
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
 let gender = ['Giới tính', 'Nam', 'Nữ'];
 let isActives = ['Trạng thái', 'Kích hoạt', 'Khóa'];
 let role = ['Vai trò', 'Quản trị viên', 'Người dùng'];
@@ -131,33 +139,56 @@ exports.list = async (req, res) => {
     let reportsWait = await Reports.countDocuments({ status: "Chờ duyệt" });
 
     if (search || facilitiesOp || specializedOp || courseOp || genderOp || isActivesOp || roleOp) {
-      let optionFind = {
-        facilities: { $regex: `.*${facilitiesOp}.*` },
-        specialized: { $regex: `.*${specializedOp}.*` },
-        course: { $regex: `.*${courseOp}.*` },
-        gender: { $regex: `.*${genderOp}.*` },
-        isActive: { $regex: `.*${isActivesOp}.*` },
-        role: { $regex: `.*${roleOp}.*` },
-        $or: [
-          { email: { $regex: `.*${search}.*`, $options: "i" } },
-          { name: { $regex: `.*${search}.*`, $options: "i" } },
-          { hobbies: { $regex: `.*${search}.*`, $options: "i" } },
-          { gender: { $regex: `.*${search}.*`, $options: "i" } },
-          { birthDay: { $regex: `.*${search}.*`, $options: "i" } },
-          { phone: { $regex: `.*${search}.*`, $options: "i" } },
-          { description: { $regex: `.*${search}.*`, $options: "i" } },
-          { facilities: { $regex: `.*${search}.*`, $options: "i" } },
-          { specialized: { $regex: `.*${search}.*`, $options: "i" } },
-          { course: { $regex: `.*${search}.*`, $options: "i" } },
-          { isActive: { $regex: `.*${search}.*`, $options: "i" } },
-          { role: { $regex: `.*${search}.*`, $options: "i" } }
-        ]
-      };
+      if (roleOp == 'Quản trị viên') {
+        let optionFind = {
+          gender: { $regex: `.*${genderOp}.*` },
+          isActive: { $regex: `.*${isActivesOp}.*` },
+          role: { $regex: `.*${roleOp}.*` },
+          $or: [
+            { email: { $regex: `.*${search}.*`, $options: "i" } },
+            { name: { $regex: `.*${search}.*`, $options: "i" } },
+            { gender: { $regex: `.*${search}.*`, $options: "i" } },
+            { birthDay: { $regex: `.*${search}.*`, $options: "i" } },
+            { phone: { $regex: `.*${search}.*`, $options: "i" } },
+            { isActive: { $regex: `.*${search}.*`, $options: "i" } },
+            { role: { $regex: `.*${search}.*`, $options: "i" } }
+          ]
+        };
 
-      users = await Users.find(optionFind)
-        .limit(pageSize).skip(skipPage).sort({ role: -1 });
+        users = await Users.find(optionFind)
+          .limit(pageSize).skip(skipPage).sort({ role: -1 });
 
-      countUsers = await Users.countDocuments(optionFind);
+        countUsers = await Users.countDocuments(optionFind);
+      }
+      else {
+        let optionFind = {
+          facilities: { $regex: `.*${facilitiesOp}.*` },
+          specialized: { $regex: `.*${specializedOp}.*` },
+          course: { $regex: `.*${courseOp}.*` },
+          gender: { $regex: `.*${genderOp}.*` },
+          isActive: { $regex: `.*${isActivesOp}.*` },
+          role: { $regex: `.*${roleOp}.*` },
+          $or: [
+            { email: { $regex: `.*${search}.*`, $options: "i" } },
+            { name: { $regex: `.*${search}.*`, $options: "i" } },
+            { hobbies: { $regex: `.*${search}.*`, $options: "i" } },
+            { gender: { $regex: `.*${search}.*`, $options: "i" } },
+            { birthDay: { $regex: `.*${search}.*`, $options: "i" } },
+            { phone: { $regex: `.*${search}.*`, $options: "i" } },
+            { description: { $regex: `.*${search}.*`, $options: "i" } },
+            { facilities: { $regex: `.*${search}.*`, $options: "i" } },
+            { specialized: { $regex: `.*${search}.*`, $options: "i" } },
+            { course: { $regex: `.*${search}.*`, $options: "i" } },
+            { isActive: { $regex: `.*${search}.*`, $options: "i" } },
+            { role: { $regex: `.*${search}.*`, $options: "i" } }
+          ]
+        };
+
+        users = await Users.find(optionFind)
+          .limit(pageSize).skip(skipPage).sort({ role: -1 });
+
+        countUsers = await Users.countDocuments(optionFind);
+      }
     }
     else {
       users = await Users.find()
@@ -277,15 +308,15 @@ exports.insert = async (req, res) => {
       hobbies: null,
       gender,
       birthDay,
-      phone: Number(phone),
+      phone,
       description: null,
       facilities: null,
       specialized: null,
       course: null,
       isShow: null,
       isActive: "Kích hoạt",
-      role: "Quản trị viên",
-      statusHobby: null,
+      role: 'Quản trị viên',
+      statusHobby: false,
       reportNumber: 0,
       code: null,
       accessToken,

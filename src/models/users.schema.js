@@ -8,7 +8,7 @@ let Users = new mongoose.Schema(
     images: [String],
     hobbies: [String],
     gender: String,
-    birthDay: String,
+    birthDay: Date,
     phone: String,
     description: String,
     facilities: String,

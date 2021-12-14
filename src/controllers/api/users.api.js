@@ -20,6 +20,7 @@ exports.list = async (req, res) => {
     // Nếu tìm kiếm sở thích giống mình
     if (statusHobby === "true") {
       let option = {
+        gender: shows[0],
         isShow: shows,
         role: 'Người dùng',
         hobbies: { $all: hobby }
@@ -29,6 +30,7 @@ exports.list = async (req, res) => {
     // Không tìm cùng
     else {
       let option = {
+        gender: shows[0],
         isShow: shows,
         role: 'Người dùng'
       }

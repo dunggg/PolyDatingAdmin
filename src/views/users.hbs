@@ -13,8 +13,6 @@
                 <ul class="navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link" href="/statistical?format=0&timeStamp={{timeStamp}}"><i
                                 class="fas fa-tachometer-alt"></i><span>Thống kê</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/employees"><i class="fas fa-user-cog"></i>
-                            <span>Nhân viên</span></a></li>
                     <li class="nav-item"><a class="nav-link active" href="/users"><i class="fas fa-user"></i>
                             <span>Người dùng</span></a></li>
                     <li class="nav-item">
@@ -345,7 +343,7 @@
                                             <td class="text-nowrap">{{this.role}}</td>
                                             <td class="text-nowrap">{{this.phone}}</td>
                                             <td class="text-nowrap">{{this.gender}}</td>
-                                            <td class="text-nowrap">{{this.birthDay}}</td>
+                                            <td class="text-nowrap">{{#newDateRemoveHours this.birthDay}}{{/newDateRemoveHours}}</td>
                                             <td class="text-nowrap">{{this.hobbies}}</td>
                                             <td class="text-nowrap">{{this.facilities}}</td>
                                             <td class="text-nowrap">{{this.specialized}}</td>
