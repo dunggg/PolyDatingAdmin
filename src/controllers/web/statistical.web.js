@@ -87,8 +87,8 @@ let listTotalReportsYears = (totalReports, timeStamp) => {
   return listTotalReports;
 };
 
-let countMatch = async (timeStamp, format, objSearch) => {
-  let listFriends = await Friends.find({ status: true, ...objSearch });
+let countMatch = async (timeStamp, format, objSearch, status) => {
+  let listFriends = await Friends.find({ status, ...objSearch });
   let list = [];
   switch (Number(format)) {
     case 0:
@@ -182,7 +182,13 @@ let statistical = async (req, res) => {
       ...objSearch,
     });
     let totalReport = await countReports(timeStamp, format, objSearch);
-    let totalMatch = await countMatch(timeStamp, format, objSearch);
+    let totalMatch = await countMatch(timeStamp, format, objSearch, true);
+    let totalMatchPending = await countMatch(
+      timeStamp,
+      format,
+      objSearch,
+      false,
+    );
     let totalBlock = await countBlock(timeStamp, format, objSearch);
 
     const totalReportServer = await Reports.countDocuments({});
@@ -195,6 +201,7 @@ let statistical = async (req, res) => {
       totalMatch,
       totalReport,
       totalBlock,
+      totalMatchPending,
       data,
       course: course,
       specialized: specialized,

@@ -1,7 +1,7 @@
 $(document).ready(function () {
   // get value emlement input statistical
   const totalMatch = $('input[name="totalMatch"]')[0];
-  // const totalActivityUser = $('input[name="totalActivityUser"]')[0];
+  const totalMatchPending = $('input[name="totalMatchPending"]')[0];
   // const totalTimeActivityUser = $('input[name="totalTimeActivityUser"]')[0];
   const totalReport = $('input[name="totalReport"]')[0];
   // const totalMessage = $('input[name="totalMessage"]')[0];
@@ -24,9 +24,9 @@ $(document).ready(function () {
   const arrTotalMatch = totalMatch.value
     .split(',')
     .map((value) => Number(value));
-  // const arrTotalActivityUser = totalActivityUser.value
-  //   .split(',')
-  //   .map((value) => Number(value));
+  const arrTotalMatchPending = totalMatchPending.value
+    .split(',')
+    .map((value) => Number(value));
   // const arrTotalTimeActivityUser = totalTimeActivityUser.value
   //   .split(',')
   //   .map((value) => Number(value));
@@ -51,18 +51,18 @@ $(document).ready(function () {
       datasets: [
         {
           data: arrTotalMatch,
-          label: 'Số lượt kết bạn',
+          label: 'Số lượt kết bạn thành công',
           borderColor: '#FF99FF',
           backgroundColor: '#FF99FF',
           fill: false,
         },
-        // {
-        //   data: arrTotalTimeActivityUser,
-        //   label: 'Thời gian hoạt động của người dùng',
-        //   borderColor: '#458af7',
-        //   fill: true,
-        //   backgroundColor: '#458af7',
-        // },
+        {
+          data: arrTotalMatchPending,
+          label: 'Số lượt kết bạn đang chờ',
+          borderColor: '#458af7',
+          fill: true,
+          backgroundColor: '#458af7',
+        },
         // {
         //   data: arrTotalActivityUser,
         //   label: 'Số lượng người dùng hoạt động',
@@ -137,7 +137,7 @@ $(document).ready(function () {
 
   btnExport.addEventListener('click', async function () {
     try {
-      const res = await fetch('https://poly-dating.herokuapp.com/export-xlsx');
+      const res = await fetch('http://localhost:3000/export-xlsx');
       const val = await res.json();
       btnExport2.href = `/public/files/${val}`;
       setTimeout(() => {
