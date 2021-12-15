@@ -16,7 +16,7 @@ router.get('/', users.index);
 router.post('/login', users.logIn);
 router.get('/logout', users.logOut);
 router.get('/forgot-password', users.screenForgotPassword);
-router.use(checkTokenWebsite);
+// router.use(checkTokenWebsite);
 
 //1. Users
 router.get('/users', users.list);
