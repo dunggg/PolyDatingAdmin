@@ -4,9 +4,7 @@ let uploadFile = require('../middlewares/uploadFile');
 let getTimeZone = require('../middlewares/getTime');
 let { checkToken } = require('../middlewares/checkToken');
 let { sendMailRequestCode } = require('../middlewares/sendMail');
-let {
-  pushNotificationsFriendsRequest,
-} = require('../middlewares/notifications');
+let { pushNotificationsFriendsRequest } = require('../middlewares/notifications');
 let masters = require('../controllers/api/masters.api');
 let users = require('../controllers/api/users.api');
 let friends = require('../controllers/api/friends.api');
@@ -15,9 +13,9 @@ let notifications = require('../controllers/api/notifications.api');
 
 /* API */
 // 1. Master
+router.use(getTimeZone);
 router.get('/master/list', masters.list);
 
-router.use(getTimeZone);
 router.post('/users/sign-up', uploadFile, users.signUp);
 router.post('/users/sign-in', users.signIn);
 router.use(checkToken);
