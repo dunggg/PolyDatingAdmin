@@ -131,8 +131,10 @@ exports.signUp = async (req, res) => {
       ];
       let accessToken = jwt.sign(value.email, info.accessKey);
 
-      let birthDay = moment(value?.birthDay).format('YYYY-MM-DD');
+      let arr = value.birthDay.split('/');
+      let birthDay = `${arr[2]}-${arr[1]}-${arr[0]}`;
 
+      console.log(birthDay);
       let payload = {
         email: value.email,
         password: null,
