@@ -61,6 +61,10 @@ exports.list = async (req, res) => {
       countTo = countReports;
     }
 
+    for (let index = 0; index < reports.length; index++) {
+      reports[index].index = countFrom + index;
+    }
+
     let paging = {
       pageNumber,
       countReports,

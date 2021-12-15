@@ -260,7 +260,7 @@ let exportExcel = (data, dataMonths, dataYears) => {
       .style({ font: { color: 'black', size: 13 } });
   }
 
-  let fileName = `Statistical_PolyDating_${moment().unix()}`;
+  let fileName = `PolyDating-Thống kê-${moment().unix()}`;
   wb.write(`src/public/files/${fileName}.xlsx`);
   return fileName + '.xlsx';
 };

@@ -202,7 +202,7 @@ exports.list = async (req, res) => {
       roleOp,
     } = req.query;
 
-    let pageSize = 20;
+    let pageSize = 5;
     let pageNumber = Number(page) || 1;
     let skipPage = pageSize * pageNumber - pageSize;
 
@@ -298,6 +298,10 @@ exports.list = async (req, res) => {
       roleOp,
       search,
     };
+
+    for (let index = 0; index < users.length; index++) {
+      users[index].index = countFrom + index;
+    }
 
     let payload = {
       users,

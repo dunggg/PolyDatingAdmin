@@ -54,6 +54,10 @@ exports.list = async (req, res) => {
       countTo = countNotifications;
     }
 
+    for (let index = 0; index < notifications.length; index++) {
+      notifications[index].index = countFrom + index;
+    }
+
     let paging = {
       pageNumber,
       countNotifications,
