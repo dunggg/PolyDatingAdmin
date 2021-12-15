@@ -153,6 +153,8 @@ exports.insert = async (req, res) => {
     let hashPass = jwt.sign(email + phone, info.hassPassKey);
     let accessToken = jwt.sign(email, info.accessKey);
 
+    birthDay = moment(birthDay).format('DD/MM/YYYY');
+
     let payload = {
       email,
       password: hashPass,
