@@ -6,6 +6,7 @@ let { response, insertUser, updateUser } = require('../../utils/utils');
 let info = require('../../config/info');
 let randomString = require('randomstring');
 let jwt = require('jsonwebtoken');
+let moment = require('moment');
 
 let pathUrl = 'https://poly-dating.herokuapp.com/public/data_images/';
 
