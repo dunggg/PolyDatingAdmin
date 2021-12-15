@@ -216,28 +216,14 @@
                                                 </div>
                                                 {{else}}
                                                 <div style="display: flex">
-                                                    <form action="/reports/verify-report-request" method="post"
-                                                        class="text-end col-md-6" style="margin-right: 5px;">
-
-                                                        <input type="hidden" value="{{this.emailReceiver}}"
-                                                            name="email">
-                                                        <input type="hidden" value="{{this._id}}" name="_idReport">
-                                                        <input type="hidden" value="true" name="action">
-
-                                                        <button class="btn btn-success" type="submit" disabled>
+                                                    <form action="" class="text-end col-md-6"
+                                                        style="margin-right: 5px;">
+                                                        <button class="btn btn-success" type="button" disabled>
                                                             <i class="fas fa-check text-white"></i>
                                                         </button>
                                                     </form>
-
-                                                    <form action="/reports/verify-report-request" method="post"
-                                                        class="text-end col-md-6" style="display: flex">
-
-                                                        <input type="hidden" value="{{this.emailReceiver}}"
-                                                            name="email">
-                                                        <input type="hidden" value="{{this._id}}" name="_idReport">
-                                                        <input type="hidden" value="false" name="action">
-
-                                                        <button class="btn btn-danger" type="submit" disabled>
+                                                    <form action="" class="text-end col-md-6" style="display: flex">
+                                                        <button class="btn btn-danger" type="button" disabled>
                                                             <i class="fas fa-times"></i>
                                                         </button>
                                                     </form>

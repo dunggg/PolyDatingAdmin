@@ -12,7 +12,7 @@ let { statistical, exportFile } = require('../controllers/web/statistical.web');
 /* Website */
 router.use(getTimeZone);
 router.get('/', users.index);
-router.post('/login', users.login, checkTokenWebsite);
+router.post('/login', users.login);
 router.post('/users/insert', uploadFile, users.insert);
 
 //1. Users

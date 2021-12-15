@@ -17,7 +17,7 @@ app.set('view engine', 'hbs');
 
 app.use(cookieParser());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 app.use('/public', express.static(path.join(__dirname, 'public'))); // use bootstrap
 
 // Website

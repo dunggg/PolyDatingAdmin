@@ -114,9 +114,6 @@ exports.index = async (req, res) => {
 
 exports.login = async (req, res, next) => {
   try {
-    req.setHeader("ok", "ok")
-    console.log(req.headers);
-
     let { email, password } = req.body;
     let user = await Users.findOne({ email });
 
@@ -129,9 +126,7 @@ exports.login = async (req, res, next) => {
       res.render('index', { msgError: "Sai mật khẩu" });
     }
     else {
-      console.log(req);
-
-      // res.redirect('/users');
+      res.redirect('/users');
     }
   } catch (error) {
     res.send(error.message);
@@ -190,59 +185,45 @@ let role = ['Vai trò', 'Quản trị viên', 'Người dùng'];
 exports.list = async (req, res) => {
   try {
     let { page } = req.params;
-    let { search,
-      facilitiesOp,
-      specializedOp,
-      courseOp,
-      genderOp,
-      isActivesOp,
-      roleOp
-    } = req.query;
+    let { search, facilitiesOp, specializedOp, courseOp, genderOp, isActivesOp, roleOp } = req.query;
 
     let pageSize = 20;
     let pageNumber = Number(page) || 1;
     let skipPage = (pageSize * pageNumber) - pageSize;
 
-    let users;
-    let countUsers;
+    let optionFind = {};
+
+    if (search || facilitiesOp || specializedOp || courseOp || genderOp || isActivesOp || roleOp) {
+      optionFind = {
+        facilities: new RegExp(`.*${facilitiesOp || ""}.*`),
+        specialized: new RegExp(`.*${specializedOp || ""}.*`),
+        course: new RegExp(`.*${courseOp || ""}.*`),
+        gender: new RegExp(`.*${genderOp || ""}.*`),
+        isActive: new RegExp(`.*${isActivesOp || ""}.*`),
+        role: new RegExp(`.*${roleOp || ""}.*`),
+        $or: [
+          { email: new RegExp(`.*${search || ""}.*`, "i") },
+          { name: new RegExp(`.*${search || ""}.*`, "i") },
+          { hobbies: new RegExp(`.*${search || ""}.*`, "i") },
+          { gender: new RegExp(`.*${search || ""}.*`, "i") },
+          { birthDay: new RegExp(`.*${search || ""}.*`, "i") },
+          { phone: new RegExp(`.*${search || ""}.*`, "i") },
+          { facilities: new RegExp(`.*${search || ""}.*`, "i") },
+          { specialized: new RegExp(`.*${search || ""}.*`, "i") },
+          { course: new RegExp(`.*${search || ""}.*`, "i") },
+          { isActive: new RegExp(`.*${search || ""}.*`, "i") },
+          { role: new RegExp(`.*${search || ""}.*`, "i") }
+        ]
+      }
+    }
 
     let masters = await Masters.findOne();
     let reportsWait = await Reports.countDocuments({ status: "Chờ duyệt" });
 
-    if (search || facilitiesOp || specializedOp || courseOp || genderOp || isActivesOp || roleOp) {
-      let optionFind = {
-        facilities: { $regex: `.*${facilitiesOp}.*` },
-        specialized: { $regex: `.*${specializedOp}.*` },
-        course: { $regex: `.*${courseOp}.*` },
-        gender: { $regex: `.*${genderOp}.*` },
-        isActive: { $regex: `.*${isActivesOp}.*` },
-        role: { $regex: `.*${roleOp}.*` },
-        $or: [
-          { email: { $regex: `.*${search}.*`, $options: "i" } },
-          { name: { $regex: `.*${search}.*`, $options: "i" } },
-          { hobbies: { $regex: `.*${search}.*`, $options: "i" } },
-          { gender: { $regex: `.*${search}.*`, $options: "i" } },
-          { birthDay: { $regex: `.*${search}.*`, $options: "i" } },
-          { phone: { $regex: `.*${search}.*`, $options: "i" } },
-          { facilities: { $regex: `.*${search}.*`, $options: "i" } },
-          { specialized: { $regex: `.*${search}.*`, $options: "i" } },
-          { course: { $regex: `.*${search}.*`, $options: "i" } },
-          { isActive: { $regex: `.*${search}.*`, $options: "i" } },
-          { role: { $regex: `.*${search}.*`, $options: "i" } }
-        ]
-      };
+    let users = await Users.find(optionFind)
+      .limit(pageSize).skip(skipPage).sort({ role: -1 });
 
-      users = await Users.find(optionFind)
-        .limit(pageSize).skip(skipPage).sort({ role: -1 });
-
-      countUsers = await Users.countDocuments(optionFind);
-    }
-    else {
-      users = await Users.find()
-        .limit(pageSize).skip(skipPage).sort({ role: -1 });
-
-      countUsers = await Users.countDocuments();
-    }
+    let countUsers = await Users.countDocuments(optionFind);;
 
     let totalUsersPage = Math.ceil(countUsers / pageSize);
 

@@ -137,7 +137,7 @@ exports.signUp = async (req, res) => {
         hobbies,
         gender: value.gender,
         birthDay: value.birthDay,
-        phone: null,
+        phone: "",
         description: "Không có gì để hiển thị",
         facilities: value.facilities,
         specialized: value.specialized,
