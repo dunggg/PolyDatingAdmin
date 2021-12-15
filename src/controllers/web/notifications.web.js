@@ -11,33 +11,26 @@ exports.list = async (req, res) => {
         let pageNumber = Number(page) || 1;
         let skipPage = (pageSize * pageNumber) - pageSize;
 
-        let notifications;
-        let countNotifications;
+        let optionFind = {};
+
+        if (search) {
+            optionFind = {
+                $or: [
+                    { emailSender: new RegExp(`.*${search}.*`, "i") },
+                    { emailReceiver: new RegExp(`.*${search}.*`, "i") },
+                    { title: new RegExp(`.*${search}.*`, "i") },
+                    { content: new RegExp(`.*${search}.*`, "i") },
+                    { link: new RegExp(`.*${search}.*`, "i") }
+                ]
+            }
+        };
 
         let reportsWait = await Reports.countDocuments({ status: "Chờ duyệt" });
 
-        if (search) {
-            let optionFind = {
-                $or: [
-                    { emailSender: { $regex: `.*${search}.*`, $options: "i" } },
-                    { emailReceiver: { $regex: `.*${search}.*`, $options: "i" } },
-                    { title: { $regex: `.*${search}.*`, $options: "i" } },
-                    { content: { $regex: `.*${search}.*`, $options: "i" } },
-                    { link: { $regex: `.*${search}.*`, $options: "i" } }
-                ]
-            };
+        let notifications = await Notifications.find(optionFind)
+            .limit(pageSize).skip(skipPage).sort({ createdAt: -1 });;
 
-            notifications = await Notifications.find(optionFind)
-                .limit(pageSize).skip(skipPage).sort({ createdAt: -1 });
-
-            countNotifications = await Notifications.countDocuments(optionFind);
-        }
-        else {
-            notifications = await Notifications.find()
-                .limit(pageSize).skip(skipPage).sort({ createdAt: -1 });
-
-            countNotifications = await Notifications.countDocuments();
-        }
+        let countNotifications = await Notifications.countDocuments(optionFind);
 
         let totalNotificationsPage = Math.ceil(countNotifications / pageSize);
 
@@ -94,8 +87,8 @@ exports.insert = async (req, res, next) => {
             let ontion = {
                 emailSender: "polydating@gmail.com.vn",
                 emailReceiver: dataUsers[i].email,
-                title: title || "",
-                content: content || "",
+                title,
+                content,
                 link: link || "",
                 createdAt: req.getTime
             }

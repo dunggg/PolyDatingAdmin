@@ -2,7 +2,7 @@ let Reports = require('../../models/reports.schema');
 let Masters = require('../../models/masters.schema');
 let Users = require("../../models/users.schema");
 
-let statusReports = ['Trạng thái', 'Chấp thuận', "Từ chối", "Chờ duyệt"];
+let statusReports = ["Trạng thái", "Chấp thuận", "Từ chối", "Chờ duyệt"];
 
 exports.list = async (req, res) => {
     try {
@@ -13,38 +13,31 @@ exports.list = async (req, res) => {
         let pageNumber = Number(page) || 1;
         let skipPage = (pageSize * pageNumber) - pageSize;
 
-        let reports;
-        let countReports;
+        let optionFind = {};
+
+        if (search || titleOp || statusOp) {
+            optionFind = {
+                title: new RegExp(`.*${titleOp || ""}.*`),
+                status: new RegExp(`.*${statusOp || ""}.*`),
+                $or: [
+                    { emailSender: new RegExp(`.*${search || ""}.*`, "i") },
+                    { emailReceiver: new RegExp(`.*${search || ""}.*`, "i") },
+                    { title: new RegExp(`.*${search || ""}.*`, "i") },
+                    { content: new RegExp(`.*${search || ""}.*`, "i") },
+                    { status: new RegExp(`.*${search || ""}.*`, "i") }
+                ]
+            }
+        };
 
         let dataTitleReports = await Masters.findOne();
         dataTitleReports.reports.splice(0, 0, "Tiêu đề");
 
         let reportsWait = await Reports.countDocuments({ status: "Chờ duyệt" });
 
-        if (search || titleOp || statusOp) {
-            let optionFind = {
-                title: { $regex: `.*${titleOp}.*` },
-                status: { $regex: `.*${statusOp}.*` },
-                $or: [
-                    { emailSender: { $regex: `.*${search}.*`, $options: "i" } },
-                    { emailReceiver: { $regex: `.*${search}.*`, $options: "i" } },
-                    { title: { $regex: `.*${search}.*`, $options: "i" } },
-                    { content: { $regex: `.*${search}.*`, $options: "i" } },
-                    { status: { $regex: `.*${search}.*`, $options: "i" } },
-                ]
-            };
+        let reports = await Reports.find(optionFind)
+            .limit(pageSize).skip(skipPage).sort({ createdAt: -1 });
 
-            reports = await Reports.find(optionFind)
-                .limit(pageSize).skip(skipPage).sort({ createdAt: -1 });
-
-            countReports = await Reports.countDocuments(optionFind);
-        }
-        else {
-            reports = await Reports.find()
-                .limit(pageSize).skip(skipPage).sort({ createdAt: -1 });
-
-            countReports = await Reports.countDocuments();
-        }
+        let countReports = await Reports.countDocuments(optionFind);
 
         let totalReportsPage = Math.ceil(countReports / pageSize);
 

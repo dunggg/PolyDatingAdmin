@@ -32,16 +32,15 @@ let sendMailForgotPassword = async (req, res) => {
         await transporter.sendMail({
             from: '"Poly Dating" <quannhph11150@fpt.edu.vn>', // sender address
             to: `${req.decoded.email}`, // list of receivers
-            subject: "Yêu cầu quên mật khẩu", // Subject line
+            subject: "Yêu cầu cập nhật mật khẩu", // Subject line
             html: `<h3>Mật khẩu: ${req.decoded.passRandom}</h3>
                   <img src="https://f42-zpg.zdn.vn/6960682428680983532/966d3fa482ad49f310bc.jpg"> `, // html body
         });
 
-        // res.render('index', { msgError: "Yêu cầu quên mật khẩu thành công" });
-        res.json("Yêu cầu quên mật khẩu thành công")
+        res.render('forgot-password', { msgSuccess: "Yêu cầu cập nhật mật khẩu thành công" });
 
     } catch (error) {
-        res.status(500).send(error.message);
+        res.send(error.message);
     }
 };
 

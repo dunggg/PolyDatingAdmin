@@ -170,6 +170,20 @@
                                         </tr>
                                         {{/each}}
                                     </tbody>
+                                    {{#if (gt countNotifications 0)}}
+                                    <thead>
+                                        <tr>
+                                            <th nowrap>STT</th>
+                                            <th nowrap>Tiêu đề</th>
+                                            <th nowrap>Nội dung</th>
+                                            <th nowrap>Link</th>
+                                            <th nowrap>Người gửi</th>
+                                            <th nowrap>Người nhận</th>
+                                            <th nowrap>Thời gian gửi</th>
+                                            <th nowrap>Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    {{/if}}
                                 </table>
                             </div>
 
@@ -259,8 +273,8 @@
 
         searchIp.value = btnSearch.value;
 
-        if (btnSearch.value == '') {
-            searchIp.name = '';
+        if (btnSearch.value == "") {
+            searchIp.name = "";
         }
 
         form.submit();

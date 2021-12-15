@@ -5,6 +5,7 @@ let Reports = require('../../models/reports.schema');
 let Notifications = require('../../models/notifications.schema');
 let info = require('../../config/info');
 let jwt = require('jsonwebtoken');
+let randomString = require('randomstring');
 let _ = require('lodash');
 let moment = require('moment');
 
@@ -112,6 +113,14 @@ exports.index = async (req, res) => {
   }
 };
 
+exports.screenForgotPassword = async (req, res) => {
+  try {
+    res.render('forgot-password');
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
 exports.login = async (req, res, next) => {
   try {
     let { email, password } = req.body;
@@ -126,7 +135,7 @@ exports.login = async (req, res, next) => {
       res.render('index', { msgError: "Sai mật khẩu" });
     }
     else {
-      res.redirect('/users');
+      res.redirect('/statistical?format=0&timeStamp=' + moment().unix());
     }
   } catch (error) {
     res.send(error.message);
@@ -137,9 +146,9 @@ exports.insert = async (req, res) => {
   try {
     let { email, name, gender, birthDay, phone } = req.body;
 
-    let images;
+    let images = [];
     if (req.files.length > 0) {
-      images = pathUrl + req.files[0].filename;
+      images.push(pathUrl + req.files[0].filename);
     }
 
     let hashPass = jwt.sign(email + phone, info.hassPassKey);
@@ -178,9 +187,9 @@ exports.insert = async (req, res) => {
   }
 };
 
-let gender = ['Giới tính', 'Nam', 'Nữ'];
-let isActives = ['Trạng thái', 'Kích hoạt', 'Khóa'];
-let role = ['Vai trò', 'Quản trị viên', 'Người dùng'];
+let gender = ["Giới tính", "Nam", "Nữ"];
+let isActives = ["Trạng thái", "Kích hoạt", "Khóa"];
+let role = ["Vai trò", "Quản trị viên", "Người dùng"];
 
 exports.list = async (req, res) => {
   try {
@@ -215,7 +224,7 @@ exports.list = async (req, res) => {
           { role: new RegExp(`.*${search || ""}.*`, "i") }
         ]
       }
-    }
+    };
 
     let masters = await Masters.findOne();
     let reportsWait = await Reports.countDocuments({ status: "Chờ duyệt" });
@@ -311,6 +320,95 @@ exports.findOne = async (req, res) => {
     };
 
     res.render('profile', payload);
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+exports.updateInformation = async (req, res) => {
+  try {
+    let { _id, phone, birthDay, gender } = req.body;
+
+    let user = await Users.findOne({ _id });
+    let images = user.images;
+
+    if (req.files.length > 0) {
+      images.splice(0, 1);
+      images.push(pathUrl + req.files[0].filename);
+    }
+
+    let payload = {
+      images,
+      phone,
+      birthDay,
+      gender,
+      updatedAt: req.getTime
+    }
+
+    await Users.updateOne({ _id }, payload);
+    res.redirect(`/users/${user.email}`);
+
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+exports.updatePassword = async (req, res) => {
+  try {
+    let { _id, passOld, passNew, passNew2 } = req.body;
+
+    let user = await Users.findOne({ _id });
+
+    let verifyPass = jwt.verify(user.password, info.hassPassKey);
+
+    if (passOld != verifyPass) {
+      res.send('Sai mật khẩu cũ');
+    }
+    else if (passNew2 != passNew) {
+      res.send('Mật khẩu mới cần giống nhau');
+    }
+    else {
+      let hashPass = jwt.sign(passNew, info.hassPassKey);
+
+      let payload = {
+        password: hashPass,
+        updatedAt: req.getTime
+      }
+
+      await Users.updateOne({ _id }, payload);
+      res.redirect(`/users/${user.email}`);
+    }
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+exports.forgotPassword = async (req, res, next) => {
+  try {
+    let { email } = req.body;
+
+    let user = await Users.findOne({ email, role: 'Quản trị viên' });
+
+    if (!user) {
+      return res.render('forgot-password', { msgError: 'Email không tồn tại' });
+    }
+
+    let passRandom = randomString.generate(6);
+    let hashPass = jwt.sign(passRandom, info.hassPassKey);
+
+    let payload = {
+      password: hashPass,
+      updatedAt: req.getTime
+    }
+
+    await Users.updateOne({ _id: user._id }, payload);
+
+    req.decoded = {
+      email,
+      passRandom
+    }
+    next();
+
   } catch (error) {
     res.send(error.message);
   }

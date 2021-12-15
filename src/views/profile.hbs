@@ -159,7 +159,163 @@
                                                 </p>
 
                                                 <hr>
+
+                                                {{#if (eq user.role "Quản trị viên")}}
+                                                <div class="d-md-flex mb-2">
+                                                    <form action="#" class="text-end col-md-6">
+                                                        <button class="btn btn-success" type="button"
+                                                            data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                                            style="width: 97%;">
+                                                            <span class="text-white">Sửa thông tin</span>
+                                                        </button>
+                                                    </form>
+
+                                                    <form action="#" class="text-end col-md-6">
+                                                        <button class="btn btn-info" type="button"
+                                                            data-bs-toggle="modal" data-bs-target="#exampleModal2"
+                                                            style="width: 97%;">
+                                                            <span class="text-white">Đổi mật khẩu</span>
+                                                        </button>
+                                                    </form>
+                                                </div>
+
+                                                <!-- Modal Information -->
+                                                <div class="modal fade" id="exampleModal" tabindex="-1"
+                                                    data-bs-backdrop="static" data-bs-keyboard="false"
+                                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title text-danger">Sửa thông tin
+                                                                    {{user.name}}
+                                                                </h5>
+                                                            </div>
+                                                            <!-- form -->
+                                                            <form action="/users/update-information" method="post"
+                                                                enctype="multipart/form-data">
+                                                                <div class="modal-body row g-3">
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label">Email</label>
+                                                                        <input type="text" disabled class="form-control"
+                                                                            value="{{user.email}}">
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label">Họ tên</label>
+                                                                        <input type="text" value="{{user.name}}"
+                                                                            class="form-control" disabled>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label">Số điện thoại</label>
+                                                                        <input type="tel" name="phone" maxlength="12"
+                                                                            minlength="8" value="{{user.phone}}"
+                                                                            class="form-control" required>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label">Ngày sinh</label>
+                                                                        <input type="date" name="birthDay"
+                                                                            value="{{user.birthDay}}"
+                                                                            class="form-control" required>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label">Giới tính</label>
+                                                                        <select name="gender" class="form-select"
+                                                                            required>
+
+                                                                            {{#if (eq user.gender "Nam")}}
+                                                                            <option value="Nam" selected>Nam</option>
+                                                                            <option value="Nữ">Nữ</option>
+                                                                            {{else}}
+                                                                            <option value="Nam">Nam</option>
+                                                                            <option value="Nữ" selected>Nữ</option>
+                                                                            {{/if}}
+
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label">Hình ảnh</label>
+                                                                        <input type="file" name="images"
+                                                                            accept="image/jpeg, image/jpg"
+                                                                            class="form-control">
+                                                                    </div>
+                                                                    <input type="hidden" name="_id"
+                                                                        value="{{user._id}}">
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="submit"
+                                                                        class="btn btn-primary">Gửi</button>
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Hủy</button>
+                                                                </div>
+                                                            </form>
+                                                            <!-- end form -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Modal Password -->
+                                                <div class="modal fade" id="exampleModal2" tabindex="-1"
+                                                    data-bs-backdrop="static" data-bs-keyboard="false"
+                                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title text-danger">Đổi mật khẩu </h5>
+                                                            </div>
+                                                            <!-- form -->
+                                                            <form action="/users/update-password" method="post">
+                                                                <div class="modal-body row g-3">
+                                                                    <div class="col-md-12">
+                                                                        <label class="form-label">Mật khẩu cũ</label>
+                                                                        <input type="password" name="passOld"
+                                                                            minlength="6" class="form-control" required>
+                                                                    </div>
+                                                                    <div class="col-md-12">
+                                                                        <label class="form-label">Mật khẩu mới</label>
+                                                                        <input type="password" name="passNew"
+                                                                            minlength="6" class="form-control" required>
+                                                                    </div>
+                                                                    <div class="col-md-12">
+                                                                        <label class="form-label">Nhập lại mật
+                                                                            khẩu mới</label>
+                                                                        <input type="password" name="passNew2"
+                                                                            minlength="6" class="form-control" required>
+                                                                    </div>
+
+                                                                    <input type="hidden" name="_id"
+                                                                        value="{{user._id}}">
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="submit"
+                                                                        class="btn btn-primary">Gửi</button>
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Hủy</button>
+                                                                </div>
+                                                            </form>
+                                                            <!-- end form -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- -------------------- -->
+                                                {{/if}}
+
+
                                                 <div class="d-md-flex">
+                                                    {{#if (eq user.role "Quản trị viên")}}
+                                                    <form action="#" class="text-end col-md-6">
+                                                        <button class="btn btn-danger" type="button" disabled
+                                                            style="width: 97%;">
+                                                            <span class="text-white">Khóa</span>
+                                                        </button>
+                                                    </form>
+
+                                                    <form action="#" class="text-end col-md-6">
+                                                        <button class="btn btn-warning" type="button" disabled
+                                                            style="width: 97%;">
+                                                            <span class="text-white">Xóa tài khoản</span>
+                                                        </button>
+                                                    </form>
+                                                    {{else}}
+
                                                     {{#if (eq user.isActive "Kích hoạt")}}
                                                     <form action="/users/block" method="post" class="text-end col-md-6">
 
@@ -196,7 +352,9 @@
                                                             <span class="text-white">Xóa tài khoản</span>
                                                         </button>
                                                     </form>
+                                                    {{/if}}
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>

@@ -75,7 +75,8 @@
                                                     <div class="col-md-6">
                                                         <label class="form-label">Số điện
                                                             thoại</label>
-                                                        <input type="number" name="phone" class="form-control" required>
+                                                        <input type="tel" maxlength="12" minlength="8" name="phone"
+                                                            class="form-control" required>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label">Ngày sinh</label>
@@ -375,6 +376,23 @@
                                             <td class="text-nowrap">{{#newDate this.updatedAt}}{{/newDate}}</td>
 
                                             <td>
+                                                {{#if (eq this.role "Quản trị viên")}}
+                                                <div style="display: flex">
+                                                    <form action="#" class="text-end col-md-6">
+
+                                                        <button class="btn btn-danger" type="button" disabled
+                                                            style="margin-right: 5px;">
+                                                            <i class="fas fa-lock text-white"></i>
+                                                        </button>
+                                                    </form>
+
+                                                    <form action="#" class="text-end col-md-6">
+                                                        <button class="btn btn-warning" type="button" disabled>
+                                                            <i class="fas fa-trash-alt text-white"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                {{else}}
                                                 {{#if (eq this.isActive "Kích hoạt")}}
                                                 <div style="display: flex">
                                                     <form action="/users/block" method="post" class="text-end col-md-6">
@@ -422,12 +440,34 @@
                                                         </button>
                                                     </form>
                                                 </div>
-
+                                                {{/if}}
                                                 {{/if}}
                                             </td>
                                         </tr>
                                         {{/each }}
                                     </tbody>
+                                    {{#if (gt countUsers 0)}}
+                                    <thead>
+                                        <tr>
+                                            <th nowrap>STT</th>
+                                            <th nowrap>Email</th>
+                                            <th nowrap>Họ tên</th>
+                                            <th nowrap>Vai trò</th>
+                                            <th nowrap>Số điện thoại</th>
+                                            <th nowrap>Giới tính</th>
+                                            <th nowrap>Ngày sinh</th>
+                                            <th nowrap>Sở thích</th>
+                                            <th nowrap>Cơ sở</th>
+                                            <th nowrap>Chuyên ngành</th>
+                                            <th nowrap>Khóa học</th>
+                                            <th nowrap>Báo cáo</th>
+                                            <th nowrap>Trạng thái</th>
+                                            <th nowrap>Ngày tạo</th>
+                                            <th nowrap>Ngày cập nhật</th>
+                                            <th nowrap>Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    {{/if}}
                                 </table>
                             </div>
 
