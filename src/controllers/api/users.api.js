@@ -62,9 +62,7 @@ exports.list = async (req, res) => {
       users: data,
     };
 
-    res
-      .status(200)
-      .json(response(200, 'Lấy danh sách người dùng thành công', payload));
+    res.status(200).json(response(200, 'Lấy danh sách người dùng thành công', payload));
   } catch (error) {
     res.status(500).json(response(500, error.message));
   }
@@ -153,16 +151,16 @@ exports.signUp = async (req, res) => {
         reportNumber: 0,
         code: "",
         accessToken,
+        notificationToken: value.token,
         createdAt: req.getTime,
         updatedAt: req.getTime,
-        notificationToken: value.token,
       };
 
       await Users.create(payload);
       res.status(200).json(response(200, 'Tạo tài khoản thành công'));
     }
   } catch (error) {
-    res.status(500).json(response(500, error.message));
+    res.status(500).json(response(500, "error.message"));
   }
 };
 
