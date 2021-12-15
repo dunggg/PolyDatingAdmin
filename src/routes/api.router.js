@@ -13,7 +13,7 @@ let notifications = require('../controllers/api/notifications.api');
 
 /* API */
 // 1. Master
-router.get('/master/list', masters.list);
+router.get('/masters/list', masters.list);
 router.use(getTimeZone);
 
 router.post('/users/sign-up', uploadFile, users.signUp);
