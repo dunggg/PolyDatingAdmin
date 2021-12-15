@@ -6,7 +6,7 @@ let jwt = require('jsonwebtoken');
 let checkToken = async (req, res, next) => {
     try {
         let authorizationHeader = req.headers['authorization'];
-        if (!authorizationHeader) return res.sendStatus(401);
+        if (!authorizationHeader) return res.sendStatus(400);
 
         let token = authorizationHeader.split(' ')[1];
 
