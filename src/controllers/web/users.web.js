@@ -1,5 +1,5 @@
 let Masters = require('../../models/masters.schema');
-let Users = require("../../models/users.schema");
+let Users = require('../../models/users.schema');
 let Friends = require('../../models/friends.schema');
 let Reports = require('../../models/reports.schema');
 let Notifications = require('../../models/notifications.schema');
@@ -9,7 +9,7 @@ let randomString = require('randomstring');
 let _ = require('lodash');
 let moment = require('moment');
 
-let pathUrl = "https://poly-dating.herokuapp.com/public/data_images/";
+let pathUrl = 'https://poly-dating.herokuapp.com/public/data_images/';
 
 // exports.list = async (req, res) => {
 //   let isSearch = false;
@@ -127,14 +127,13 @@ exports.login = async (req, res, next) => {
     let user = await Users.findOne({ email });
 
     if (!user) {
-      return res.render('index', { msgError: "Sai email hoặc mật khẩu" });
+      return res.render('index', { msgError: 'Sai email hoặc mật khẩu' });
     }
     let verifyPass = jwt.verify(user.password, info.hassPassKey);
 
     if (password != verifyPass) {
-      res.render('index', { msgError: "Sai mật khẩu" });
-    }
-    else {
+      res.render('index', { msgError: 'Sai mật khẩu' });
+    } else {
       res.redirect('/statistical?format=0&timeStamp=' + moment().unix());
     }
   } catch (error) {
@@ -159,16 +158,16 @@ exports.insert = async (req, res) => {
       password: hashPass,
       name,
       images,
-      hobbies: "",
+      hobbies: '',
       gender,
       birthDay,
       phone,
-      description: "",
-      facilities: "",
-      specialized: "",
-      course: "",
-      isShow: "",
-      isActive: "Kích hoạt",
+      description: '',
+      facilities: '',
+      specialized: '',
+      course: '',
+      isShow: '',
+      isActive: 'Kích hoạt',
       role: 'Quản trị viên',
       statusHobby: false,
       reportNumber: 0,
@@ -176,63 +175,80 @@ exports.insert = async (req, res) => {
       accessToken,
       notificationToken: null,
       createdAt: req.getTime,
-      updatedAt: req.getTime
-    }
+      updatedAt: req.getTime,
+    };
 
     await Users.create(payload);
     res.redirect('/users');
-
   } catch (error) {
     res.send(error.message);
   }
 };
 
-let gender = ["Giới tính", "Nam", "Nữ"];
-let isActives = ["Trạng thái", "Kích hoạt", "Khóa"];
-let role = ["Vai trò", "Quản trị viên", "Người dùng"];
+let gender = ['Giới tính', 'Nam', 'Nữ'];
+let isActives = ['Trạng thái', 'Kích hoạt', 'Khóa'];
+let role = ['Vai trò', 'Quản trị viên', 'Người dùng'];
 
 exports.list = async (req, res) => {
   try {
     let { page } = req.params;
-    let { search, facilitiesOp, specializedOp, courseOp, genderOp, isActivesOp, roleOp } = req.query;
+    let {
+      search,
+      facilitiesOp,
+      specializedOp,
+      courseOp,
+      genderOp,
+      isActivesOp,
+      roleOp,
+    } = req.query;
 
     let pageSize = 20;
     let pageNumber = Number(page) || 1;
-    let skipPage = (pageSize * pageNumber) - pageSize;
+    let skipPage = pageSize * pageNumber - pageSize;
 
     let optionFind = {};
 
-    if (search || facilitiesOp || specializedOp || courseOp || genderOp || isActivesOp || roleOp) {
+    if (
+      search ||
+      facilitiesOp ||
+      specializedOp ||
+      courseOp ||
+      genderOp ||
+      isActivesOp ||
+      roleOp
+    ) {
       optionFind = {
-        facilities: new RegExp(`.*${facilitiesOp || ""}.*`),
-        specialized: new RegExp(`.*${specializedOp || ""}.*`),
-        course: new RegExp(`.*${courseOp || ""}.*`),
-        gender: new RegExp(`.*${genderOp || ""}.*`),
-        isActive: new RegExp(`.*${isActivesOp || ""}.*`),
-        role: new RegExp(`.*${roleOp || ""}.*`),
+        facilities: new RegExp(`.*${facilitiesOp || ''}.*`),
+        specialized: new RegExp(`.*${specializedOp || ''}.*`),
+        course: new RegExp(`.*${courseOp || ''}.*`),
+        gender: new RegExp(`.*${genderOp || ''}.*`),
+        isActive: new RegExp(`.*${isActivesOp || ''}.*`),
+        role: new RegExp(`.*${roleOp || ''}.*`),
         $or: [
-          { email: new RegExp(`.*${search || ""}.*`, "i") },
-          { name: new RegExp(`.*${search || ""}.*`, "i") },
-          { hobbies: new RegExp(`.*${search || ""}.*`, "i") },
-          { gender: new RegExp(`.*${search || ""}.*`, "i") },
-          { birthDay: new RegExp(`.*${search || ""}.*`, "i") },
-          { phone: new RegExp(`.*${search || ""}.*`, "i") },
-          { facilities: new RegExp(`.*${search || ""}.*`, "i") },
-          { specialized: new RegExp(`.*${search || ""}.*`, "i") },
-          { course: new RegExp(`.*${search || ""}.*`, "i") },
-          { isActive: new RegExp(`.*${search || ""}.*`, "i") },
-          { role: new RegExp(`.*${search || ""}.*`, "i") }
-        ]
-      }
-    };
+          { email: new RegExp(`.*${search || ''}.*`, 'i') },
+          { name: new RegExp(`.*${search || ''}.*`, 'i') },
+          { hobbies: new RegExp(`.*${search || ''}.*`, 'i') },
+          { gender: new RegExp(`.*${search || ''}.*`, 'i') },
+          { birthDay: new RegExp(`.*${search || ''}.*`, 'i') },
+          { phone: new RegExp(`.*${search || ''}.*`, 'i') },
+          { facilities: new RegExp(`.*${search || ''}.*`, 'i') },
+          { specialized: new RegExp(`.*${search || ''}.*`, 'i') },
+          { course: new RegExp(`.*${search || ''}.*`, 'i') },
+          { isActive: new RegExp(`.*${search || ''}.*`, 'i') },
+          { role: new RegExp(`.*${search || ''}.*`, 'i') },
+        ],
+      };
+    }
 
     let masters = await Masters.findOne();
-    let reportsWait = await Reports.countDocuments({ status: "Chờ duyệt" });
+    let reportsWait = await Reports.countDocuments({ status: 'Chờ duyệt' });
 
     let users = await Users.find(optionFind)
-      .limit(pageSize).skip(skipPage).sort({ role: -1 });
+      .limit(pageSize)
+      .skip(skipPage)
+      .sort({ role: -1 });
 
-    let countUsers = await Users.countDocuments(optionFind);;
+    let countUsers = await Users.countDocuments(optionFind);
 
     let totalUsersPage = Math.ceil(countUsers / pageSize);
 
@@ -242,15 +258,14 @@ exports.list = async (req, res) => {
     }
 
     let countFrom = pageSize * (pageNumber - 1) + 1;
-    let countTo = (pageSize * pageNumber);
+    let countTo = pageSize * pageNumber;
     let previousPage = pageNumber - 1;
     let nextPage = pageNumber + 1;
 
     if (countUsers < skipPage || countUsers < 1) {
       countFrom = 0;
-      countTo = 0
-    }
-    else if (countUsers < countTo) {
+      countTo = 0;
+    } else if (countUsers < countTo) {
       countTo = countUsers;
     }
 
@@ -271,7 +286,7 @@ exports.list = async (req, res) => {
       course: masters.course,
       gender,
       isActives,
-      role
+      role,
     };
 
     let payloadParams = {
@@ -281,15 +296,16 @@ exports.list = async (req, res) => {
       genderOp,
       isActivesOp,
       roleOp,
-      search
+      search,
     };
 
     let payload = {
       users,
       reportsWait,
+      timeStamp: moment().unix(),
       ...payloadMasters,
       ...payloadParams,
-      ...paging
+      ...paging,
     };
 
     res.render('users', payload);
@@ -306,17 +322,17 @@ exports.findOne = async (req, res) => {
     if (!user) return res.sendStatus(404);
 
     let optionFind = {
-      "friend.email": email,
-      status: true
-    }
+      'friend.email': email,
+      status: true,
+    };
 
     let countFriends = await Friends.countDocuments(optionFind);
-    let reportsWait = await Reports.countDocuments({ status: "Chờ duyệt" });
+    let reportsWait = await Reports.countDocuments({ status: 'Chờ duyệt' });
 
     let payload = {
       user,
       countFriends,
-      reportsWait
+      reportsWait,
     };
 
     res.render('profile', payload);
@@ -342,12 +358,11 @@ exports.updateInformation = async (req, res) => {
       phone,
       birthDay,
       gender,
-      updatedAt: req.getTime
-    }
+      updatedAt: req.getTime,
+    };
 
     await Users.updateOne({ _id }, payload);
     res.redirect(`/users/${user.email}`);
-
   } catch (error) {
     res.send(error.message);
   }
@@ -363,17 +378,15 @@ exports.updatePassword = async (req, res) => {
 
     if (passOld != verifyPass) {
       res.send('Sai mật khẩu cũ');
-    }
-    else if (passNew2 != passNew) {
+    } else if (passNew2 != passNew) {
       res.send('Mật khẩu mới cần giống nhau');
-    }
-    else {
+    } else {
       let hashPass = jwt.sign(passNew, info.hassPassKey);
 
       let payload = {
         password: hashPass,
-        updatedAt: req.getTime
-      }
+        updatedAt: req.getTime,
+      };
 
       await Users.updateOne({ _id }, payload);
       res.redirect(`/users/${user.email}`);
@@ -398,17 +411,16 @@ exports.forgotPassword = async (req, res, next) => {
 
     let payload = {
       password: hashPass,
-      updatedAt: req.getTime
-    }
+      updatedAt: req.getTime,
+    };
 
     await Users.updateOne({ _id: user._id }, payload);
 
     req.decoded = {
       email,
-      passRandom
-    }
+      passRandom,
+    };
     next();
-
   } catch (error) {
     res.send(error.message);
   }
@@ -419,20 +431,18 @@ exports.block = async (req, res) => {
     let { _id, checkAction } = req.body;
 
     let payload = {
-      isActive: "Khóa",
-      updatedAt: req.getTime
-    }
+      isActive: 'Khóa',
+      updatedAt: req.getTime,
+    };
 
     let user = await Users.findOneAndUpdate({ _id }, payload);
     if (!user) return res.sendStatus(404);
 
-    if (checkAction == "1") {
+    if (checkAction == '1') {
       res.redirect(`/users`);
-    }
-    else {
+    } else {
       res.redirect(`/users/${user.email}`);
     }
-
   } catch (error) {
     res.send(error.message);
   }
@@ -444,20 +454,18 @@ exports.unblock = async (req, res) => {
 
     let payload = {
       reportNumber: 0,
-      isActive: "Kích hoạt",
-      updatedAt: req.getTime
-    }
+      isActive: 'Kích hoạt',
+      updatedAt: req.getTime,
+    };
 
     let user = await Users.findOneAndUpdate({ _id }, payload);
     if (!user) return res.sendStatus(404);
 
-    if (checkAction == "1") {
+    if (checkAction == '1') {
       res.redirect(`/users`);
-    }
-    else {
+    } else {
       res.redirect(`/users/${user.email}`);
     }
-
   } catch (error) {
     res.send(error.message);
   }
