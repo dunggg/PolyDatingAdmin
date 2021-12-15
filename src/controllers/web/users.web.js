@@ -350,6 +350,7 @@ exports.findOne = async (req, res) => {
 
     let payload = {
       user,
+      currentUserWeb: req.currentUserWeb,
       countFriends,
       reportsWait,
       timeStamp: moment().unix(),
@@ -363,7 +364,7 @@ exports.findOne = async (req, res) => {
 
 exports.updateInformation = async (req, res) => {
   try {
-    let { _id, phone, birthDay, gender } = req.body;
+    let { _id, name, phone, birthDay, gender } = req.body;
 
     let user = await Users.findOne({ _id });
     let images = user.images;
@@ -374,6 +375,7 @@ exports.updateInformation = async (req, res) => {
     }
 
     let payload = {
+      name,
       images,
       phone,
       birthDay,

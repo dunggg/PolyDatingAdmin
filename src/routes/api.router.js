@@ -34,11 +34,7 @@ router.post('/users/delete', users.delete);
 router.get('/friends/list-friends-requests', friends.listFriendsRequests);
 router.get('/friends/list-of-requests-sent', friends.listOfRequestsSent);
 router.get('/friends/list-friends', friends.listFriends);
-router.post(
-  '/friends/friend-request',
-  friends.friendRequest,
-  pushNotificationsFriendsRequest,
-);
+router.post('/friends/friend-request', friends.friendRequest, pushNotificationsFriendsRequest);
 router.post('/friends/delete', friends.delete);
 
 // 4. Reports

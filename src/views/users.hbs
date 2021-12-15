@@ -43,6 +43,20 @@
                         <div class="d-sm-inline-block me-auto md-3 my-2 my-md-0 mw-100 navbar-search">
                             <h4 class="text-dark mb-0">Người dùng</h4>
                         </div>
+                        <ul class="navbar-nav flex-nowrap ms-auto">
+                            <li class="nav-item dropdown no-arrow">
+                                <div class="nav-item dropdown no-arrow">
+                                    <a class="dropdown-toggle nav-link" href="/users/{{currentUserWeb.email}}">
+                                        <span class="d-none d-lg-inline me-2 text-gray-600 small">
+                                            {{currentUserWeb.name}}
+                                        </span>
+                                        {{#each currentUserWeb.images}}
+                                        <img class="border rounded-circle img-profile" src="{{this}}">
+                                        {{/each}}
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </nav>
 
@@ -50,8 +64,7 @@
                     <div class="card shadow">
                         <div class="card-header py-3">
                             <div class="row">
-                                <p class="text-primary m-0 fw-bold col-md-6">Thông tin người dùng
-                                    {{currentUserWeb.email}}</p>
+                                <p class="text-primary m-0 fw-bold col-md-6">Thông tin người dùng</p>
                                 <a href="#" class="text-danger m-0 fw-bold col-md-6 text-end" data-bs-toggle="modal"
                                     data-bs-target="#exampleModal" style="text-decoration: none;">Thêm quản trị viên</a>
 
@@ -72,7 +85,8 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label">Họ tên</label>
-                                                        <input type="text" name="name" class="form-control" required>
+                                                        <input type="text" name="name" class="form-control"
+                                                            minlength="5" maxlength="25" required>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label">Số điện

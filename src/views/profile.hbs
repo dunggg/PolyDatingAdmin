@@ -13,11 +13,11 @@
                 <ul class="navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link" href="/statistical?format=0&timeStamp={{timeStamp}}"><i
                                 class="fas fa-tachometer-alt"></i><span>Thống kê</span></a></li>
-                    <li class="nav-item"><a class="nav-link active" href="/users/page/1">
+                    <li class="nav-item"><a class="nav-link active" href="/users">
                             <i class="fas fa-user"></i>
                             <span>Người dùng</span></a></li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/reports/page/1">
+                        <a class="nav-link" href="/reports">
                             <i class="fas fa-flag"></i>
                             <span>Báo cáo</span>
                             {{#if (gt reportsWait 0)}}
@@ -25,9 +25,10 @@
                             {{/if}}
                         </a>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="/notifications/page/1"><i
+                    <li class="nav-item"><a class="nav-link" href="/notifications"><i
                                 class="fas fa-bell"></i><span>Thông báo</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i><span>Đăng
+                    <li class="nav-item"><a class="nav-link" href="/logout"><i
+                                class="fas fa-sign-out-alt"></i><span>Đăng
                                 xuất</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0"
@@ -42,6 +43,20 @@
                         <div class="d-sm-inline-block me-auto md-3 my-2 my-md-0 mw-100 navbar-search">
                             <h4 class="text-dark mb-0">Thông tin người dùng {{user.name}}</h4>
                         </div>
+                        <ul class="navbar-nav flex-nowrap ms-auto">
+                            <li class="nav-item dropdown no-arrow">
+                                <div class="nav-item dropdown no-arrow">
+                                    <a class="dropdown-toggle nav-link" href="/users/{{currentUserWeb.email}}">
+                                        <span class="d-none d-lg-inline me-2 text-gray-600 small">
+                                            {{currentUserWeb.name}}
+                                        </span>
+                                        {{#each currentUserWeb.images}}
+                                        <img class="border rounded-circle img-profile" src="{{this}}">
+                                        {{/each}}
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </nav>
 
@@ -157,10 +172,10 @@
                                                     <span class="text-black">Ngày cập nhật: </span>{{#newDate
                                                     user.updatedAt}}{{/newDate}}
                                                 </p>
-
                                                 <hr>
 
                                                 {{#if (eq user.role "Quản trị viên")}}
+                                                {{#if (eq user.email currentUserWeb.email)}}
                                                 <div class="d-md-flex mb-2">
                                                     <form action="#" class="text-end col-md-6">
                                                         <button class="btn btn-success" type="button"
@@ -202,7 +217,7 @@
                                                                     <div class="col-md-6">
                                                                         <label class="form-label">Họ tên</label>
                                                                         <input type="text" value="{{user.name}}"
-                                                                            class="form-control" disabled>
+                                                                            class="form-control" minlength="5" maxlength="25">
                                                                     </div>
                                                                     <div class="col-md-6">
                                                                         <label class="form-label">Số điện thoại</label>
@@ -297,25 +312,10 @@
                                                 </div>
                                                 <!-- -------------------- -->
                                                 {{/if}}
-
+                                                {{/if}}
 
                                                 <div class="d-md-flex">
-                                                    {{#if (eq user.role "Quản trị viên")}}
-                                                    <form action="#" class="text-end col-md-6">
-                                                        <button class="btn btn-danger" type="button" disabled
-                                                            style="width: 97%;">
-                                                            <span class="text-white">Khóa</span>
-                                                        </button>
-                                                    </form>
-
-                                                    <form action="#" class="text-end col-md-6">
-                                                        <button class="btn btn-warning" type="button" disabled
-                                                            style="width: 97%;">
-                                                            <span class="text-white">Xóa tài khoản</span>
-                                                        </button>
-                                                    </form>
-                                                    {{else}}
-
+                                                    {{#if (eq user.role "Người dùng")}}
                                                     {{#if (eq user.isActive "Kích hoạt")}}
                                                     <form action="/users/block" method="post" class="text-end col-md-6">
 
