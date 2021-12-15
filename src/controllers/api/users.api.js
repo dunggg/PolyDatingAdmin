@@ -156,7 +156,6 @@ exports.signUp = async (req, res) => {
         code: null,
         accessToken,
         notificationToken: value.token,
-        createdAt: req.getTime,
         updatedAt: req.getTime,
       };
 
