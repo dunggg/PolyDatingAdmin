@@ -61,22 +61,7 @@
                                         <label class="form-label">
                                             <select class="d-inline-block form-select form-select-sm" id="facilitiesOp">
                                                 {{#each facilities}}
-
-                                                {{#if (eq this 'Lựa chọn cơ sở')}}
-                                                <option value="">{{this}} </option>
-
-                                                {{else}}
-                                                {{#if (eq this @root.facilitiesOp)}}
-                                                <option value="{{@root.facilitiesOp}}" selected="">
-                                                    {{@root.facilitiesOp}}
-                                                </option>
-
-                                                {{else}}
-                                                <option value="{{this}}">{{this}}</option>
-
-                                                {{/if}}
-                                                {{/if}}
-
+                                                {{#optionFacilities "" this}}{{/optionFacilities}}
                                                 {{/each}}
                                             </select>
                                         </label>
@@ -89,22 +74,20 @@
                                             <select class="d-inline-block form-select form-select-sm"
                                                 id="specializedOp">
                                                 {{#each specialized}}
+                                                {{#optionSpecialized "" this}} {{/optionSpecialized}}
+                                                {{/each}}
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
 
-                                                {{#if (eq this 'Lựa chọn ngành học')}}
-                                                <option value="">{{this}}</option>
 
-                                                {{else}}
-                                                {{#if (eq this @root.specializedOp)}}
-                                                <option value="{{@root.specializedOp}}" selected="">
-                                                    {{@root.specializedOp}}
-                                                </option>
-
-                                                {{else}}
-                                                <option value="{{this}}">{{this}}</option>
-
-                                                {{/if}}
-                                                {{/if}}
-
+                                <div class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <select class="d-inline-block form-select form-select-sm">
+                                                {{#each course}}
+                                                {{#optionCourse "" this}} {{/optionCourse}}
                                                 {{/each}}
                                             </select>
                                         </label>
@@ -115,24 +98,9 @@
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
                                             <select class="d-inline-block form-select form-select-sm" id="courseOp">
-                                                {{#each course}}
-
-                                                {{#if (eq this 'Lựa chọn khóa học')}}
-                                                <option value="">{{this}}</option>
-
-                                                {{else}}
-                                                {{#if (eq this @root.courseOp)}}
-                                                <option value="{{@root.courseOp}}" selected="">
-                                                    {{@root.courseOp}}
-                                                </option>
-
-                                                {{else}}
-                                                <option value="{{this}}">{{this}}</option>
-
-                                                {{/if}}
-                                                {{/if}}
-
-                                                {{/each}}
+                                                {{#optionTime "" 0}} {{/optionTime}}
+                                                {{#optionTime "" 1}} {{/optionTime}}
+                                                {{#optionTime "" 2}} {{/optionTime}}
                                             </select>
                                         </label>
                                     </div>
@@ -141,28 +109,15 @@
                                 <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
-                                            <select class="d-inline-block form-select form-select-sm">
-                                                {{#each dataDate}}
-                                                <option value="{{this}}">{{this}}</option>
-                                                {{/each}}
-                                            </select>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-auto">
-                                    <div id="dataTable_length" aria-controls="dataTable">
-                                        <label class="form-label">
-                                            <form action="/statistical" method="get" id="id-form5">
-                                                <input type="hidden" id="facilitiesIp" name="facilitiesOp">
-                                                <input type="hidden" id="specializedIp" name="specializedOp">
-                                                <input type="hidden" id="courseIp" name="courseOp">
-                                                <input type="hidden" id="formatIp" name="format" />
-                                                <input type="hidden" id="timeStampIp" name="timeStamp" />
-
-                                                <input type="submit" class="form-control form-control-sm btn-primary"
-                                                    onclick="checkSubmit(`0`,`{{timeStamp}}`)" aria-controls="dataTable"
-                                                    value="Tìm kiếm">
+                                            <form action="/statistical">
+                                                <input hidden name="facilities" />
+                                                <input hidden name="specialized" />
+                                                <input hidden name="course" />
+                                                <input hidden name="format" value="0" />
+                                                <input hidden name="timeStamp" value="{{timeStamp}}" />
+                                                <input id="btnSearch" type="submit"
+                                                    class="form-control form-control-sm btn-primary"
+                                                    aria-controls="dataTable" value="Tìm kiếm">
                                             </form>
                                         </label>
                                     </div>
@@ -171,30 +126,43 @@
                                 <div class="col-md-auto">
                                     <div id="dataTable_length" aria-controls="dataTable">
                                         <label class="form-label">
-                                            <a class="btn btn-primary btn-sm" href="/export-xlsx">
+                                            <a id="export" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-download fa-sm text-white-50"></i> Export
                                             </a>
                                         </label>
                                     </div>
                                 </div>
+
+                                <div style="display:none" class="col-md-auto">
+                                    <div id="dataTable_length" aria-controls="dataTable">
+                                        <label class="form-label">
+                                            <a id="download" class="btn btn-primary btn-sm" download>
+                                                <i class="fas fa-download fa-sm text-white-50"></i> Export22222
+                                            </a>
+                                        </label>
+                                    </div>
+                                </div>
+
                             </div>
+
+
 
                             <hr>
                             <div class="row">
                                 <div class="col-md-3 mb-2">
-                                    <p class="fw-bold h5">Tổng người dùng: 50 {{totalUser}}</p>
+                                    <p class="fw-bold h5">Tổng người dùng: {{totalUser}}</p>
                                 </div>
 
                                 <div class="col-md-3 mb-2">
-                                    <p class="fw-bold h5">Sinh viên Nam: 50 {{totalUserMale}}</p>
+                                    <p class="fw-bold h5">Sinh viên Nam: {{totalUserMale}}</p>
                                 </div>
 
                                 <div class="col-md-3 mb-2">
-                                    <p class="fw-bold h5">Sinh viên Nữ: 50 {{totalUserFemale}}</p>
+                                    <p class="fw-bold h5">Sinh viên Nữ: {{totalUserFemale}}</p>
                                 </div>
 
                                 <div class="col-md-3 mb-2">
-                                    <p class="fw-bold h5">Số báo cáo: 50 {{totalReports}}</p>
+                                    <p class="fw-bold h5">Số báo cáo: </p>
                                 </div>
                             </div>
                         </div>
@@ -223,7 +191,8 @@
                                                     <div style="position:absolute;width:200%;height:200%;left:0; top:0">
                                                     </div>
                                                 </div>
-                                            </div> <canvas id="chart-line" width="300" height="200"
+                                            </div>
+                                            <canvas id="chart-line" width="300" height="200"
                                                 class="chartjs-render-monitor"
                                                 style="display: block; width: 300; height: 200px;"></canvas>
                                         </div>

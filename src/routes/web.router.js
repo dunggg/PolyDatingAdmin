@@ -8,6 +8,7 @@ let users = require('../controllers/web/users.web');
 let reports = require('../controllers/web/reports.web');
 let notifications = require('../controllers/web/notifications.web');
 let { statistical, exportFile } = require('../controllers/web/statistical.web');
+let exportExcel = require('../utils/exportExcel');
 
 /* Website */
 router.use(getTimeZone);
@@ -31,11 +32,20 @@ router.post('/reports/verify-report-request', reports.verifyReportRequest);
 //3. Notifications
 router.get('/notifications', notifications.list);
 router.get('/notifications/page/:page', notifications.list);
-router.post('/notifications/insert', notifications.insert, pushNotificationsAll);
+router.post(
+  '/notifications/insert',
+  notifications.insert,
+  pushNotificationsAll,
+);
 router.post('/notifications/delete', notifications.delete);
 
 //4. Statistical
 router.get('/statistical', statistical);
 router.get('/export-xlsx', exportFile);
+
+router.get('/export-excel', (req, res, next) => {
+  const fileName = exportExcel();
+  res.json(fileName);
+});
 
 module.exports = router;
