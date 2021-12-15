@@ -53,8 +53,7 @@ exports.list = async (req, res) => {
         hobbies: { $all: hobby },
       };
       data = await Users.find(search);
-    } 
-    else {
+    } else {
       data = await Users.find(search);
     }
 
@@ -62,9 +61,10 @@ exports.list = async (req, res) => {
       total: data.length,
       users: data,
     };
-    
-    res.status(200).json(response(200, 'Lấy danh sách người dùng thành công', payload));
 
+    res
+      .status(200)
+      .json(response(200, 'Lấy danh sách người dùng thành công', payload));
   } catch (error) {
     res.status(500).json(response(500, error.message));
   }
@@ -130,6 +130,8 @@ exports.signUp = async (req, res) => {
       ];
       let accessToken = jwt.sign(value.email, info.accessKey);
 
+      let birthDay = moment(value?.birthDay).format('YYYY-MM-DD');
+
       let payload = {
         email: value.email,
         password: null,
@@ -137,9 +139,9 @@ exports.signUp = async (req, res) => {
         images,
         hobbies,
         gender: value.gender,
-        birthDay: value.birthDay,
-        phone: "",
-        description: "Không có gì để hiển thị",
+        birthDay,
+        phone: '',
+        description: 'Không có gì để hiển thị',
         facilities: value.facilities,
         specialized: value.specialized,
         course: value.course,
