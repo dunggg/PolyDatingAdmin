@@ -3,7 +3,7 @@
         <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
             <div class="container-fluid d-flex flex-column p-0">
                 <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0"
-                    href="/statistical">
+                    href="/statistical?format=0&timeStamp={{timeStamp}}">
                     <div class="sidebar-brand-icon rotate-n-15">
                         <img src="/public/img/bee.png" alt="">
                     </div>
@@ -27,7 +27,8 @@
                     <li class="nav-item"><a class="nav-link" href="/notifications"><i
                                 class="fas fa-bell"></i><span>Thông
                                 báo</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-sign-out-alt"></i><span>Đăng
+                    <li class="nav-item"><a class="nav-link" href="/logout"><i
+                                class="fas fa-sign-out-alt"></i><span>Đăng
                                 xuất</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0"
@@ -49,7 +50,8 @@
                     <div class="card shadow">
                         <div class="card-header py-3">
                             <div class="row">
-                                <p class="text-primary m-0 fw-bold col-md-6">Thông tin người dùng</p>
+                                <p class="text-primary m-0 fw-bold col-md-6">Thông tin người dùng
+                                    {{currentUserWeb.email}}</p>
                                 <a href="#" class="text-danger m-0 fw-bold col-md-6 text-end" data-bs-toggle="modal"
                                     data-bs-target="#exampleModal" style="text-decoration: none;">Thêm quản trị viên</a>
 
@@ -372,6 +374,8 @@
                                                 <span class="text-danger">Khóa</span>
                                                 {{/if}}
                                             </td>
+                                            <td class="text-nowrap"> {{this.createdAt}}</td>
+                                            <td class="text-nowrap"> {{this.updatedAt}}</td>
                                             <td class="text-nowrap">{{#newDate this.createdAt}}{{/newDate}}</td>
                                             <td class="text-nowrap">{{#newDate this.updatedAt}}{{/newDate}}</td>
 

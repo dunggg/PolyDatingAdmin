@@ -121,21 +121,35 @@ exports.screenForgotPassword = async (req, res) => {
   }
 };
 
-exports.login = async (req, res, next) => {
+exports.logOut = async (req, res) => {
+  try {
+    res.clearCookie('token');
+    res.redirect('/');
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+exports.logIn = async (req, res) => {
   try {
     let { email, password } = req.body;
-    let user = await Users.findOne({ email });
+    let user = await Users.findOne({ email, role: 'Quản trị viên' });
 
     if (!user) {
       return res.render('index', { msgError: 'Sai email hoặc mật khẩu' });
     }
+
     let verifyPass = jwt.verify(user.password, info.hassPassKey);
 
     if (password != verifyPass) {
-      res.render('index', { msgError: 'Sai mật khẩu' });
-    } else {
-      res.redirect('/statistical?format=0&timeStamp=' + moment().unix());
+      return res.render('index', { msgError: 'Sai mật khẩu' });
     }
+
+    //Set cookie trong thời gian 1 giờ
+    res.cookie("token", user, { maxAge: 1000 * 60 * 60 });
+
+    res.redirect('statistical?format=0&timeStamp=' + moment().unix());
+
   } catch (error) {
     res.send(error.message);
   }
@@ -171,9 +185,9 @@ exports.insert = async (req, res) => {
       role: 'Quản trị viên',
       statusHobby: false,
       reportNumber: 0,
-      code: null,
+      code: "",
       accessToken,
-      notificationToken: null,
+      notificationToken: "",
       createdAt: req.getTime,
       updatedAt: req.getTime,
     };
@@ -202,7 +216,7 @@ exports.list = async (req, res) => {
       roleOp,
     } = req.query;
 
-    let pageSize = 5;
+    let pageSize = 20;
     let pageNumber = Number(page) || 1;
     let skipPage = pageSize * pageNumber - pageSize;
 
@@ -307,6 +321,7 @@ exports.list = async (req, res) => {
       users,
       reportsWait,
       timeStamp: moment().unix(),
+      currentUserWeb: req.currentUserWeb,
       ...payloadMasters,
       ...payloadParams,
       ...paging,
@@ -337,6 +352,7 @@ exports.findOne = async (req, res) => {
       user,
       countFriends,
       reportsWait,
+      timeStamp: moment().unix(),
     };
 
     res.render('profile', payload);
@@ -377,7 +393,6 @@ exports.updatePassword = async (req, res) => {
     let { _id, passOld, passNew, passNew2 } = req.body;
 
     let user = await Users.findOne({ _id });
-
     let verifyPass = jwt.verify(user.password, info.hassPassKey);
 
     if (passOld != verifyPass) {

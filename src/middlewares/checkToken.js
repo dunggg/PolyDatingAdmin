@@ -14,16 +14,16 @@ let checkToken = async (req, res, next) => {
         let user = await Users.findOne({ email: dataToken });
 
         if (!user) {
-            res.status(404).json(response(404, `Tài khoản không tồn tại`, null));
+            res.status(404).json(response(404, `Tài khoản không tồn tại`));
         }
         else if (user.isActive == "Khóa") {
-            res.status(403).json(response(403, `Tài khoản của bạn đã bị khóa`, user));
+            res.status(403).json(response(403, `Tài khoản của bạn đã bị khóa`));
         }
         else {
             req.currentUser = user;
             next();
         }
-
+        
     } catch (error) {
         if (error.message == "jwt malformed") {
             return res.sendStatus(401);
@@ -34,25 +34,17 @@ let checkToken = async (req, res, next) => {
 
 let checkTokenWebsite = async (req, res, next) => {
     try {
-        let currentUser = req.currentUser;
-
-        let accessToken = jwt.verify
+        let user = req.cookies.token;
 
         if (!user) {
-            res.status(404).json(response(404, `Tài khoản không tồn tại`, null));
+            return res.redirect('/');
         }
-        else if (user.isActive == "Khóa") {
-            res.status(403).json(response(403, `Tài khoản của bạn đã bị khóa`, user));
-        }
-        else {
-            req.currentUser = user;
-            next();
-        };
+
+        req.currentUserWeb = user;
+        next()
+
     } catch (error) {
-        if (error.message == "jwt malformed") {
-            return res.sendStatus(401);
-        }
-        res.status(500).json(response(500, error.message));
+        res.send(error.message);
     }
 };
 

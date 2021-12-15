@@ -2,6 +2,7 @@ let express = require('express');
 let router = express.Router();
 let uploadFile = require('../middlewares/uploadFile');
 let getTimeZone = require('../middlewares/getTime');
+let { checkTokenWebsite } = require('../middlewares/checkToken');
 let { sendMailForgotPassword } = require('../middlewares/sendMail');
 let { pushNotificationsAll } = require('../middlewares/notifications');
 let users = require('../controllers/web/users.web');
@@ -12,14 +13,16 @@ let { statistical, exportFile } = require('../controllers/web/statistical.web');
 /* Website */
 router.use(getTimeZone);
 router.get('/', users.index);
-router.post('/login', users.login);
-router.post('/users/insert', uploadFile, users.insert);
+router.post('/login', users.logIn);
+router.get('/logout', users.logOut);
+router.get('/forgot-password', users.screenForgotPassword);
+router.use(checkTokenWebsite);
 
 //1. Users
 router.get('/users', users.list);
 router.get('/users/page/:page', users.list);
 router.get('/users/:email', users.findOne);
-router.get('/forgot-password', users.screenForgotPassword);
+router.post('/users/insert', uploadFile, users.insert);
 router.post('/users/update-information', uploadFile, users.updateInformation);
 router.post('/users/update-password', users.updatePassword);
 router.post('/users/forgot-password', users.forgotPassword, sendMailForgotPassword);

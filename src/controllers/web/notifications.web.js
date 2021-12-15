@@ -54,8 +54,8 @@ exports.list = async (req, res) => {
       countTo = countNotifications;
     }
 
-    for (let index = 0; index < notifications.length; index++) {
-      notifications[index].index = countFrom + index;
+    for (let i = 0; i < notifications.length; i++) {
+      notifications[i].index = countFrom + i;
     }
 
     let paging = {
@@ -73,6 +73,7 @@ exports.list = async (req, res) => {
       notifications,
       reportsWait,
       search,
+      currentUserWeb: req.currentUserWeb,
       timeStamp: moment().unix(),
       ...paging,
     };
@@ -92,7 +93,7 @@ exports.insert = async (req, res, next) => {
 
     for (let i = 0; i < dataUsers.length; i++) {
       let ontion = {
-        emailSender: 'polydating@gmail.com.vn',
+        emailSender: req.currentUserWeb.email,
         emailReceiver: dataUsers[i].email,
         title,
         content,
@@ -112,6 +113,7 @@ exports.insert = async (req, res, next) => {
       tokens: dataUsersTokens,
     };
     next();
+
   } catch (error) {
     res.send(error.message);
   }

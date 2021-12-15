@@ -80,6 +80,7 @@ exports.list = async (req, res) => {
       reports,
       statusReports,
       dataTitleReports: dataTitleReports.reports,
+      currentUserWeb: req.currentUserWeb,
       titleOp,
       statusOp,
       search,

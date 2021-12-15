@@ -1,6 +1,4 @@
 let mongoose = require('mongoose');
-const moment = require('moment-timezone');
-const dateThailand = moment.tz(Date.now(), 'Asia/Bangkok');
 
 let Users = new mongoose.Schema({
   email: { type: String, unique: true },
@@ -23,8 +21,10 @@ let Users = new mongoose.Schema({
   code: String,
   accessToken: String,
   notificationToken: String,
-  createdAt: { type: Date, default: dateThailand },
-  updatedAt: Date,
-});
+  createdAt: Date,
+  updatedAt: Date
+},
+  { timestamps: false }
+);
 
 module.exports = mongoose.model('users', Users);

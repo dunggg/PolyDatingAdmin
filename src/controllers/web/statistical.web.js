@@ -191,7 +191,7 @@ let statistical = async (req, res) => {
     );
     let totalBlock = await countBlock(timeStamp, format, objSearch);
 
-    const totalReportServer = await Reports.countDocuments({});
+    let totalReportServer = await Reports.countDocuments({});
 
     res.render('statistical', {
       totalReportServer,
@@ -202,7 +202,9 @@ let statistical = async (req, res) => {
       totalReport,
       totalBlock,
       totalMatchPending,
+      currentUserWeb: req.currentUserWeb,
       data,
+      reportsWait,
       course: course,
       specialized: specialized,
       facilities,
@@ -215,8 +217,8 @@ let statistical = async (req, res) => {
         data.length === 12
           ? `năm ${moment(timeStamp * 1000).format('YYYY')}`
           : data.length === 11
-          ? `từ năm ${data[0]} đến năm ${data[data.length - 1]}`
-          : `tháng ${moment(timeStamp * 1000).format('MM')} năm ${moment(
+            ? `từ năm ${data[0]} đến năm ${data[data.length - 1]}`
+            : `tháng ${moment(timeStamp * 1000).format('MM')} năm ${moment(
               timeStamp * 1000,
             ).format('YYYY')}`,
     });
@@ -227,19 +229,19 @@ let statistical = async (req, res) => {
 
 let exportFile = async (req, res) => {
   try {
-    const totalUser = await Users.countDocuments({});
-    const totalMale = await Users.countDocuments({ gender: 'Nam' });
-    const totalFeMale = await Users.countDocuments({ gender: 'Nữ' });
-    const totalReport = await Reports.countDocuments({});
+    let totalUser = await Users.countDocuments({});
+    let totalMale = await Users.countDocuments({ gender: 'Nam' });
+    let totalFeMale = await Users.countDocuments({ gender: 'Nữ' });
+    let totalReport = await Reports.countDocuments({});
 
-    const timeStamp = moment().unix();
-    const totalMatchMonths = await countMatch(timeStamp, 1, {});
-    const totalReportMonths = await countReports(timeStamp, 1, {});
-    const totalBlockMonths = await countBlock(timeStamp, 1, {});
+    let timeStamp = moment().unix();
+    let totalMatchMonths = await countMatch(timeStamp, 1, {});
+    let totalReportMonths = await countReports(timeStamp, 1, {});
+    let totalBlockMonths = await countBlock(timeStamp, 1, {});
 
-    const totalMatchYears = await countMatch(timeStamp, 2, {});
-    const totalReportYears = await countReports(timeStamp, 2, {});
-    const totalBlockYears = await countBlock(timeStamp, 2, {});
+    let totalMatchYears = await countMatch(timeStamp, 2, {});
+    let totalReportYears = await countReports(timeStamp, 2, {});
+    let totalBlockYears = await countBlock(timeStamp, 2, {});
 
     let fileName = exportExcel(
       { totalUser, totalMale, totalFeMale, totalReport },

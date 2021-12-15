@@ -6,7 +6,6 @@ let { response, insertUser, updateUser } = require('../../utils/utils');
 let info = require('../../config/info');
 let randomString = require('randomstring');
 let jwt = require('jsonwebtoken');
-let moment = require('moment');
 
 let pathUrl = 'https://poly-dating.herokuapp.com/public/data_images/';
 
@@ -77,12 +76,12 @@ exports.signIn = async (req, res) => {
     let user = await Users.findOne({ email });
 
     if (!user) {
-      res.status(404).json(response(404, `Tài khoản không tồn tại`, null));
+      res.status(404).json(response(404, `Tài khoản không tồn tại`));
     } else if (user.isActive == 'Khóa') {
-      res.status(403).json(response(403, `Tài khoản của bạn đã bị khóa`, user));
+      res.status(403).json(response(403, `Tài khoản của bạn đã bị khóa`));
     } else {
       let optionToken = {
-        notificationToken: token || null,
+        notificationToken: token || "",
         updatedAt: req.getTime,
       };
 
@@ -97,7 +96,7 @@ exports.signIn = async (req, res) => {
 exports.signOut = async (req, res) => {
   try {
     let optionToken = {
-      notificationToken: null,
+      notificationToken: "",
       updatedAt: req.getTime,
     };
 
@@ -131,19 +130,18 @@ exports.signUp = async (req, res) => {
       ];
       let accessToken = jwt.sign(value.email, info.accessKey);
 
-      let arr = value.birthDay.split('/');
-      let birthDay = `${arr[2]}-${arr[1]}-${arr[0]}`;
+      let getBirthDay = value.birthDay.split('/');
+      let birthDay = `${getBirthDay[2]}-${getBirthDay[1]}-${getBirthDay[0]}`;
 
-      console.log(birthDay);
       let payload = {
         email: value.email,
-        password: null,
+        password: "",
         name: value.name,
         images,
         hobbies,
         gender: value.gender,
         birthDay,
-        phone: '',
+        phone: "",
         description: 'Không có gì để hiển thị',
         facilities: value.facilities,
         specialized: value.specialized,
@@ -153,10 +151,11 @@ exports.signUp = async (req, res) => {
         role: 'Người dùng',
         statusHobby: false,
         reportNumber: 0,
-        code: null,
+        code: "",
         accessToken,
-        notificationToken: value.token,
+        createdAt: req.getTime,
         updatedAt: req.getTime,
+        notificationToken: value.token,
       };
 
       await Users.create(payload);
@@ -316,16 +315,11 @@ exports.requestCode = async (req, res, next) => {
     };
     await Users.updateOne({ _id: currentUser._id }, payload);
 
-    // Nếu sau 5 phút (300000 ms) code không được nhập thì xóa code
+    // Nếu sau 5 phút code không được nhập thì xóa code
     setTimeout(async () => {
-      let time = new Date();
 
-      let payload2 = {
-        code: null,
-        updatedAt: time,
-      };
-      await Users.updateOne({ _id: currentUser._id }, payload2);
-    }, 300000);
+      await Users.updateOne({ _id: currentUser._id }, { code: "" });
+    }, 1000 * 60 * 5);
 
     req.decoded = {
       email: currentUser.email,
