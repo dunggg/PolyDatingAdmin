@@ -69,9 +69,9 @@ let listTotalMonthsOfYear = (totalReports, timeStamp) => {
 };
 
 let listTotalReportsYears = (totalReports, timeStamp) => {
-  let yearNow = 2020;
+  let yearNow = 2021;
   let listYear = [];
-  for (let i = 0; i <= 10; i++) {
+  for (let i = 0; i < 10; i++) {
     let time = moment(`${yearNow + i}`).unix();
     listYear.push(time);
   }
@@ -159,7 +159,7 @@ let statistical = async (req, res) => {
             .format('DD'),
       );
     } else if (Number(format) === 2) {
-      data = [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
+      data = [2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
     }
 
     let objSearch = {};
@@ -185,7 +185,10 @@ let statistical = async (req, res) => {
     let totalMatch = await countMatch(timeStamp, format, objSearch);
     let totalBlock = await countBlock(timeStamp, format, objSearch);
 
+    const totalReportServer = await Reports.countDocuments({});
+
     res.render('statistical', {
+      totalReportServer,
       totalUser,
       totalUserMale,
       totalUserFemale,
@@ -217,8 +220,27 @@ let statistical = async (req, res) => {
 
 let exportFile = async (req, res) => {
   try {
-    let fileName = exportExcel();
-    res.render('download_xlsx', { fileName });
+    const totalUser = await Users.countDocuments({});
+    const totalMale = await Users.countDocuments({ gender: 'Nam' });
+    const totalFeMale = await Users.countDocuments({ gender: 'Nữ' });
+    const totalReport = await Reports.countDocuments({});
+
+    const timeStamp = moment().unix();
+    const totalMatchMonths = await countMatch(timeStamp, 1, {});
+    const totalReportMonths = await countReports(timeStamp, 1, {});
+    const totalBlockMonths = await countBlock(timeStamp, 1, {});
+
+    const totalMatchYears = await countMatch(timeStamp, 2, {});
+    const totalReportYears = await countReports(timeStamp, 2, {});
+    const totalBlockYears = await countBlock(timeStamp, 2, {});
+
+    let fileName = exportExcel(
+      { totalUser, totalMale, totalFeMale, totalReport },
+      { totalMatchMonths, totalReportMonths, totalBlockMonths },
+      { totalMatchYears, totalReportYears, totalBlockYears },
+    );
+
+    res.json(fileName);
   } catch (error) {
     res.send(error.message);
   }

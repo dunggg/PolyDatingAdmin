@@ -137,9 +137,9 @@ $(document).ready(function () {
 
   btnExport.addEventListener('click', async function () {
     try {
-      const res = await fetch('http://localhost:3000/export-excel');
+      const res = await fetch('https://poly-dating.herokuapp.com/export-xlsx');
       const val = await res.json();
-      btnExport2.href = `http://localhost:3000/public/files/${val}`;
+      btnExport2.href = `/public/files/${val}`;
       setTimeout(() => {
         btnExport2.click();
       }, 250);
