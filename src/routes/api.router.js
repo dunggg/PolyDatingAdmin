@@ -18,7 +18,7 @@ router.use(getTimeZone);
 
 router.post('/users/sign-up', uploadFile, users.signUp);
 router.post('/users/sign-in', users.signIn);
-// router.use(checkToken);
+router.use(checkToken);
 
 // 2. Users
 router.get('/users/list', users.list);
