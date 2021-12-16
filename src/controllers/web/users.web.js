@@ -107,7 +107,7 @@ let pathUrl = 'https://poly-dating.herokuapp.com/public/data_images/';
 
 exports.getFileApk = async (req, res) => {
   try {
-    res.download('src/public/files/poly_dating.apk');
+    res.download('src/public/files/poly-dating.apk');
   } catch (error) {
     res.send(error.message);
   }
