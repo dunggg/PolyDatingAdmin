@@ -433,7 +433,7 @@ exports.forgotPassword = async (req, res, next) => {
       return res.render('forgot-password', { msgError: 'Email không tồn tại' });
     }
 
-    let passRandom = randomString.generate(6);
+    let passRandom = randomString.generate(10);
     let hashPass = jwt.sign(passRandom, info.hassPassKey);
 
     let payload = {

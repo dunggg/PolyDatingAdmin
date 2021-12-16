@@ -16,8 +16,7 @@ let sendMailRequestCode = async (req, res) => {
             from: '"Poly Dating" <quannhph11150@fpt.edu.vn>', // sender address
             to: `${req.decoded.email}`, // list of receivers
             subject: "Yêu cầu gửi mã xác nhận", // Subject line
-            html: `<h3>Mã xác nhận: ${req.decoded.codeRandom}</h3>
-                  <img src="https://f18-zpg.zdn.vn/6378515596215431194/7160a5fe91ec5ab203fd.jpg"> `, // html body
+            html: `<h3>Mã xác nhận: ${req.decoded.codeRandom}</h3>`, // html body
         });
 
         res.status(200).json(response(200, "Yêu cầu gửi mã xác nhận thành công"));
@@ -33,8 +32,7 @@ let sendMailForgotPassword = async (req, res) => {
             from: '"Poly Dating" <quannhph11150@fpt.edu.vn>', // sender address
             to: `${req.decoded.email}`, // list of receivers
             subject: "Yêu cầu cập nhật mật khẩu", // Subject line
-            html: `<h3>Mật khẩu: ${req.decoded.passRandom}</h3>
-                  <img src="https://f42-zpg.zdn.vn/6960682428680983532/966d3fa482ad49f310bc.jpg"> `, // html body
+            html: `<h3>Mật khẩu: ${req.decoded.passRandom}</h3>`, // html body
         });
 
         res.render('forgot-password', { msgSuccess: "Yêu cầu cập nhật mật khẩu thành công" });
