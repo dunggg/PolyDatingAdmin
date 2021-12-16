@@ -5,7 +5,6 @@ let hbs = require('../src/config/hbsHelper');
 let connectDB = require('./config/connectDB');
 let webRouter = require('./routes/web.router');
 let apiRouter = require('./routes/api.router');
-let getTimeZone = require('./middlewares/getTime');
 
 connectDB();
 hbs;
@@ -19,9 +18,6 @@ app.set('view engine', 'hbs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/public', express.static(path.join(__dirname, 'public'))); // use bootstrap
-
-// Get Time Zone
-app.use(getTimeZone);
 
 // Api
 app.use('/api', apiRouter);

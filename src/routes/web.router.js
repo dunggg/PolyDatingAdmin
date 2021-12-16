@@ -1,6 +1,7 @@
 let express = require('express');
 let router = express.Router();
 let uploadFile = require('../middlewares/uploadFile');
+let { getTimeWeb } = require('../middlewares/getTime');
 let { checkTokenWebsite } = require('../middlewares/checkToken');
 let { sendMailForgotPassword } = require('../middlewares/sendMail');
 let { pushNotificationsAll } = require('../middlewares/notifications');
@@ -10,6 +11,7 @@ let notifications = require('../controllers/web/notifications.web');
 let { statistical, exportFile } = require('../controllers/web/statistical.web');
 
 /* Website */
+router.use(getTimeWeb);
 router.get('/', users.index);
 router.post('/login', users.logIn);
 router.get('/forgot-password', users.screenForgotPassword);
