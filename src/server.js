@@ -5,6 +5,7 @@ let hbs = require('../src/config/hbsHelper');
 let connectDB = require('./config/connectDB');
 let webRouter = require('./routes/web.router');
 let apiRouter = require('./routes/api.router');
+let getTimeZone = require('./middlewares/getTime');
 
 connectDB();
 hbs;
@@ -19,6 +20,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/public', express.static(path.join(__dirname, 'public'))); // use bootstrap
 
+// Get Time Zone
+app.use(getTimeZone);
+
 // Api
 app.use('/api', apiRouter);
 
@@ -26,6 +30,7 @@ app.use('/api', apiRouter);
 app.use(cookieParser());
 app.use('/', webRouter);
 
+// 404 Not Found
 app.use((req, res, next) => {
   res.sendStatus(404);
 });
