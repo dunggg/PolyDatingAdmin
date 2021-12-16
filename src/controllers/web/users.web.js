@@ -6,8 +6,8 @@ let Notifications = require('../../models/notifications.schema');
 let info = require('../../config/info');
 let jwt = require('jsonwebtoken');
 let randomString = require('randomstring');
-let _ = require('lodash');
 let moment = require('moment');
+let _ = require('lodash');
 
 let pathUrl = 'https://poly-dating.herokuapp.com/public/data_images/';
 
@@ -107,7 +107,7 @@ let pathUrl = 'https://poly-dating.herokuapp.com/public/data_images/';
 
 exports.getFileApk = async (req, res) => {
   try {
-    res.download('src/public/files/app-debug.apk');
+    res.download('src/public/files/poly_dating.apk');
   } catch (error) {
     res.send(error.message);
   }
