@@ -34,11 +34,11 @@ let checkToken = async (req, res, next) => {
 
 let checkTokenWebsite = async (req, res, next) => {
     try {
-        let accessToken = req.cookies.token;
-        if (!accessToken) {
+        if (!req.cookies.token) {
             return res.redirect('/');
         }
 
+        let accessToken = req.cookies.token;
         let verifyToken = jwt.verify(accessToken, info.accessKey);
         let user = await Users.findOne({ email: verifyToken });
 
