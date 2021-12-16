@@ -107,9 +107,6 @@ let pathUrl = 'https://poly-dating.herokuapp.com/public/data_images/';
 
 exports.index = async (req, res) => {
   try {
-
-    console.log(req.cookies);
-
     if (req.cookies.token) {
       return res.redirect('statistical?format=0&timeStamp=' + moment().unix());
     }
@@ -201,6 +198,7 @@ exports.insert = async (req, res) => {
 
     await Users.create(payload);
     res.redirect('/users');
+    
   } catch (error) {
     res.send(error.message);
   }
