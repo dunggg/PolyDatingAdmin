@@ -46,7 +46,7 @@ let checkTokenWebsite = async (req, res, next) => {
         next()
 
     } catch (error) {
-        res.send(error.message);
+        res.send("error.message");
     }
 };
 
