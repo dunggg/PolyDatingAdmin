@@ -35,9 +35,9 @@ let checkToken = async (req, res, next) => {
 let checkTokenWebsite = async (req, res, next) => {
     try {
         let accessToken = req.cookies.token;
-        // if (!accessToken) {
-        //     return res.redirect('/');
-        // }
+        if (!accessToken) {
+            return res.redirect('/');
+        }
 
         let verifyToken = jwt.verify(accessToken, info.accessKey);
         let user = await Users.findOne({ email: verifyToken });
