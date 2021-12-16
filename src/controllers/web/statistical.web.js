@@ -5,15 +5,6 @@ let Reports = require('../../models/reports.schema');
 let exportExcel = require('../../utils/exportExcel');
 let moment = require('moment');
 
-let randomNumber = (length) => {
-  var arr = [];
-  while (arr.length < length) {
-    var r = Math.floor(Math.random() * 100) + 1;
-    if (arr.indexOf(r) === -1) arr.push(r);
-  }
-  return arr;
-};
-
 let getDayOfMonth = (timeStamp) => {
   let listDayOfMonth = [];
   let month = moment(timeStamp * 1000).format('MM');
@@ -175,10 +166,12 @@ let statistical = async (req, res) => {
     let totalUser = await Users.countDocuments(objSearch);
     let totalUserMale = await Users.countDocuments({
       gender: 'Nam',
+      role: 'Người dùng',
       ...objSearch,
     });
     let totalUserFemale = await Users.countDocuments({
       gender: 'Nữ',
+      role: 'Người dùng',
       ...objSearch,
     });
     let totalReport = await countReports(timeStamp, format, objSearch);
@@ -217,8 +210,8 @@ let statistical = async (req, res) => {
         data.length === 12
           ? `năm ${moment(timeStamp * 1000).format('YYYY')}`
           : data.length === 11
-            ? `từ năm ${data[0]} đến năm ${data[data.length - 1]}`
-            : `tháng ${moment(timeStamp * 1000).format('MM')} năm ${moment(
+          ? `từ năm ${data[0]} đến năm ${data[data.length - 1]}`
+          : `tháng ${moment(timeStamp * 1000).format('MM')} năm ${moment(
               timeStamp * 1000,
             ).format('YYYY')}`,
     });
@@ -230,23 +223,69 @@ let statistical = async (req, res) => {
 let exportFile = async (req, res) => {
   try {
     let totalUser = await Users.countDocuments({});
-    let totalMale = await Users.countDocuments({ gender: 'Nam' });
-    let totalFeMale = await Users.countDocuments({ gender: 'Nữ' });
+    let totalMale = await Users.countDocuments({
+      gender: 'Nam',
+      role: 'Người dùng',
+    });
+    let totalFeMale = await Users.countDocuments({
+      gender: 'Nữ',
+      role: 'Người dùng',
+    });
     let totalReport = await Reports.countDocuments({});
 
     let timeStamp = moment().unix();
-    let totalMatchMonths = await countMatch(timeStamp, 1, {});
+    let totalMatchMonths = await countMatch(timeStamp, 1, {}, true);
+    let totalMatchPendingMonths = await countMatch(timeStamp, 1, {}, false);
     let totalReportMonths = await countReports(timeStamp, 1, {});
     let totalBlockMonths = await countBlock(timeStamp, 1, {});
 
-    let totalMatchYears = await countMatch(timeStamp, 2, {});
+    let totalMatchYears = await countMatch(timeStamp, 2, {}, true);
+    let totalMatchPendingYears = await countMatch(timeStamp, 2, {}, false);
     let totalReportYears = await countReports(timeStamp, 2, {});
     let totalBlockYears = await countBlock(timeStamp, 2, {});
 
+    let listUser = await Users.find({});
+    listUser = listUser.map((value, index) => ({
+      index: index + 1,
+      email: value.email,
+      name: value.name,
+      role: value.role,
+      phoneNumber: value.phone,
+      gender: value.gender,
+      birthDay: value.birthDay,
+      hobbies: value.hobbies.toString(),
+      facilities: value.facilities,
+      specialized: value.specialized,
+      course: value.course,
+      reportNumber: value.reportNumber,
+      isActive: value.isActive,
+      createAt: moment(value.createAt).format('DD/MM/YYYY'),
+      updateAt: moment(value.updateAt).format('DD/MM/YYYY'),
+    }));
+
+    let { facilities } = await Masters.findOne();
+
     let fileName = exportExcel(
-      { totalUser, totalMale, totalFeMale, totalReport },
-      { totalMatchMonths, totalReportMonths, totalBlockMonths },
-      { totalMatchYears, totalReportYears, totalBlockYears },
+      {
+        totalUser,
+        totalMale,
+        totalFeMale,
+        totalReport,
+        facilities: facilities.slice(1),
+      },
+      {
+        totalMatchMonths,
+        totalReportMonths,
+        totalBlockMonths,
+        totalMatchPendingMonths,
+      },
+      {
+        totalMatchYears,
+        totalReportYears,
+        totalBlockYears,
+        totalMatchPendingYears,
+      },
+      listUser,
     );
 
     res.json(fileName);
