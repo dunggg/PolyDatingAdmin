@@ -88,7 +88,7 @@ exports.insert = async (req, res, next) => {
   try {
     let { title, link, content } = req.body;
 
-    let dataUsers = await Users.find();
+    let dataUsers = await Users.find({ role: 'Người dùng' });
     let dataUsersTokens = [];
 
     for (let i = 0; i < dataUsers.length; i++) {

@@ -65,7 +65,7 @@ let pushNotificationsAll = async (req, res) => {
         };
 
         fetch('https://fcm.googleapis.com/fcm/send', optionPush)
-            .then(() => res.redirect('/notifications/page/1'));
+            .then(() => res.redirect('/notifications'));
 
     } catch (error) {
         res.send(error.message);

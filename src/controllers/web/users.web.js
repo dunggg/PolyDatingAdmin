@@ -107,7 +107,11 @@ let pathUrl = 'https://poly-dating.herokuapp.com/public/data_images/';
 
 exports.index = async (req, res) => {
   try {
+    if (req.cookies.token) {
+      return res.redirect('statistical?format=0&timeStamp=' + moment().unix());
+    }
     res.render('index');
+
   } catch (error) {
     res.send(error.message);
   }
@@ -146,7 +150,7 @@ exports.logIn = async (req, res) => {
     }
 
     //Set cookie trong thời gian 1 giờ
-    res.cookie("token", user, { maxAge: 1000 * 60 * 60 });
+    res.cookie("token", user.accessToken, { maxAge: 1000 * 60 * 60 });
 
     res.redirect('statistical?format=0&timeStamp=' + moment().unix());
 
@@ -385,6 +389,7 @@ exports.updateInformation = async (req, res) => {
 
     await Users.updateOne({ _id }, payload);
     res.redirect(`/users/${user.email}`);
+
   } catch (error) {
     res.send(error.message);
   }

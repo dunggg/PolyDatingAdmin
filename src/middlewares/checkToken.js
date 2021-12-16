@@ -23,7 +23,7 @@ let checkToken = async (req, res, next) => {
             req.currentUser = user;
             next();
         }
-        
+
     } catch (error) {
         if (error.message == "jwt malformed") {
             return res.sendStatus(401);
@@ -34,11 +34,13 @@ let checkToken = async (req, res, next) => {
 
 let checkTokenWebsite = async (req, res, next) => {
     try {
-        let user = req.cookies.token;
-
-        if (!user) {
+        let accessToken = req.cookies.token;
+        if (!accessToken) {
             return res.redirect('/');
         }
+
+        let verifyToken = jwt.verify(accessToken, info.accessKey);
+        let user = await Users.findOne({ email: verifyToken });
 
         req.currentUserWeb = user;
         next()
