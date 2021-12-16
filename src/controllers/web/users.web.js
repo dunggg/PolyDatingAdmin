@@ -105,6 +105,14 @@ let pathUrl = 'https://poly-dating.herokuapp.com/public/data_images/';
 //   }
 // };
 
+exports.getFileApk = async (req, res) => {
+  try {
+    res.download('src/public/files/note.txt');
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
 exports.index = async (req, res) => {
   try {
     if (req.cookies.token) {
@@ -198,7 +206,7 @@ exports.insert = async (req, res) => {
 
     await Users.create(payload);
     res.redirect('/users');
-    
+
   } catch (error) {
     res.send(error.message);
   }
