@@ -157,8 +157,8 @@ exports.logIn = async (req, res) => {
       return res.render('index', { msgError: 'Sai mật khẩu' });
     }
 
-    //Set cookie trong thời gian 1 giờ
-    res.cookie("token", user.accessToken, { maxAge: 1000 * 60 * 60 });
+    //Set cookie trong thời gian 1 ngày
+    res.cookie("token", user.accessToken, { maxAge: 1000 * 60 * 60 * 24});
 
     res.redirect('statistical?format=0&timeStamp=' + moment().unix());
 
