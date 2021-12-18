@@ -1,7 +1,6 @@
 let express = require('express');
 let router = express.Router();
 let uploadFile = require('../middlewares/uploadFile');
-let { getTimeApi } = require('../middlewares/getTime');
 let { checkToken } = require('../middlewares/checkToken');
 let { sendMailRequestCode } = require('../middlewares/sendMail');
 let { pushNotificationsFriendsRequest } = require('../middlewares/notifications');
@@ -12,7 +11,6 @@ let reports = require('../controllers/api/reports.api');
 let notifications = require('../controllers/api/notifications.api');
 
 /* API */
-router.use(getTimeApi);
 router.get('/masters/list', masters.list);
 router.post('/users/sign-up', uploadFile, users.signUp);
 router.post('/users/sign-in', users.signIn);
