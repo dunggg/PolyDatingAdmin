@@ -135,7 +135,9 @@ exports.screenForgotPassword = async (req, res) => {
 
 exports.logOut = async (req, res) => {
   try {
-    res.clearCookie('token');
+    if (req.cookies.token) {
+      res.clearCookie('token');
+    }
     res.redirect('/');
   } catch (error) {
     res.send(error.message);
@@ -158,7 +160,7 @@ exports.logIn = async (req, res) => {
     }
 
     //Set cookie trong thời gian 1 ngày
-    res.cookie("token", user.accessToken, { maxAge: 1000 * 60 * 60 * 24});
+    res.cookie("token", user.accessToken, { maxAge: 1000 * 60 * 60 * 24 });
 
     res.redirect('statistical?format=0&timeStamp=' + moment().unix());
 

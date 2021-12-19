@@ -12,13 +12,13 @@ let { statistical, exportFile } = require('../controllers/web/statistical.web');
 /* Website */
 router.get('/', users.index);
 router.post('/login', users.logIn);
+router.get('/logout', users.logOut);
 router.get('/forgot-password', users.screenForgotPassword);
-router.post('/users/forgot-password', users.forgotPassword, sendMailForgotPassword);
+router.post('/forgot-password', users.forgotPassword, sendMailForgotPassword);
 router.get('/get-file-apk', users.getFileApk);
 router.use(checkTokenWebsite);
 
 //1. Users
-router.get('/logout', users.logOut);
 router.get('/users', users.list);
 router.get('/users/page/:page', users.list);
 router.get('/users/:email', users.findOne);
