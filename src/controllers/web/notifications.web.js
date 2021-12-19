@@ -12,7 +12,9 @@ exports.list = async (req, res) => {
     let pageNumber = Number(page) || 1;
     let skipPage = pageSize * pageNumber - pageSize;
 
-    let optionFind = {};
+    let optionFind = {
+      emailSender: { $not: new RegExp(`.*@fpt.edu.vn.*`) },
+    };
 
     if (search) {
       optionFind = {
