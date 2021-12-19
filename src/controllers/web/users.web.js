@@ -118,7 +118,7 @@ exports.index = async (req, res) => {
     if (req.cookies.token) {
       return res.redirect('statistical?format=0&timeStamp=' + moment().unix());
     }
-    res.render('index');
+    res.render('indexs');
 
   } catch (error) {
     res.send(error.message);
