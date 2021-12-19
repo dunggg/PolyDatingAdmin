@@ -165,14 +165,15 @@ let statistical = async (req, res) => {
 
     let totalUser = await Users.countDocuments(objSearch);
     let totalUserMale = await Users.countDocuments({
+      ...objSearch,
       gender: 'Nam',
-      role: 'Người dùng',
-      ...objSearch,
+      role: 'Người dùng',
     });
+    console.log(totalUserMale, 'totalUserMale');
     let totalUserFemale = await Users.countDocuments({
-      gender: 'Nữ',
-      role: 'Người dùng',
       ...objSearch,
+      gender: 'Nữ',
+      role: 'Người dùng',
     });
     let totalReport = await countReports(timeStamp, format, objSearch);
     let totalMatch = await countMatch(timeStamp, format, objSearch, true);
@@ -225,11 +226,11 @@ let exportFile = async (req, res) => {
     let totalUser = await Users.countDocuments({});
     let totalMale = await Users.countDocuments({
       gender: 'Nam',
-      role: 'Người dùng',
+      role: 'Người dùng',
     });
     let totalFeMale = await Users.countDocuments({
       gender: 'Nữ',
-      role: 'Người dùng',
+      role: 'Người dùng',
     });
     let totalReport = await Reports.countDocuments({});
 
