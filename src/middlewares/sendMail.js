@@ -13,7 +13,7 @@ let transporter = nodemailer.createTransport({
 let sendMailRequestCode = async (req, res) => {
     try {
         await transporter.sendMail({
-            from: '"Poly Dating" <quannhph11150@fpt.edu.vn>', // sender address
+            from: `"Poly Dating" <polydatingmaster@gmail.com>`, // sender address
             to: `${req.decoded.email}`, // list of receivers
             subject: "Yêu cầu gửi mã xác nhận", // Subject line
             html: `<h3>Mã xác nhận: ${req.decoded.codeRandom}</h3>`, // html body
@@ -29,7 +29,7 @@ let sendMailRequestCode = async (req, res) => {
 let sendMailForgotPassword = async (req, res) => {
     try {
         await transporter.sendMail({
-            from: '"Poly Dating" <quannhph11150@fpt.edu.vn>', // sender address
+            from: `"Poly Dating" <polydatingmaster@gmail.com>`, // sender address
             to: `${req.decoded.email}`, // list of receivers
             subject: "Yêu cầu cập nhật mật khẩu", // Subject line
             html: `<h3>Mật khẩu: ${req.decoded.passRandom}</h3>`, // html body

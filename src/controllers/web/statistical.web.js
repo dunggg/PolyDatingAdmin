@@ -131,7 +131,7 @@ let countReports = async (timeStamp, format, objSearch) => {
 };
 
 let countBlock = async (timeStamp, format, objSearch) => {
-  let total = await Users.find({ ...objSearch, isActive: 'Khóa' });
+  let total = await Users.find({ ...objSearch, isActive: "Khóa" });
   let list = [];
   switch (Number(format)) {
     case 0:
@@ -231,8 +231,8 @@ let statistical = async (req, res) => {
         data.length === 12
           ? `năm ${moment(timeStamp * 1000).format('YYYY')}`
           : data.length === 11
-          ? `từ năm ${data[0]} đến năm ${data[data.length - 1]}`
-          : `tháng ${moment(timeStamp * 1000).format('MM')} năm ${moment(
+            ? `từ năm ${data[0]} đến năm ${data[data.length - 1]}`
+            : `tháng ${moment(timeStamp * 1000).format('MM')} năm ${moment(
               timeStamp * 1000,
             ).format('YYYY')}`,
     });

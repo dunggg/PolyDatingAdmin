@@ -3,7 +3,7 @@ exports.hassPassKey = "qazwsx123";
 exports.accessKey = 'azsxdcfvgb123';
 
 /** Mail */
-exports.user = "quannhph11150@fpt.edu.vn";
+exports.user = "polydatingmaster@gmail.com";
 exports.pass = "chmgxjamiyazxyav";
 
 /** Firebase */
