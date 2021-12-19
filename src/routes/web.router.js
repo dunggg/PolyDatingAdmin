@@ -13,6 +13,7 @@ let { statistical, exportFile } = require('../controllers/web/statistical.web');
 router.get('/', users.index);
 router.post('/login', users.logIn);
 router.get('/forgot-password', users.screenForgotPassword);
+router.post('/users/forgot-password', users.forgotPassword, sendMailForgotPassword);
 router.get('/get-file-apk', users.getFileApk);
 router.use(checkTokenWebsite);
 
@@ -24,7 +25,6 @@ router.get('/users/:email', users.findOne);
 router.post('/users/insert', uploadFile, users.insert);
 router.post('/users/update-information', uploadFile, users.updateInformation);
 router.post('/users/update-password', users.updatePassword);
-router.post('/users/forgot-password', users.forgotPassword, sendMailForgotPassword);
 router.post('/users/block', users.block);
 router.post('/users/unblock', users.unblock);
 router.post('/users/delete', users.delete);
