@@ -3,8 +3,9 @@ let xl = require('excel4node');
 let { v4 } = require('uuid');
 let moment = require('moment');
 
-let exportExcel = (data, dataMonths, dataYears, listUser) => {
+let exportExcel = (data, dataMonths, dataYears, listUser, obj) => {
   const { totalUser, totalMale, totalFeMale, totalReport, facilities } = data;
+  const { totalReportByFacility } = obj;
   const {
     totalMatchMonths,
     totalReportMonths,
@@ -447,6 +448,13 @@ let exportExcel = (data, dataMonths, dataYears, listUser) => {
       .cell(5, i + 2)
       .number(totalUserFeMale.length)
       .style({ font: { color: 'black', size: 13 } });
+
+    if (facilities[i] in totalReportByFacility) {
+      wFacilities
+        .cell(6, i + 2)
+        .number(totalReportByFacility[facilities[i]])
+        .style({ font: { color: 'black', size: 13 } });
+    }
   }
 
   wFacilities
@@ -462,6 +470,11 @@ let exportExcel = (data, dataMonths, dataYears, listUser) => {
   wFacilities
     .cell(5, 1)
     .string('Sinh viên nữ')
+    .style({ font: { color: 'black', size: 13 } });
+
+  wFacilities
+    .cell(6, 1)
+    .string('Số lượt báo cáo')
     .style({ font: { color: 'black', size: 13 } });
 
   let fileName = `PolyDating-Thống kê-${moment().unix()}`;

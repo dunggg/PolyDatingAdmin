@@ -4,6 +4,7 @@ let Friends = require('../../models/friends.schema');
 let Reports = require('../../models/reports.schema');
 let exportExcel = require('../../utils/exportExcel');
 let moment = require('moment');
+let _ = require('lodash');
 
 let getDayOfMonth = (timeStamp) => {
   let listDayOfMonth = [];
@@ -92,6 +93,25 @@ let countMatch = async (timeStamp, format, objSearch, status) => {
       list = listTotalMonthsOfYear(listFriends, timeStamp);
   }
   return list;
+};
+
+let countReportByFacility = async (facilities) => {
+  const totalReport = await Reports.find({});
+  const obj = {};
+  for (const val of facilities) {
+    let total = 0;
+    for (const value of totalReport) {
+      const user = await Users.find({
+        email: value.emailReceiver,
+        facilities: val,
+      });
+      if (!_.isEmpty(user)) {
+        total += 1;
+      }
+    }
+    obj[val] = total;
+  }
+  return obj;
 };
 
 let countReports = async (timeStamp, format, objSearch) => {
@@ -266,6 +286,8 @@ let exportFile = async (req, res) => {
 
     let { facilities } = await Masters.findOne();
 
+    const totalReportByFacility = await countReportByFacility(facilities);
+
     let fileName = exportExcel(
       {
         totalUser,
@@ -287,6 +309,7 @@ let exportFile = async (req, res) => {
         totalMatchPendingYears,
       },
       listUser,
+      { totalReportByFacility },
     );
 
     res.json(fileName);
