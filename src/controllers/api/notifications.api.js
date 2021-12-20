@@ -5,6 +5,18 @@ exports.list = async (req, res) => {
     try {
         let data = await Nofitications.find({ emailReceiver: req.currentUser.email });
 
+        data = data.map(v => {
+            return {
+                _id: v._id,
+                emailSender: v.emailSender,
+                emailReceiver: v.emailReceiver,
+                title: v.title,
+                content: v.content,
+                link: v.link,
+                createdAt: v.createdAt.toLocaleString()
+            }
+        });
+
         let payload = {
             total: data.length,
             nofitications: data
