@@ -3,7 +3,8 @@ let { response } = require("../../utils/utils");
 
 exports.list = async (req, res) => {
     try {
-        let data = await Nofitications.find({ emailReceiver: req.currentUser.email });
+        let data = await Nofitications.find({ emailReceiver: req.currentUser.email })
+            .sort({ createdAt: -1 });
 
         data = data.map(v => {
             return {
