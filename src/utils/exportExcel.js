@@ -290,7 +290,7 @@ let exportExcel = (data, dataMonths, dataYears, listUser, obj) => {
     .style({ font: { color: 'red', size: 13 } });
 
   for (let i = 0; i < totalMatchPendingYears.length; i++) {
-    ws2
+    ws4
       .cell(7, 2 + i)
       .number(totalMatchPendingYears[i])
       .style({ font: { color: 'black', size: 13 } });
