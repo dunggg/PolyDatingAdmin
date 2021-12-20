@@ -191,7 +191,7 @@ let statistical = async (req, res) => {
     });
     let totalUserFemale = await Users.countDocuments({
       ...objSearch,
-      gender: 'Nữ',
+      gender: 'Nữ',
       role: 'Người dùng',
     });
 
@@ -261,7 +261,7 @@ let exportFile = async (req, res) => {
       role: 'Người dùng',
     });
     let totalFeMale = await Users.countDocuments({
-      gender: 'Nữ',
+      gender: 'Nữ',
       role: 'Người dùng',
     });
     let totalReport = await Reports.countDocuments({});
