@@ -131,7 +131,7 @@ let countReports = async (timeStamp, format, objSearch) => {
 };
 
 let countBlock = async (timeStamp, format, objSearch) => {
-  let total = await Users.find({ ...objSearch, isActive: "Khóa" });
+  let total = await Users.find({ ...objSearch, isActive: 'Khóa' });
   let list = [];
   switch (Number(format)) {
     case 0:
@@ -189,13 +189,13 @@ let statistical = async (req, res) => {
       gender: 'Nam',
       role: 'Người dùng',
     });
-    console.log(totalUserMale, 'totalUserMale');
     let totalUserFemale = await Users.countDocuments({
       ...objSearch,
       gender: 'Nữ',
       role: 'Người dùng',
     });
-    let totalReport = await countReports(timeStamp, format, objSearch);
+    let totalReport = await countReports(timeStamp, format, {});
+
     let totalMatch = await countMatch(timeStamp, format, objSearch, true);
     let totalMatchPending = await countMatch(
       timeStamp,
@@ -204,9 +204,20 @@ let statistical = async (req, res) => {
       false,
     );
     let totalBlock = await countBlock(timeStamp, format, objSearch);
+    let totalReportServer = 0;
 
-    let totalReportServer = await Reports.countDocuments({});
-
+    if (specializedParams || facilitiesParams || courseParams) {
+      for (const val of totalReport) {
+        for (let i = 0; i < totalUser.length; i++) {
+          if (val.emailReceiver === totalUser[i].email) {
+            totalReportServer += 1;
+            return;
+          }
+        }
+      }
+    } else {
+      totalReportServer = await Reports.countDocuments({});
+    }
     res.render('statistical', {
       totalReportServer,
       totalUser,
@@ -231,8 +242,8 @@ let statistical = async (req, res) => {
         data.length === 12
           ? `năm ${moment(timeStamp * 1000).format('YYYY')}`
           : data.length === 11
-            ? `từ năm ${data[0]} đến năm ${data[data.length - 1]}`
-            : `tháng ${moment(timeStamp * 1000).format('MM')} năm ${moment(
+          ? `từ năm ${data[0]} đến năm ${data[data.length - 1]}`
+          : `tháng ${moment(timeStamp * 1000).format('MM')} năm ${moment(
               timeStamp * 1000,
             ).format('YYYY')}`,
     });
