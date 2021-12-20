@@ -178,10 +178,10 @@ let statistical = async (req, res) => {
     objSearch = courseParams ? { ...objSearch, course: courseParams } : {};
     objSearch = specializedParams
       ? { ...objSearch, specialized: specializedParams }
-      : {};
+      : { ...objSearch };
     objSearch = facilitiesParams
       ? { ...objSearch, facilities: facilitiesParams }
-      : {};
+      : { ...objSearch };
 
     let totalUser = await Users.countDocuments(objSearch);
     let totalUserMale = await Users.countDocuments({
@@ -194,6 +194,7 @@ let statistical = async (req, res) => {
       gender: 'Nữ',
       role: 'Người dùng',
     });
+
     let totalReport = await countReports(timeStamp, format, {});
 
     let totalMatch = await countMatch(timeStamp, format, objSearch, true);
