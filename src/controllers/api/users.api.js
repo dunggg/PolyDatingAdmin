@@ -18,6 +18,7 @@ exports.list = async (req, res) => {
     let data;
 
     let search = {
+      isActive: 'Kích hoạt',
       role: 'Người dùng',
     };
 
