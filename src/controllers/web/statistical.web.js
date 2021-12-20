@@ -32,13 +32,13 @@ let getTimeStampMonthsOfYear = (timeStamp = moment().unix()) => {
   return listMonthOfYear;
 };
 
-let listTotalReportsDaysOfMonth = (totalReports, timeStamp) => {
+let listTotalReportsDaysOfMonth = (totalReports, timeStamp, date) => {
   let listDayOfMonth = getDayOfMonth(timeStamp);
   let listTotalReports = [];
   for (let i = 0; i < listDayOfMonth.length; i++) {
     let totalForTimeStamp = totalReports.filter(
       (value) =>
-        moment(value.createAt).format('DD/MM/YYYY') ===
+        moment(date ? value[date] : value.createAt).format('DD/MM/YYYY') ===
         moment(listDayOfMonth[i] * 1000).format('DD/MM/YYYY'),
     );
     listTotalReports.push(totalForTimeStamp.length);
@@ -84,13 +84,13 @@ let countMatch = async (timeStamp, format, objSearch, status) => {
   let list = [];
   switch (Number(format)) {
     case 0:
-      list = listTotalReportsDaysOfMonth(listFriends, timeStamp);
+      list = listTotalReportsDaysOfMonth(listFriends, timeStamp, 'updateAt');
       break;
     case 2:
-      list = listTotalReportsYears(listFriends, timeStamp);
+      list = listTotalReportsYears(listFriends, timeStamp, 'updateAt');
       break;
     default:
-      list = listTotalMonthsOfYear(listFriends, timeStamp);
+      list = listTotalMonthsOfYear(listFriends, timeStamp, 'updateAt');
   }
   return list;
 };
