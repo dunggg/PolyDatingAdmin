@@ -17,7 +17,7 @@ let checkToken = async (req, res, next) => {
             res.status(404).json(response(404, `Tài khoản không tồn tại`));
         }
         else if (user.isActive == "Khóa") {
-            res.status(403).json(response(403, `Tài khoản của bạn đã bị khóa`));
+            res.status(403).json(response(403, `Tài khoản của bạn đã bị khóa, vui lòng kiểm tra email`));
         }
         else {
             req.currentUser = user;
@@ -41,6 +41,11 @@ let checkTokenWebsite = async (req, res, next) => {
         let accessToken = req.cookies.token;
         let verifyToken = jwt.verify(accessToken, info.accessKey);
         let user = await Users.findOne({ email: verifyToken });
+
+        if (!user) {
+            res.clearCookie('token');
+            return res.redirect('/');
+        }
 
         req.currentUserWeb = user;
         next()

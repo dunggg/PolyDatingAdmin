@@ -367,15 +367,15 @@
                                             <td class="text-nowrap">{{this.course}}</td>
                                             <td class="text-nowrap">
                                                 {{#if (eq this.role "Người dùng")}}
-                                                {{#if (eq this.reportNumber 3)}}
-                                                <span class="text-warning">{{this.reportNumber}} lượt</span>
+                                                {{#if (gte this.reportNumber 5)}}
+                                                <span class="text-danger">{{this.reportNumber}} lượt</span>
 
                                                 {{else}}
                                                 {{#if (lt this.reportNumber 3)}}
                                                 <span class="text-success">{{this.reportNumber}} lượt</span>
 
                                                 {{else}}
-                                                <span class="text-danger">{{this.reportNumber}} lượt</span>
+                                                <span class="text-warning">{{this.reportNumber}} lượt</span>
 
                                                 {{/if}}
                                                 {{/if}}

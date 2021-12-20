@@ -131,15 +131,15 @@
                                                 <p><span class="text-black">Bạn bè: </span>{{countFriends}} bạn</p>
                                                 <p>
                                                     <span class="text-black">Báo cáo: </span>
-                                                    {{#if (eq user.reportNumber 3)}}
-                                                    <span class="text-warning">{{user.reportNumber}} lượt</span>
+                                                    {{#if (gte user.reportNumber 5)}}
+                                                    <span class="text-danger">{{user.reportNumber}} lượt</span>
 
                                                     {{else}}
                                                     {{#if (lt user.reportNumber 3)}}
                                                     <span class="text-success">{{user.reportNumber}} lượt</span>
 
                                                     {{else}}
-                                                    <span class="text-danger">{{user.reportNumber}} lượt</span>
+                                                    <span class="text-warning">{{user.reportNumber}} lượt</span>
 
                                                     {{/if}}
                                                     {{/if}}

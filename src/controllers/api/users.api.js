@@ -77,7 +77,7 @@ exports.signIn = async (req, res) => {
     if (!user) {
       res.status(404).json(response(404, `Tài khoản không tồn tại`));
     } else if (user.isActive == 'Khóa') {
-      res.status(403).json(response(403, `Tài khoản của bạn đã bị khóa`));
+      res.status(403).json(response(403, `Tài khoản của bạn đã bị khóa, vui lòng kiểm tra email`));
     } else {
       let optionToken = {
         notificationToken: token || "",

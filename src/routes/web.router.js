@@ -2,7 +2,7 @@ let express = require('express');
 let router = express.Router();
 let uploadFile = require('../middlewares/uploadFile');
 let { checkTokenWebsite } = require('../middlewares/checkToken');
-let { sendMailForgotPassword } = require('../middlewares/sendMail');
+let { sendMailForgotPassword, sendMailActiveUser } = require('../middlewares/sendMail');
 let { pushNotificationsAll } = require('../middlewares/notifications');
 let users = require('../controllers/web/users.web');
 let reports = require('../controllers/web/reports.web');
@@ -25,14 +25,14 @@ router.get('/users/:email', users.findOne);
 // router.post('/users/insert', uploadFile, users.insert);
 // router.post('/users/update-information', uploadFile, users.updateInformation);
 router.post('/users/update-password', users.updatePassword);
-router.post('/users/block', users.block);
-router.post('/users/unblock', users.unblock);
+router.post('/users/block', users.block, sendMailActiveUser);
+router.post('/users/unblock', users.unblock, sendMailActiveUser);
 router.post('/users/delete', users.delete);
 
 //2. Reports
 router.get('/reports', reports.list);
 router.get('/reports/page/:page', reports.list);
-router.post('/reports/verify-report-request', reports.verifyReportRequest);
+router.post('/reports/verify-report-request', reports.verifyReportRequest, sendMailActiveUser);
 
 //3. Notifications
 router.get('/notifications', notifications.list);

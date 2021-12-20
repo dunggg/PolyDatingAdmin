@@ -463,7 +463,7 @@ exports.forgotPassword = async (req, res, next) => {
   }
 };
 
-exports.block = async (req, res) => {
+exports.block = async (req, res, next) => {
   try {
     let { _id, checkAction } = req.body;
 
@@ -475,17 +475,21 @@ exports.block = async (req, res) => {
     let user = await Users.findOneAndUpdate({ _id }, payload);
     if (!user) return res.sendStatus(404);
 
-    if (checkAction == '1') {
-      res.redirect(`/users`);
-    } else {
-      res.redirect(`/users/${user.email}`);
+    req.decoded = {
+      email: user.email,
+      checkAction,
+      subject: "Khóa tài khoản",
+      html: `<p>Tài khoản của bạn đã bị khóa do vi phạm tiêu chuẩn cộng đồng nhiều lần.</p>
+      <p>Vui lòng liên hệ tới email này để được hỗ trợ.</p>`
     }
+    next();
+
   } catch (error) {
     res.send(error.message);
   }
 };
 
-exports.unblock = async (req, res) => {
+exports.unblock = async (req, res, next) => {
   try {
     let { _id, checkAction } = req.body;
 
@@ -498,11 +502,15 @@ exports.unblock = async (req, res) => {
     let user = await Users.findOneAndUpdate({ _id }, payload);
     if (!user) return res.sendStatus(404);
 
-    if (checkAction == '1') {
-      res.redirect(`/users`);
-    } else {
-      res.redirect(`/users/${user.email}`);
+    req.decoded = {
+      email: user.email,
+      checkAction,
+      subject: "Mở khóa tài khoản",
+      html: `<p>Tài khoản của bạn đã được mở khóa.</p>
+      <p>Chúc mừng và hy vọng bạn sẽ không tái phạm tiêu chuẩn cộng đồng.</p>`
     }
+    next();
+
   } catch (error) {
     res.send(error.message);
   }

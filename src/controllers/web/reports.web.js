@@ -95,7 +95,7 @@ exports.list = async (req, res) => {
   }
 };
 
-exports.verifyReportRequest = async (req, res) => {
+exports.verifyReportRequest = async (req, res, next) => {
   try {
     let { email, _idReport, action } = req.body;
 
@@ -108,30 +108,54 @@ exports.verifyReportRequest = async (req, res) => {
     if (action == 'true') {
       status = 'Chấp thuận';
       reportNumber = user.reportNumber + 1;
-    } else {
+    }
+    else {
       status = 'Từ chối';
       reportNumber = user.reportNumber;
     }
 
-    const payload = {
-      isActive: false,
-      updatedAt: req.getTime,
-    };
-
-    const payload2 = {
+    let payload = {
       reportNumber,
       updatedAt: req.getTime,
     };
 
-    if (user.reportNumber >= 5) {
-      await Users.updateOne({ email }, payload);
-    } else {
-      await Users.updateOne({ email }, payload2);
-    }
+    let payload2 = {
+      reportNumber: user.reportNumber,
+      updatedAt: req.getTime,
+    };
+
+    let payload3 = {
+      isActive: 'Khóa',
+      updatedAt: req.getTime,
+    };
 
     await Reports.updateOne({ _id: _idReport }, { status });
 
-    res.redirect(`/reports`);
+    if (user.reportNumber < 5) {
+
+      await Users.updateOne({ email }, payload);
+      let newUser = await Users.findOne({ email });
+
+      if (newUser.reportNumber > 4) {
+        await Users.updateOne({ email }, payload3);
+
+        req.decoded = {
+          email: user.email,
+          checkAction: "3",
+          subject: "Khóa tài khoản",
+          html: `<p>Tài khoản của bạn đã bị khóa do vi phạm tiêu chuẩn cộng đồng nhiều lần.</p>
+          <p>Vui lòng liên hệ tới email này để được hỗ trợ.</p>`
+        }
+        return next();
+      }
+
+      res.redirect(`/reports`);
+    }
+    else {
+      await Users.updateOne({ email }, payload2);
+      res.redirect(`/reports`);
+    }
+    
   } catch (error) {
     res.send(error.message);
   }

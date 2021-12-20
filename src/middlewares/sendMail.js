@@ -42,4 +42,31 @@ let sendMailForgotPassword = async (req, res) => {
     }
 };
 
-module.exports = { sendMailRequestCode, sendMailForgotPassword };
+let sendMailActiveUser = async (req, res) => {
+    try {
+        await transporter.sendMail({
+            from: `"Poly Dating" <polydatingmaster@gmail.com>`, // sender address
+            to: `${req.decoded.email}`, // list of receivers
+            subject: req.decoded.subject, // Subject line
+            html: req.decoded.html, // html body
+        });
+
+        if (req.decoded.checkAction == '1') {
+            res.redirect(`/users`);
+        }
+        else if (req.decoded.checkAction == '2') {
+            res.redirect(`/users/${req.decoded.email}`);
+        }
+        else if (req.decoded.checkAction == '3') {
+            res.redirect(`/reports`);
+        }
+    } catch (error) {
+        res.send(error.message);
+    }
+};
+
+module.exports = {
+    sendMailRequestCode,
+    sendMailForgotPassword,
+    sendMailActiveUser,
+};
