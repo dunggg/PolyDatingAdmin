@@ -142,7 +142,7 @@ $(document).ready(function () {
       btnExport2.href = `/public/files/${val}`;
       setTimeout(() => {
         btnExport2.click();
-      }, 500);
+      }, 1000);
     } catch (error) {
       console.log(error);
     }
