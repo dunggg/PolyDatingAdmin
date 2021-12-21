@@ -23,7 +23,6 @@
     "node-fetch": "^2.6.6",
     "nodemailer": "^6.7.1",
     "nodemon": "^2.0.13",
-    "randomstring": "^1.2.1",
-    "uuid": "^8.3.2"
+    "randomstring": "^1.2.1"
   }
 }
